@@ -21,7 +21,7 @@ services:
       - type: bind
         source: /bayiot/nodered
         target: /data
-    depends_on:
+    #depends_on:
     #  - mqtt
     restart: unless-stopped
 
