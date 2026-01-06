@@ -7,9 +7,9 @@ services:
     ports:
       - "8883:8883"
     volumes:
-      - ./bayiot/mosquitto/config:/mosquitto/config
-      - ./bayiot/mosquitto/data:/mosquitto/data
-      - ./bayiot/mosquitto/log:/mosquitto/log
+      - /etc/bayiot/mosquitto/config:/mosquitto/config
+      - /etc/bayiot/mosquitto/data:/mosquitto/data
+      - /etc/bayiot/mosquitto/log:/mosquitto/log
     restart: unless-stopped
 
   nodered:
@@ -18,9 +18,7 @@ services:
     ports:
       - "1880:1880"
     volumes:
-      - type: bind
-        source: /bayiot/nodered
-        target: /data
+      - /etc/bayiot/nodered:/data
     #depends_on:
     #  - mqtt
     restart: unless-stopped
