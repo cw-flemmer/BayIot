@@ -43,5 +43,5 @@ services:
     ports:
       - "3200:3000"
     volumes:
-      - ./grafana:/var/lib/grafana
+      - /etc/bayiot/grafana:/var/lib/grafana
     restart: unless-stopped
