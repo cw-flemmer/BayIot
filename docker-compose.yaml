@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: bayiot_mqtt
+    ports:
+      - "8883:8883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    restart: unless-stopped
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: bayiot_nodered
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./nodered/data:/data
+    depends_on:
+      - mqtt
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: bayiot_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: Sp0ng3B0B@Umicore
+      MYSQL_DATABASE: BayIot
+      MYSQL_USER: BayIot
+      MYSQL_PASSWORD: Sp0ng3B0B@Umicore
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: bayiot_grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana:/var/lib/grafana
+    restart: unless-stopped
