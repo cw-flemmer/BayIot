@@ -6,6 +6,9 @@ services:
     container_name: bayiot_mqtt
     ports:
       - "8883:8883"
+    networks:
+      saas:
+        ipv4_address: 11.0.1.37
     volumes:
       - /etc/bayiot/mosquitto/config:/mosquitto/config
       - /etc/bayiot/mosquitto/data:/mosquitto/data
@@ -17,6 +20,9 @@ services:
     container_name: bayiot_nodered
     ports:
       - "1880:1880"
+    networks:
+      saas:
+        ipv4_address: 11.0.1.38
     volumes:
       - /etc/bayiot/nodered:/data
     #depends_on:
@@ -32,6 +38,9 @@ services:
       MYSQL_DATABASE: BayIot
       MYSQL_USER: BayIot
       MYSQL_PASSWORD: Sp0ng3B0B@Umicore
+    networks:
+      saas:
+        ipv4_address: 11.0.1.36  
     volumes:
       - ./mysql:/var/lib/mysql
     ports:
@@ -42,6 +51,13 @@ services:
     container_name: bayiot_grafana
     ports:
       - "3200:3000"
+    networks:
+      saas:
+        ipv4_address: 11.0.1.39       
     volumes:
       - /etc/bayiot/grafana:/var/lib/grafana
     restart: unless-stopped
+
+networks:
+  saas:
+    external: true 
