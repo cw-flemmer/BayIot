@@ -18,7 +18,7 @@ services:
     ports:
       - "1880:1880"
     volumes:
-      - ./nodered/data:/data
+      - /nodered/data:/data
     depends_on:
       - mqtt
     restart: unless-stopped
