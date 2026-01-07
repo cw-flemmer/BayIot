@@ -80,7 +80,9 @@ services:
       - mysql
 
   dashboard:
-    build: ./dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile    
     container_name: bayiot_dashboard
     restart: unless-stopped
     ports:
