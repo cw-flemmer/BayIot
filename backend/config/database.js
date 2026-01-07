@@ -1,21 +1,21 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASS,
-    {
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        dialect: 'mysql',
-        logging: false,
-        define: {
-            timestamps: true,
-            underscored: true,
-        },
+const sequelize = new Sequelize({
+    dialect: 'mysql',
+    host: '11.0.1.36',
+    database: 'BayIot',
+    username: 'BayIot',
+    password: 'Sp0ng3B0B@Umicore',
+    logging: console.log,
+    timezone: '+02:00', // Ensure UTC consistency
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
     }
-);
+});
 
 const connectDB = async () => {
     try {
