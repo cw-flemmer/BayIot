@@ -102,15 +102,13 @@ void loop() {
   if (now - lastTelemetry > telemetryInterval) {
     lastTelemetry = now;
 
-    // Generate dummy data
-    int deviceid = 8408;
+    // Generate dummy data    
     float temperature = random(200, 800) / 100.0; // 2.0°C – 8.0°C
     float humidity = random(4000, 7000) / 100.0;   // 40% – 70%
     int battery = random(80, 100);                // 80% – 100%
     bool door = random(0, 2);                     // 0 = closed, 1 = open
 
-    StaticJsonDocument<200> doc;
-    doc["deviceid"] = deviceid;
+    StaticJsonDocument<200> doc;    
     doc["temperature"] = temperature;
     doc["humidity"] = humidity;
     doc["battery"] = battery;
