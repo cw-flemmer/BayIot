@@ -112,8 +112,7 @@ void loop() {
     doc["temperature"] = temperature;
     doc["humidity"] = humidity;
     doc["battery"] = battery;
-    doc["door"] = door ? "0" : "1";
-    doc["timestamp"] = millis();
+    doc["door"] = door ? "0" : "1";    
 
     char payload[256];
     serializeJson(doc, payload);

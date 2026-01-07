@@ -58,6 +58,39 @@ services:
       - /etc/bayiot/grafana:/var/lib/grafana
     restart: unless-stopped
 
+  backend:
+    build: ./backend
+    container_name: bayiot_backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=bayiot_mysql
+      - DB_PORT=3306
+      - DB_USER=BayIot
+      - DB_PASS=Sp0ng3B0B@Umicore
+      - DB_NAME=BayIot
+      - JWT_SECRET=supersecretbayiotkey2026
+      - JWT_REFRESH_SECRET=supersecretrefreshbayiotkey2026
+      - NODE_ENV=production
+    networks:
+      saas:
+        ipv4_address: 11.0.1.40
+    depends_on:
+      - mysql
+
+  dashboard:
+    build: ./dashboard
+    container_name: bayiot_dashboard
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    networks:
+      saas:
+        ipv4_address: 11.0.1.41
+    depends_on:
+      - backend
+
 networks:
   saas:
     external: true 
