@@ -9,8 +9,14 @@ const char* password = "0677521411";
 // ---------- MQTT Settings ----------
 const char* mqtt_server = "156.155.253.143"; // e.g., 192.168.1.100
 const int mqtt_port = 8883;              // No TLS
-const char* mqtt_topic_telemetry = "coldchain/clientA/fridge1/telemetry";
-const char* mqtt_topic_heartbeat = "coldchain/clientA/fridge1/heartbeat";
+
+// identify customer + device (IMPORTANT)
+const char* customer = "shoprite";
+const char* site = "standfordsquare";
+const char* device = "liquorstore";
+
+String mqtt_topic_telemetry = "coldchain/" + String(customer) + "/" + String(site) + "/" + String(device) + "/telemetry";
+String mqtt_topic_heartbeat = "coldchain/" + String(customer) + "/" + String(site) + "/" + String(device) + "/heartbeat";;
 
 // ---------- Globals ----------
 WiFiClient espClient;
@@ -18,8 +24,8 @@ PubSubClient client(espClient);
 unsigned long lastTelemetry = 0;
 unsigned long lastHeartbeat = 0;
 
-const long telemetryInterval = 1 * 60 * 1000; // 15 minutes (Testing: Set to 1 minute)
-const long heartbeatInterval = 5 * 60 * 1000;  // 5 minutes
+const long telemetryInterval = 5 * 60 * 1000; // 15 minutes (Testing: Set to 1 minute)
+const long heartbeatInterval = 1 * 60 * 1000;  // 5 minutes (Testing: Set to 1 minute)
 
 // ---------- WiFi Connect ----------
 void setup_wifi() {
@@ -58,9 +64,10 @@ void reconnect() {
 
 // ---------- Setup ----------
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(115200);    
+  delay(1000);
   setup_wifi();
-  client.setServer(mqtt_server, mqtt_port);
+  client.setServer(mqtt_server, mqtt_port);  
 }
 
 // ---------- Main Loop ----------
@@ -83,7 +90,7 @@ void loop() {
     char hbPayload[128];
     serializeJson(hb, hbPayload);
 
-    if (client.publish(mqtt_topic_heartbeat, hbPayload)) {
+    if (client.publish(mqtt_topic_heartbeat.c_str(), hbPayload)) {
       Serial.print("Heartbeat sent: ");
       Serial.println(hbPayload);
     } else {
@@ -113,7 +120,7 @@ void loop() {
     char payload[256];
     serializeJson(doc, payload);
 
-    if (client.publish(mqtt_topic_telemetry, payload)) {
+    if (client.publish(mqtt_topic_telemetry.c_str(), payload)) {
       Serial.print("Telemetry sent: ");
       Serial.println(payload);
     } else {
