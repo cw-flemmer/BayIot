@@ -81,7 +81,7 @@ services:
 
   dashboard:
     build:
-      context: .
+      context: ./dashboard 
       dockerfile: Dockerfile    
     container_name: bayiot_dashboard
     restart: unless-stopped
