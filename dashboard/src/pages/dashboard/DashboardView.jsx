@@ -72,7 +72,76 @@ const DashboardView = () => {
         }
     };
 
-    // ... (handleLayoutChange, handleAddWidget, handleDeleteWidget)
+    const handleLayoutChange = async (layout) => {
+        // Update local state positions
+        const updatedWidgets = widgets.map(w => {
+            const gridItem = layout.find(l => l.i === w.id.toString());
+            if (gridItem) {
+                return {
+                    ...w,
+                    x: gridItem.x,
+                    y: gridItem.y,
+                    w: gridItem.w,
+                    h: gridItem.h
+                };
+            }
+            return w;
+        });
+        setWidgets(updatedWidgets);
+
+        // In a real optimized app, we'd debounce this save
+        // For now, we wait for explicit "Save" or just let it float in state 
+        // until we decide to sync. But requirement says "widgets should be saved".
+        // Let's implement individual update or bulk update.
+        // For simplicity/robustness, let's update changed ones in background.
+
+        updatedWidgets.forEach(async (w) => {
+            try {
+                await api.put(`/widgets/${w.id}`, {
+                    position: { x: w.x, y: w.y, w: w.w, h: w.h }
+                });
+            } catch (err) {
+                console.error("Failed to save position", err);
+            }
+        });
+    };
+
+    const handleAddWidget = async (e) => {
+        e.preventDefault();
+        try {
+            // Auto-assign title and telemetry column if not set
+            const title = newWidget.title || `${newWidget.type.charAt(0).toUpperCase() + newWidget.type.slice(1)} Widget`;
+            const telemetry_column = newWidget.type === 'door' ? 'door_status' :
+                newWidget.type === 'battery' ? 'battery_level' :
+                    newWidget.type;
+
+            const payload = {
+                dashboard_id: parseInt(id),
+                type: newWidget.type,
+                title: title,
+                device_id: newWidget.device_id,
+                telemetry_column: telemetry_column,
+                position: { x: 0, y: Infinity, w: 2, h: 2 } // Bottom of grid
+            };
+
+            await api.post('/widgets', payload);
+            setIsModalOpen(false);
+            setNewWidget({ type: 'temperature', title: '', device_id: '' });
+            fetchDashboardData();
+        } catch (error) {
+            console.error('Add widget error:', error);
+        }
+    };
+
+    const handleDeleteWidget = async (widgetId) => {
+        if (!window.confirm("Remove this widget?")) return;
+        try {
+            await api.delete(`/widgets/${widgetId}`);
+            setWidgets(prev => prev.filter(w => w.id !== widgetId));
+        } catch (error) {
+            console.error('Delete widget error:', error);
+        }
+    };
 
     // ... (Loading state)
 
