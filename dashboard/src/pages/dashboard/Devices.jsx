@@ -131,6 +131,7 @@ const Devices = () => {
                         <thead>
                             <tr className="border-b border-white/10 bg-white/[0.02]">
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Device ID</th>
+                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Tenant UUID</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Created At</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Last Seen</th>
                                 {!isCustomer && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>}
@@ -139,7 +140,7 @@ const Devices = () => {
                         <tbody className="divide-y divide-white/5">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                                         <div className="flex flex-col items-center justify-center space-y-3">
                                             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
                                             <p className="text-sm">Loading devices...</p>
@@ -148,7 +149,7 @@ const Devices = () => {
                                 </tr>
                             ) : filteredDevices.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                                         <Cpu size={40} className="mx-auto mb-3 opacity-20" />
                                         <p>No devices found.</p>
                                     </td>
@@ -161,6 +162,9 @@ const Devices = () => {
                                                 <span className="font-bold">{device.device_id}</span>
                                                 <span className="text-xs text-gray-500">#{device.id}</span>
                                             </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="text-xs text-gray-400 font-mono">{device.tenant_uuid}</span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-2 text-sm text-gray-400">
