@@ -37,6 +37,11 @@ const setTokenCookies = (res, accessToken, refreshToken) => {
 export const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
+
+        if (!req.tenant) {
+            return res.status(404).json({ message: 'Tenant not found for this domain. Registration is only available on specific tenant domains.' });
+        }
+
         const tenant_id = req.tenant.id;
 
         const existingUser = await TenantCustomer.findOne({ where: { email, tenant_id } });
@@ -83,6 +88,11 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        if (!req.tenant) {
+            return res.status(404).json({ message: 'Tenant not found for this domain. Please ensure you are accessing the correct URL.' });
+        }
+
         const tenant_id = req.tenant.id;
 
         const user = await TenantCustomer.findOne({ where: { email, tenant_id } });

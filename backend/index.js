@@ -25,6 +25,13 @@ app.use(cookieParser());
 // Tenant Branding Route (Public)
 app.get('/api/tenant/info', tenantDetection, (req, res) => {
     try {
+        if (!req.tenant) {
+            return res.json({
+                name: 'BayIot',
+                logo: null,
+                theme: 'dark'
+            });
+        }
         const tenantData = req.tenant.get({ plain: true });
         console.log(`Branding fetch for ${req.tenant.domain}:`, tenantData);
         // We only want to expose branding-related fields publicly

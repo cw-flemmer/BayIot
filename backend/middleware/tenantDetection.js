@@ -21,10 +21,11 @@ const tenantDetection = async (req, res, next) => {
         }
 
         if (!tenant) {
-            return res.status(404).json({ message: `Tenant not found for domain: ${domain}` });
+            console.warn(`Tenant detection: No tenant found for domain ${domain}. Proceeding with req.tenant = null.`);
+            req.tenant = null;
+        } else {
+            req.tenant = tenant;
         }
-
-        req.tenant = tenant;
         next();
     } catch (error) {
         console.error('Tenant detection error details:', error);
