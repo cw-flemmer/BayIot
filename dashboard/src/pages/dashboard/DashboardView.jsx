@@ -29,7 +29,12 @@ const DashboardView = () => {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // ... (Add Widget Form state)
+    // Add Widget Form
+    const [newWidget, setNewWidget] = useState({
+        type: 'temperature',
+        title: '',
+        device_id: ''
+    });
 
     useEffect(() => {
         fetchDashboardData();
