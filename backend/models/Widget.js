@@ -43,6 +43,6 @@ const Widget = sequelize.define('Widget', {
 
 // Associations
 Dashboard.hasMany(Widget, { foreignKey: 'dashboard_id', onDelete: 'CASCADE' });
-Widget.belongsTo(Dashboard, { foreignKey: 'dashboard_id' });
+Widget.belongsTo(Dashboard, { foreignKey: 'dashboard_id', as: 'dashboard' });
 
 export default Widget;

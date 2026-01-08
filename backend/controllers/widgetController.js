@@ -76,7 +76,7 @@ export const updateWidget = async (req, res) => {
         res.json(widget);
     } catch (error) {
         console.error('Update widget error:', error);
-        res.status(500).json({ message: 'Server error updating widget.' });
+        res.status(500).json({ message: 'Server error updating widget.', error: error.message });
     }
 };
 
