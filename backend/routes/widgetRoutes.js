@@ -3,8 +3,11 @@ import { createWidget, getWidgets, updateWidget, deleteWidget } from '../control
 import authMiddleware from '../middleware/authMiddleware.js';
 import adminMiddleware from '../middleware/adminMiddleware.js';
 
+import tenantDetection from '../middleware/tenantDetection.js';
+
 const router = express.Router();
 
+router.use(tenantDetection); // Ensure tenant is detected first
 router.use(authMiddleware);
 
 // Get widgets for a dashboard
