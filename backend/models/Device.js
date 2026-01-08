@@ -28,14 +28,6 @@ const Device = sequelize.define('Device', {
         type: DataTypes.DATE,
         allowNull: false,
     },
-    dashboard_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'dashboards',
-            key: 'id',
-        },
-    },
 }, {
     tableName: 'tenant_devices',
     underscored: true,
