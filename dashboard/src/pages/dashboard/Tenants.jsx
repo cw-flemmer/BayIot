@@ -149,6 +149,7 @@ const Tenants = () => {
                         <thead>
                             <tr className="border-b border-white/5 bg-white/[0.02]">
                                 <th className="px-6 py-4 text-sm font-semibold text-gray-400">Tenant Info</th>
+                                <th className="px-6 py-4 text-sm font-semibold text-gray-400">UUID</th>
                                 <th className="px-6 py-4 text-sm font-semibold text-gray-400">Domain</th>
                                 <th className="px-6 py-4 text-sm font-semibold text-gray-400">Created At</th>
                                 <th className="px-6 py-4 text-sm font-semibold text-gray-400">Default Theme</th>
@@ -159,12 +160,12 @@ const Tenants = () => {
                             {isLoading ? (
                                 Array(5).fill(0).map((_, i) => (
                                     <tr key={i} className="animate-pulse">
-                                        <td colSpan="5" className="px-6 py-4 h-16 bg-white/[0.01]" />
+                                        <td colSpan="6" className="px-6 py-4 h-16 bg-white/[0.01]" />
                                     </tr>
                                 ))
                             ) : filteredTenants.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
                                         No tenants found matching your search.
                                     </td>
                                 </tr>
@@ -179,6 +180,11 @@ const Tenants = () => {
                                                 <p className="font-bold">{tenant.name}</p>
                                                 <p className="text-xs text-gray-500">ID: {tenant.id}</p>
                                             </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center space-x-2 text-[11px] text-blue-400/70 font-mono bg-blue-400/5 px-2 py-1 rounded-md w-fit">
+                                            <span>{tenant.uuid}</span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
@@ -261,6 +267,16 @@ const Tenants = () => {
                                         placeholder="e.g. Acme Corp"
                                     />
                                 </div>
+
+                                {editingTenant && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-500 ml-1 uppercase tracking-wider text-[10px]">Tenant UUID (Read Only)</label>
+                                        <div className="w-full bg-white/[0.02] border border-white/5 rounded-2xl py-3 px-4 text-gray-500 font-mono text-xs select-all">
+                                            {editingTenant.uuid}
+                                        </div>
+                                        <p className="text-[10px] text-gray-600 ml-1 italic">Used for linking external devices.</p>
+                                    </div>
+                                )}
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300 ml-1">Domain / Hostname</label>

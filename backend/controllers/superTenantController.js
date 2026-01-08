@@ -1,4 +1,5 @@
 import Tenant from '../models/Tenant.js';
+import { Op } from 'sequelize';
 
 export const getAllTenants = async (req, res) => {
     try {
@@ -16,9 +17,20 @@ export const createTenant = async (req, res) => {
     try {
         const { name, domain, theme } = req.body;
 
-        const existingTenant = await Tenant.findOne({ where: { domain } });
+        // Check for existing tenant with same domain or name
+        const existingTenant = await Tenant.findOne({
+            where: {
+                [Op.or]: [
+                    { domain },
+                    { name }
+                ]
+            }
+        });
+
         if (existingTenant) {
-            return res.status(400).json({ message: 'A tenant with this domain already exists.' });
+            return res.status(400).json({
+                message: `A tenant with the same name or domain already exists. (Note: Names and domains must be unique).`
+            });
         }
 
         const tenant = await Tenant.create({

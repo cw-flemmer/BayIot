@@ -16,6 +16,12 @@ const Tenant = sequelize.define('Tenant', {
         allowNull: false,
         unique: true,
     },
+    uuid: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        unique: true,
+    },
     logo: {
         type: DataTypes.STRING,
         allowNull: true,

@@ -94,3 +94,7 @@ Note: When creating models, please use sequelize and create models in model fold
 Adjust the signin to check for this role and allow the site-admin to create tenants as well. 
 - Create a new page Tenants, then create a new sidebar menu for admin (Tenants), include all menus from the admin menu as well. The site admin has full access to all menus.
 - In the Tenants page, allow viewing a list of tenants, as well as creating and editing tenants. Use a layout similarthe Dashboard page layout, but instead of displaying tenants in cards, show them in a searchable table view       
+
+7. Site Admin Enhancements
+- Each tenant must have a unique uuid. This uuid will be used to link devices to the tenant.
+- When creating a tenant, generate a unique uuid for the tenant and store it in the database. I also want to be able to view the uuid in the Edit Tenant form, but it must be read only. Also, when creating the tenant, first check if a tenant with the domain, name and uuid already exists. If it does, reject the request and notify the user that a tenant with the same domain, name and uuid already exists.
