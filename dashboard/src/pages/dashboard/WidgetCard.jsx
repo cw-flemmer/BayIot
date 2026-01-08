@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Trash2, Move, Thermometer, Droplets, Battery, DoorOpen, Bolt } from 'lucide-react';
 import api from '../../services/api';
-import TemperatureGauge from '../../components/widgets/TemperatureGauge';
 
 const WidgetCard = ({ widget, onDelete, isDraggable, showDelete }) => {
     const [data, setData] = useState(null);
@@ -76,13 +75,9 @@ const WidgetCard = ({ widget, onDelete, isDraggable, showDelete }) => {
 
             {/* Value */}
             <div className="flex-1 flex items-center justify-center w-full">
-                {widget.type === 'temperature' ? (
-                    <TemperatureGauge value={data?.temperature || 0} />
-                ) : (
-                    <span className={`text-4xl font-bold font-['Outfit'] ${widget.type === 'door' ? (data?.door_status ? 'text-red-400' : 'text-green-400') : 'text-white'}`}>
-                        {getValue()}
-                    </span>
-                )}
+                <span className={`text-4xl font-bold font-['Outfit'] ${widget.type === 'door' ? (data?.door_status ? 'text-red-400' : 'text-green-400') : 'text-white'}`}>
+                    {getValue()}
+                </span>
             </div>
 
             {/* Footer / Status */}
