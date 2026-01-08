@@ -73,11 +73,11 @@ services:
     depends_on:
       - mysql
 
-  dashboard:
-    build:
-      context: ./dashboard 
-      dockerfile: Dockerfile    
+  nginx:
     container_name: bayiot_dashboard
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile        
     restart: unless-stopped
     ports:
       - "8080:80"
