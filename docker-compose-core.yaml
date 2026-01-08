@@ -58,44 +58,6 @@ services:
       - /etc/bayiot/grafana:/var/lib/grafana
     restart: unless-stopped
 
-  backend:
-    build: ./backend
-    container_name: bayiot_backend
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    env_file:
-      - ./backend/.env
-    environment:
-      - JWT_SECRET=your_very_secure_secret
-      - JWT_REFRESH_SECRET=your_very_secure_refresh_secret  
-    networks:
-      saas:
-        ipv4_address: 11.0.1.40
-    volumes:
-      - images_data:/app/public/images
-    depends_on:
-      - mysql
-
-  nginx:
-    container_name: bayiot_dashboard
-    build:
-      context: .
-      dockerfile: nginx/Dockerfile        
-    restart: unless-stopped
-    volumes:
-      - images_data:/usr/share/nginx/html/images
-    ports:
-      - "8080:80"
-    networks:
-      saas:
-        ipv4_address: 11.0.1.41
-    depends_on:
-      - backend
-
-volumes:
-  images_data:
-
 networks:
   saas:
     external: true 
