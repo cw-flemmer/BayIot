@@ -188,7 +188,7 @@ const DashboardView = () => {
                         className="layout"
                         layouts={{ lg: widgets }}
                         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-                        cols={{ lg: 6, md: 6, sm: 4, xs: 2, xxs: 1 }} // 6 columns requirement
+                        cols={{ lg: 12, md: 6, sm: 4, xs: 2, xxs: 1 }} // 6 columns requirement
                         rowHeight={100}
                         draggableHandle=".drag-handle"
                         onLayoutChange={handleLayoutChange}
