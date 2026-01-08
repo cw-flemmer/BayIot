@@ -110,7 +110,6 @@ Then show menu as previously implemented
 - Allow admin to view a list of devices assigned to them. Use same layout as for admin dashboard. The devices (tenant_devices) is linked to the (tenants) with uuid and tenant_uuid. There is currently no device model, create one. The device model will have the following fields:
 - id (key, auto increment)
 - tenant_uuid (char 36) Note: Link to tenant table on uuid
-- customer (varchar)
 - device (varchar)
 - created_at (datetime)
 - last_seen (datetime)

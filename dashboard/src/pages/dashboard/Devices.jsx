@@ -27,8 +27,7 @@ const Devices = () => {
 
     // Form State
     const [formData, setFormData] = useState({
-        device: '',
-        customer: ''
+        device: ''
     });
 
     const fetchDevices = async () => {
@@ -56,7 +55,7 @@ const Devices = () => {
             await api.post('/devices', formData);
             setSuccessMessage('Device registered successfully!');
             setIsModalOpen(false);
-            setFormData({ device: '', customer: '' });
+            setFormData({ device: '' });
             fetchDevices();
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (err) {
@@ -79,8 +78,7 @@ const Devices = () => {
     };
 
     const filteredDevices = devices.filter(d =>
-        d.device.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (d.customer && d.customer.toLowerCase().includes(searchQuery.toLowerCase()))
+        d.device.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
@@ -132,7 +130,6 @@ const Devices = () => {
                         <thead>
                             <tr className="border-b border-white/10 bg-white/[0.02]">
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Device</th>
-                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Customer Link</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Created At</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Last Seen</th>
                                 {!isCustomer && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>}
@@ -165,9 +162,6 @@ const Devices = () => {
                                                 </div>
                                                 <span className="font-bold">{device.device}</span>
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className="text-sm text-gray-300">{device.customer || 'Unassigned'}</span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-2 text-sm text-gray-400">
@@ -241,17 +235,6 @@ const Devices = () => {
                                         onChange={(e) => setFormData({ ...formData, device: e.target.value })}
                                         className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-['Outfit'] text-white"
                                         placeholder="e.g. ESP32-Temp-Sensor"
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300 ml-1">Customer Identifier</label>
-                                    <input
-                                        type="text"
-                                        value={formData.customer}
-                                        onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
-                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-['Outfit'] text-white"
-                                        placeholder="Customer name or ID (optional)"
                                     />
                                 </div>
 

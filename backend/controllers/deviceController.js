@@ -27,14 +27,13 @@ export const getDevices = async (req, res) => {
 
 export const createDevice = async (req, res) => {
     try {
-        const { device, customer } = req.body;
+        const { device } = req.body;
         if (!req.tenant) {
             return res.status(404).json({ message: 'Tenant context missing.' });
         }
 
         const newDevice = await Device.create({
             device,
-            customer,
             tenant_uuid: req.tenant.uuid
         });
 

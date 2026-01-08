@@ -16,10 +16,6 @@ const Device = sequelize.define('Device', {
             key: 'uuid',
         },
     },
-    customer: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
     device: {
         type: DataTypes.STRING,
         allowNull: false,
