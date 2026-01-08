@@ -26,7 +26,9 @@ const Devices = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     // Form State
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({
+        device_id: ''
+    });
 
     const fetchDevices = async () => {
         setIsLoading(true);
@@ -53,7 +55,7 @@ const Devices = () => {
             await api.post('/devices', formData);
             setSuccessMessage('Device registered successfully!');
             setIsModalOpen(false);
-            setFormData({});
+            setFormData({ device_id: '' });
             fetchDevices();
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (err) {
@@ -76,6 +78,7 @@ const Devices = () => {
     };
 
     const filteredDevices = devices.filter(d =>
+        d.device_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         d.id.toString().includes(searchQuery.toLowerCase())
     );
 
@@ -127,7 +130,7 @@ const Devices = () => {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-white/10 bg-white/[0.02]">
-                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">ID</th>
+                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Device ID</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Created At</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Last Seen</th>
                                 {!isCustomer && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>}
@@ -155,16 +158,14 @@ const Devices = () => {
                                     <tr key={device.id} className="hover:bg-white/[0.02] transition-colors group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-3">
-                                                <div className="w-10 h-10 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-400">
-                                                    <Cpu size={20} />
-                                                </div>
-                                                <span className="font-bold">#{device.id}</span>
+                                                <span className="font-bold">{device.device_id}</span>
+                                                <span className="text-xs text-gray-500">#{device.id}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-2 text-sm text-gray-400">
                                                 <Calendar size={14} />
-                                                <span>{new Date(device.createdAt).toLocaleDateString()}</span>
+                                                <span>{new Date(device.created_at || device.createdAt).toLocaleDateString()}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
@@ -224,8 +225,16 @@ const Devices = () => {
                             )}
 
                             <form onSubmit={handleCreate} className="space-y-6">
-                                <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-2xl text-sm text-blue-400 mb-4">
-                                    Clicking register will create a new device entry for this tenant.
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300 ml-1">Device ID</label>
+                                    <input
+                                        required
+                                        type="text"
+                                        value={formData.device_id}
+                                        onChange={(e) => setFormData({ ...formData, device_id: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-['Outfit'] text-white"
+                                        placeholder="e.g. SN-990-221"
+                                    />
                                 </div>
 
                                 <div className="flex space-x-4 pt-4">

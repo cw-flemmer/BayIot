@@ -12,7 +12,7 @@ export const getDevices = async (req, res) => {
 
         const devices = await Device.findAll({
             where: { tenant_uuid: req.tenant.uuid },
-            order: [['createdAt', 'DESC']]
+            order: [['created_at', 'DESC']]
         });
 
         res.json(devices);
@@ -31,8 +31,16 @@ export const createDevice = async (req, res) => {
             return res.status(404).json({ message: 'Tenant context missing.' });
         }
 
+        const { device_id } = req.body;
+        if (!device_id) {
+            return res.status(400).json({ message: 'device_id is required.' });
+        }
+
         const newDevice = await Device.create({
-            tenant_uuid: req.tenant.uuid
+            device_id,
+            tenant_uuid: req.tenant.uuid,
+            created_at: new Date(),
+            last_seen: new Date()
         });
 
         res.status(201).json({ message: 'Device created successfully', device: newDevice });

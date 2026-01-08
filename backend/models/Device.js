@@ -16,11 +16,22 @@ const Device = sequelize.define('Device', {
             key: 'uuid',
         },
     },
+    device_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    last_seen: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
 }, {
     tableName: 'tenant_devices',
     underscored: true,
-    createdAt: 'created_at',
-    updatedAt: 'last_seen'
+    timestamps: false
 });
 
 // Associations
