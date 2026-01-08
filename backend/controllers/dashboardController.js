@@ -46,6 +46,32 @@ export const getDashboards = async (req, res) => {
     }
 };
 
+export const getDashboard = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tenant_id = req.tenant.id;
+
+        const dashboard = await Dashboard.findOne({
+            where: { id, tenant_id },
+            include: [{ model: TenantCustomer, as: 'assignedCustomer', attributes: ['id', 'name', 'email'] }]
+        });
+
+        if (!dashboard) {
+            return res.status(404).json({ message: 'Dashboard not found.' });
+        }
+
+        // Security check for customers
+        if (req.user.role === 'customer' && dashboard.customer_id !== req.user.id) {
+            return res.status(403).json({ message: 'Access denied.' });
+        }
+
+        res.json(dashboard);
+    } catch (error) {
+        console.error('Get dashboard error:', error);
+        res.status(500).json({ message: 'Server error fetching dashboard.' });
+    }
+};
+
 export const updateDashboard = async (req, res) => {
     try {
         const { id } = req.params;

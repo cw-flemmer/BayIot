@@ -25,15 +25,11 @@ const DashboardView = () => {
 
     const [widgets, setWidgets] = useState([]);
     const [devices, setDevices] = useState([]);
+    const [dashboardData, setDashboardData] = useState(null); // [NEW]
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Add Widget Form
-    const [newWidget, setNewWidget] = useState({
-        type: 'temperature',
-        title: '',
-        device_id: ''
-    });
+    // ... (Add Widget Form state)
 
     useEffect(() => {
         fetchDashboardData();
@@ -41,20 +37,20 @@ const DashboardView = () => {
 
     const fetchDashboardData = async () => {
         try {
-            const [widgetsRes, devicesRes] = await Promise.all([
+            const [widgetsRes, devicesRes, dashboardRes] = await Promise.all([
                 api.get(`/widgets/dashboard/${id}`),
-                api.get('/devices') // In real app, maybe filter by what's allocated to this dashboard? 
-                // Requirement said: "filtered to devices allocated to this dashboard"
-                // But currently GET /devices returns all tenant devices.
-                // We can filter on client side for now.
+                api.get('/devices'),
+                api.get(`/dashboards/${id}`) // [NEW]
             ]);
 
+            setDashboardData(dashboardRes.data); // [NEW]
+
+            // ... (rest of filtering logic)
             // Debugging: Log the raw devices and ID
             console.log('Dashboard ID:', id);
             console.log('All Devices:', devicesRes.data);
 
             // Filter devices allocated to this dashboard
-            // Check both the direct foreign key and the association
             const allocatedDevices = devicesRes.data.filter(d =>
                 d.dashboard_id == id ||
                 d.allocatedDashboard?.id == id
@@ -76,82 +72,9 @@ const DashboardView = () => {
         }
     };
 
-    const handleLayoutChange = async (layout) => {
-        // Update local state positions
-        const updatedWidgets = widgets.map(w => {
-            const gridItem = layout.find(l => l.i === w.id.toString());
-            if (gridItem) {
-                return {
-                    ...w,
-                    x: gridItem.x,
-                    y: gridItem.y,
-                    w: gridItem.w,
-                    h: gridItem.h
-                };
-            }
-            return w;
-        });
-        setWidgets(updatedWidgets);
+    // ... (handleLayoutChange, handleAddWidget, handleDeleteWidget)
 
-        // In a real optimized app, we'd debounce this save
-        // For now, we wait for explicit "Save" or just let it float in state 
-        // until we decide to sync. But requirement says "widgets should be saved".
-        // Let's implement individual update or bulk update.
-        // For simplicity/robustness, let's update changed ones in background.
-
-        updatedWidgets.forEach(async (w) => {
-            try {
-                await api.put(`/widgets/${w.id}`, {
-                    position: { x: w.x, y: w.y, w: w.w, h: w.h }
-                });
-            } catch (err) {
-                console.error("Failed to save position", err);
-            }
-        });
-    };
-
-    const handleAddWidget = async (e) => {
-        e.preventDefault();
-        try {
-            // Auto-assign title and telemetry column if not set
-            const title = newWidget.title || `${newWidget.type.charAt(0).toUpperCase() + newWidget.type.slice(1)} Widget`;
-            const telemetry_column = newWidget.type === 'door' ? 'door_status' :
-                newWidget.type === 'battery' ? 'battery_level' :
-                    newWidget.type;
-
-            const payload = {
-                dashboard_id: parseInt(id),
-                type: newWidget.type,
-                title: title,
-                device_id: newWidget.device_id,
-                telemetry_column: telemetry_column,
-                position: { x: 0, y: Infinity, w: 2, h: 2 } // Bottom of grid
-            };
-
-            await api.post('/widgets', payload);
-            setIsModalOpen(false);
-            setNewWidget({ type: 'temperature', title: '', device_id: '' });
-            fetchDashboardData();
-        } catch (error) {
-            console.error('Add widget error:', error);
-        }
-    };
-
-    const handleDeleteWidget = async (widgetId) => {
-        if (!window.confirm("Remove this widget?")) return;
-        try {
-            await api.delete(`/widgets/${widgetId}`);
-            setWidgets(prev => prev.filter(w => w.id !== widgetId));
-        } catch (error) {
-            console.error('Delete widget error:', error);
-        }
-    };
-
-    if (loading) return (
-        <div className="flex items-center justify-center h-screen text-blue-500">
-            <Loader2 className="animate-spin w-10 h-10" />
-        </div>
-    );
+    // ... (Loading state)
 
     return (
         <div className="space-y-6">
@@ -162,8 +85,8 @@ const DashboardView = () => {
                         <ArrowLeft size={24} />
                     </button>
                     <div>
-                        <h2 className="text-3xl font-bold">Dashboard Editor</h2>
-                        <p className="text-gray-500">Customize layout and add widgets</p>
+                        <h2 className="text-3xl font-bold">{dashboardData ? dashboardData.name : 'Dashboard Editor'}</h2>
+                        <p className="text-gray-500">{isCustomer ? 'View your dashboard' : 'Customize layout and add widgets'}</p>
                     </div>
                 </div>
                 <div className="flex items-center space-x-3">

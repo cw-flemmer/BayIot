@@ -2,6 +2,7 @@ import express from 'express';
 import {
     createDashboard,
     getDashboards,
+    getDashboard,
     updateDashboard,
     deleteDashboard
 } from '../controllers/dashboardController.js';
@@ -22,5 +23,6 @@ router.delete('/:id', adminMiddleware, deleteDashboard);
 
 // Common routes (Customers can only see their assigned dashboards via logic in controller)
 router.get('/', getDashboards);
+router.get('/:id', getDashboard);
 
 export default router;
