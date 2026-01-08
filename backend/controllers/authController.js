@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const TenantCustomer = require('../models/TenantCustomer');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import TenantCustomer from '../models/TenantCustomer.js';
 
 const generateTokens = (user) => {
     const accessToken = jwt.sign(
@@ -34,7 +34,7 @@ const setTokenCookies = (res, accessToken, refreshToken) => {
     });
 };
 
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const tenant_id = req.tenant.id;
@@ -66,7 +66,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const tenant_id = req.tenant.id;
@@ -94,13 +94,13 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.logout = (req, res) => {
+export const logout = (req, res) => {
     res.clearCookie('accessToken');
     res.clearCookie('refreshToken');
     res.json({ message: 'Logged out successfully' });
 };
 
-exports.refreshToken = async (req, res) => {
+export const refreshToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
         return res.status(401).json({ message: 'Refresh token missing.' });

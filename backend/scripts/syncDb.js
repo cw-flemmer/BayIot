@@ -1,7 +1,7 @@
-const { sequelize } = require('./config/database');
-const Tenant = require('./models/Tenant');
-const TenantCustomer = require('./models/TenantCustomer');
-const TenantCustomerDevice = require('./models/TenantCustomerDevice');
+import { sequelize } from '../config/database.js';
+import Tenant from '../models/Tenant.js';
+import TenantCustomer from '../models/TenantCustomer.js';
+import TenantCustomerDevice from '../models/TenantCustomerDevice.js';
 
 const initDB = async () => {
     try {

@@ -1,14 +1,14 @@
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-require('dotenv').config();
-const { connectDB } = require('./config/database');
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import 'dotenv/config';
+import { connectDB } from './config/database.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const authRoutes = require('./routes/authRoutes');
-const tenantDetection = require('./middleware/tenantDetection');
+import authRoutes from './routes/authRoutes.js';
+import tenantDetection from './middleware/tenantDetection.js';
 
 // Connect to Database
 connectDB();

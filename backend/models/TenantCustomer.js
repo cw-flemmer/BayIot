@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/database');
-const Tenant = require('./Tenant');
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.js';
+import Tenant from './Tenant.js';
 
 const TenantCustomer = sequelize.define('TenantCustomer', {
     id: {
@@ -44,4 +44,4 @@ const TenantCustomer = sequelize.define('TenantCustomer', {
 Tenant.hasMany(TenantCustomer, { foreignKey: 'tenant_id' });
 TenantCustomer.belongsTo(Tenant, { foreignKey: 'tenant_id' });
 
-module.exports = TenantCustomer;
+export default TenantCustomer;

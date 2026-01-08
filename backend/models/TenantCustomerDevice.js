@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/database');
-const TenantCustomer = require('./TenantCustomer');
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.js';
+import TenantCustomer from './TenantCustomer.js';
 
 const TenantCustomerDevice = sequelize.define('TenantCustomerDevice', {
     id: {
@@ -31,4 +31,4 @@ const TenantCustomerDevice = sequelize.define('TenantCustomerDevice', {
 TenantCustomer.hasMany(TenantCustomerDevice, { foreignKey: 'tenant_customer_id' });
 TenantCustomerDevice.belongsTo(TenantCustomer, { foreignKey: 'tenant_customer_id' });
 
-module.exports = TenantCustomerDevice;
+export default TenantCustomerDevice;

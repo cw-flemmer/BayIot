@@ -1,4 +1,4 @@
-const Tenant = require('../models/Tenant');
+import Tenant from '../models/Tenant.js';
 
 const tenantDetection = async (req, res, next) => {
     try {
@@ -20,4 +20,4 @@ const tenantDetection = async (req, res, next) => {
     }
 };
 
-module.exports = tenantDetection;
+export default tenantDetection;
