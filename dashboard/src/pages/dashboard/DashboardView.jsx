@@ -41,8 +41,18 @@ const DashboardView = () => {
                 // We can filter on client side for now.
             ]);
 
+            // Debugging: Log the raw devices and ID
+            console.log('Dashboard ID:', id);
+            console.log('All Devices:', devicesRes.data);
+
             // Filter devices allocated to this dashboard
-            const allocatedDevices = devicesRes.data.filter(d => d.allocatedDashboard?.id === parseInt(id));
+            // Check both the direct foreign key and the association
+            const allocatedDevices = devicesRes.data.filter(d =>
+                d.dashboard_id == id ||
+                d.allocatedDashboard?.id == id
+            );
+
+            console.log('Allocated Devices:', allocatedDevices);
             setDevices(allocatedDevices);
 
             // Format widgets for grid
