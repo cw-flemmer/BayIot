@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000/api', // Should be dynamic in production
+    baseURL: 'http://bayiot_backend:3000/api', // Should be dynamic in production
     withCredentials: true,
 });
 
@@ -12,7 +12,7 @@ api.interceptors.response.use(
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                await axios.post('http://localhost:3000/api/auth/refresh-token', {}, { withCredentials: true });
+                await axios.post('http://bayiot_backend:3000/api/auth/refresh-token', {}, { withCredentials: true });
                 return api(originalRequest);
             } catch (refreshError) {
                 // Redirect to login if refresh fails
