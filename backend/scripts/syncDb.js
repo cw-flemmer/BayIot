@@ -2,6 +2,7 @@ import { sequelize } from '../config/database.js';
 import Tenant from '../models/Tenant.js';
 import TenantCustomer from '../models/TenantCustomer.js';
 import TenantCustomerDevice from '../models/TenantCustomerDevice.js';
+import Dashboard from '../models/Dashboard.js';
 
 const initDB = async () => {
     try {
