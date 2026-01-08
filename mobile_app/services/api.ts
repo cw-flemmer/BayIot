@@ -1,0 +1,29 @@
+import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
+
+// Replace with your local machine's IP (e.g., http://192.168.1.50:5000)
+// or use 10.0.2.2 for Android Emulator
+const BASE_URL = 'http://156.155.253.143:3000/api';
+
+const api = axios.create({
+    baseURL: BASE_URL,
+    timeout: 10000,
+});
+
+// Interceptor to attach Tenant Domain and Token
+api.interceptors.request.use(async (config) => {
+    const tenantDomain = await SecureStore.getItemAsync('tenant_domain');
+    const token = await SecureStore.getItemAsync('auth_token');
+
+    if (tenantDomain) {
+        config.headers['X-Tenant-Domain'] = tenantDomain;
+    }
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+});
+
+export default api;

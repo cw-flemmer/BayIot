@@ -8,7 +8,16 @@ const tenantDetection = async (req, res, next) => {
         }
 
         // Remove port if present
-        const domain = host.split(':')[0];
+        let domain = host.split(':')[0];
+
+        // Mobile App Support: Check for explicit X-Tenant-Domain header
+        const xTenantDomain = req.headers['x-tenant-domain'];
+        if (xTenantDomain) {
+            domain = xTenantDomain;
+            console.log(`Tenant Detection: Using X-Tenant-Domain header: ${domain}`);
+        } else {
+            console.log(`Tenant Detection: Using Host header: ${domain}`);
+        }
 
         let tenant = await Tenant.findOne({ where: { domain } });
 
