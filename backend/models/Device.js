@@ -16,10 +16,6 @@ const Device = sequelize.define('Device', {
             key: 'uuid',
         },
     },
-    device: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
 }, {
     tableName: 'tenant_devices',
     underscored: true,

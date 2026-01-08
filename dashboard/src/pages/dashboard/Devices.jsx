@@ -26,9 +26,7 @@ const Devices = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     // Form State
-    const [formData, setFormData] = useState({
-        device: ''
-    });
+    const [formData, setFormData] = useState({});
 
     const fetchDevices = async () => {
         setIsLoading(true);
@@ -55,7 +53,7 @@ const Devices = () => {
             await api.post('/devices', formData);
             setSuccessMessage('Device registered successfully!');
             setIsModalOpen(false);
-            setFormData({ device: '' });
+            setFormData({});
             fetchDevices();
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (err) {
@@ -78,7 +76,7 @@ const Devices = () => {
     };
 
     const filteredDevices = devices.filter(d =>
-        d.device.toLowerCase().includes(searchQuery.toLowerCase())
+        d.id.toString().includes(searchQuery.toLowerCase())
     );
 
     return (
@@ -129,7 +127,7 @@ const Devices = () => {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="border-b border-white/10 bg-white/[0.02]">
-                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Device</th>
+                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">ID</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Created At</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Last Seen</th>
                                 {!isCustomer && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>}
@@ -160,7 +158,7 @@ const Devices = () => {
                                                 <div className="w-10 h-10 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-400">
                                                     <Cpu size={20} />
                                                 </div>
-                                                <span className="font-bold">{device.device}</span>
+                                                <span className="font-bold">#{device.id}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
@@ -226,16 +224,8 @@ const Devices = () => {
                             )}
 
                             <form onSubmit={handleCreate} className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300 ml-1">Device Name</label>
-                                    <input
-                                        required
-                                        type="text"
-                                        value={formData.device}
-                                        onChange={(e) => setFormData({ ...formData, device: e.target.value })}
-                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-['Outfit'] text-white"
-                                        placeholder="e.g. ESP32-Temp-Sensor"
-                                    />
+                                <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-2xl text-sm text-blue-400 mb-4">
+                                    Clicking register will create a new device entry for this tenant.
                                 </div>
 
                                 <div className="flex space-x-4 pt-4">
