@@ -10,6 +10,7 @@ export const TenantProvider = ({ children }) => {
     const fetchTenantInfo = async () => {
         try {
             const response = await api.get('/tenant/info');
+            console.log('Tenant Branding Info:', response.data);
             setTenantInfo(response.data);
         } catch (error) {
             console.error('Failed to fetch tenant info:', error);

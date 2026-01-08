@@ -20,9 +20,10 @@ const Settings = () => {
     const [error, setError] = useState('');
 
     const getLogoUrl = (logoPath) => {
-        if (!logoPath) return null;
+        if (!logoPath || logoPath === '') return null;
         if (logoPath.startsWith('http')) return logoPath;
         if (logoPath.startsWith('/')) return logoPath;
+        if (logoPath.startsWith('data:')) return logoPath;
         return `/images/${logoPath}`;
     };
 

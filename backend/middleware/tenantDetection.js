@@ -10,10 +10,18 @@ const tenantDetection = async (req, res, next) => {
         // Remove port if present
         const domain = host.split(':')[0];
 
-        const tenant = await Tenant.findOne({ where: { domain } });
+        let tenant = await Tenant.findOne({ where: { domain } });
+
+        // Developer/Localhost Fallback: If no tenant matches and we are on localhost, pick the first tenant
+        if (!tenant && (domain === 'localhost' || domain === '127.0.0.1')) {
+            tenant = await Tenant.findOne({ order: [['id', 'ASC']] });
+            if (tenant) {
+                console.log(`Development mode: Falling back to first tenant (ID: ${tenant.id}) for host ${domain}`);
+            }
+        }
 
         if (!tenant) {
-            return res.status(404).json({ message: 'Tenant not found for this domain.' });
+            return res.status(404).json({ message: `Tenant not found for domain: ${domain}` });
         }
 
         req.tenant = tenant;
