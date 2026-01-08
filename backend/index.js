@@ -25,7 +25,8 @@ import tenantDetection from './middleware/tenantDetection.js';
 // Middleware
 app.use(cors({
     origin: true,
-    credentials: true
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-Domain']
 }));
 app.use(express.json());
 app.use(cookieParser());
