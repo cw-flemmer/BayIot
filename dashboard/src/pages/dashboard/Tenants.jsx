@@ -194,7 +194,7 @@ const Tenants = () => {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-400">
-                                        {new Date(tenant.created_at).toLocaleDateString()}
+                                        {new Date(tenant.createdAt).toLocaleDateString()}
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${tenant.theme === 'dark' ? 'bg-indigo-500/10 text-indigo-400' : 'bg-gray-500/10 text-gray-400'

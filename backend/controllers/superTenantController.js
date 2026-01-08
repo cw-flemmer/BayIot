@@ -4,7 +4,7 @@ import { Op } from 'sequelize';
 export const getAllTenants = async (req, res) => {
     try {
         const tenants = await Tenant.findAll({
-            order: [['created_at', 'DESC']]
+            order: [['createdAt', 'DESC']]
         });
         res.json(tenants);
     } catch (error) {

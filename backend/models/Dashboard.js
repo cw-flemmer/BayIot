@@ -35,6 +35,7 @@ const Dashboard = sequelize.define('Dashboard', {
     },
 }, {
     tableName: 'dashboards',
+    underscored: true,
 });
 
 // Associations

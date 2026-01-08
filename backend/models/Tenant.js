@@ -33,6 +33,7 @@ const Tenant = sequelize.define('Tenant', {
     },
 }, {
     tableName: 'tenants',
+    underscored: true,
 });
 
 export default Tenant;

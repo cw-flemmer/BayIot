@@ -39,6 +39,7 @@ const TenantCustomer = sequelize.define('TenantCustomer', {
     },
 }, {
     tableName: 'tenant_customers',
+    underscored: true,
 });
 
 Tenant.hasMany(TenantCustomer, { foreignKey: 'tenant_id' });
