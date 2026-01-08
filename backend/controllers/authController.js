@@ -45,12 +45,18 @@ export const register = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Role Determination Logic
+        const emailDomain = email.split('@')[1];
+        const tenantDomain = req.tenant.domain;
+        const role = emailDomain === tenantDomain ? 'admin' : 'customer';
+
         const newUser = await TenantCustomer.create({
             name,
             email,
             password: hashedPassword,
             tenant_id,
-            role: 'customer' // Default role
+            role
         });
 
         const { accessToken, refreshToken } = generateTokens(newUser);

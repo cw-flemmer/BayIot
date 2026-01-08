@@ -71,3 +71,5 @@ Note: When creating models, please use sequelize and create models in model fold
     - Password
     - Confirm password
 
+### Next Steps
+1. The tenant will already exist, but now, i want the tenant to be able to create an account for him/her self as admin in order to manage customer dashboards.The email address domain must match the tenant domain. If this is true, then the user will be created as admin. If not, the user will be created as customer. The customer at this point, will only be able to view the dashboard and not manage it.
