@@ -45,7 +45,7 @@ const WidgetCard = ({ widget, onDelete, isDraggable, showDelete }) => {
             case 'temperature': return `${data.temperature?.toFixed(1) || '--'}°C`;
             case 'humidity': return `${data.humidity?.toFixed(1) || '--'}%`;
             case 'battery': return `${data.battery_level || '--'}%`;
-            case 'door': return data.door_status ? 'OPEN' : 'CLOSED';
+            case 'door': return data.door_status ? 'CLOSED' : 'OPEN';
             default: return '--';
         }
     };
@@ -54,11 +54,11 @@ const WidgetCard = ({ widget, onDelete, isDraggable, showDelete }) => {
         <div className={`h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 flex flex-col items-center relative group overflow-hidden shadow-xl ${isDraggable ? 'cursor-move drag-handle' : ''}`}>
             {/* Header */}
             <div className="w-full flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-center space-x-3">
                     <div className="p-2 rounded-xl bg-white/5">
                         {getIcon()}
                     </div>
-                    <div>
+                    <div className=''>
                         <h4 className="font-bold text-sm text-gray-200 text-left">{widget.title || widget.type}</h4>
                         <p className="text-[10px] text-gray-500 font-mono tracking-wider text-left">{widget.device_id}</p>
                     </div>
