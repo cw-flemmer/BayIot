@@ -12,7 +12,6 @@ import {
     X,
     Search,
     Bell,
-    Bell,
     ChevronRight,
     Layout,
     Plus,
