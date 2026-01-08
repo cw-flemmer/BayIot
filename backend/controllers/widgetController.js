@@ -52,8 +52,12 @@ export const updateWidget = async (req, res) => {
         const isCustomer = req.user.role === 'customer';
 
         if (isCustomer) {
+            console.log(`[UpdateWidget] Customer ID: ${req.user.id}, Dashboard Customer ID: ${widget.dashboard?.customer_id}`);
+
             // Check if dashboard is assigned to this customer
-            if (widget.dashboard?.customer_id !== req.user.id) {
+            // Use loose Not Equal (!=) to handle string/number differences
+            if (!widget.dashboard || widget.dashboard.customer_id != req.user.id) {
+                console.error('[UpdateWidget] Access denied: Ownership mismatch');
                 return res.status(403).json({ message: 'Access denied: You do not own this dashboard.' });
             }
         }
