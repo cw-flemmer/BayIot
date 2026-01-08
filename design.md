@@ -116,3 +116,7 @@ Then show menu as previously implemented
 
 11. dashboard -> Admin -> Devices
 - Add a new edit icon in the table in actions column. When clicked, show a modal. The modal must allow me to allocate the selected device to a dashboard. The device should only be allowed to be allocated to a single dashboard. If the device is already allocated to a dashboard, show an error message.Then, show the allocated dashboard in the devices table. Create the necessary models, sql scripts and other related files for this request.
+
+12. dashboard -> Admin -> Dashboards
+- Create a new page (DashboardView). This page must only be shown when the edit icon is clicked on the dashboard card. Only admin is allowed to edit the dashboard.
+- On this page, i want to be able to add widgets to the dashboard. The widgets should be displayed in a grid layout. The grid layout should be responsive. The grid layout should have 6 columns. The widgets should be draggable, re-orderable and resizable. The widgets should be saved in the database and linked to the dashboard. There should be an (Add Widget) button at the top of the page. When clicked, show a modal with a list of available widgets. For now, create a tempareture widget, humidity widget, door widget, battery widget. Show nice colourfull icons for the widgets, as well as the widget name as specified, and a value. Then, i want to link the widget to a  column in the telemetry table,which is also linked to the device allocated to the dashboard, see the @TelemetryTable.PNG, to create the model and relevant files.

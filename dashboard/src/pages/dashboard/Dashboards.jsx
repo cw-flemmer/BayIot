@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -144,9 +145,12 @@ const Dashboards = () => {
                                 </div>
                                 {!isCustomer && (
                                     <div className="flex items-center space-x-2">
-                                        <button className="p-2 text-gray-500 hover:text-white transition-colors">
+                                        <Link
+                                            to={`/dashboard/list/${db.id}`}
+                                            className="p-2 text-gray-500 hover:text-white transition-colors"
+                                        >
                                             <Edit3 size={18} />
-                                        </button>
+                                        </Link>
                                         <button
                                             onClick={() => handleDelete(db.id)}
                                             className="p-2 text-gray-500 hover:text-red-400 transition-colors"

@@ -22,6 +22,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import SettingsPage from './Settings.jsx';
 import DashboardsPage from './Dashboards.jsx';
+import DashboardView from './DashboardView.jsx';
 import TenantsPage from './Tenants.jsx';
 import DevicesPage from './Devices.jsx';
 
@@ -199,6 +200,7 @@ const DashboardLayout = () => {
                     <Routes>
                         <Route path="/" element={<Overview />} />
                         <Route path="/list" element={<DashboardsPage />} />
+                        <Route path="/list/:id" element={<DashboardView />} />
 
                         {!isCustomer && (
                             <>
