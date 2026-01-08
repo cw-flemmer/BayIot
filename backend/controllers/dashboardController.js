@@ -18,7 +18,8 @@ export const createDashboard = async (req, res) => {
             name,
             description,
             tenant_id,
-            customer_id: customer_id || null
+            customer_id: customer_id || null,
+            columns: req.body.columns || 6
         });
 
         res.status(201).json({ message: 'Dashboard created successfully', dashboard });
@@ -93,6 +94,7 @@ export const updateDashboard = async (req, res) => {
         dashboard.name = name || dashboard.name;
         dashboard.description = description || dashboard.description;
         dashboard.customer_id = customer_id !== undefined ? customer_id : dashboard.customer_id;
+        dashboard.columns = req.body.columns || dashboard.columns;
 
         await dashboard.save();
         res.json({ message: 'Dashboard updated successfully', dashboard });

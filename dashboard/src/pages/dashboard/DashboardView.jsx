@@ -164,6 +164,29 @@ const DashboardView = () => {
                     </div>
                 </div>
                 <div className="flex items-center space-x-3">
+                    {!isCustomer && (
+                        <div className="flex items-center space-x-2 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5">
+                            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Density</span>
+                            <select
+                                value={dashboardData?.columns || 6}
+                                onChange={async (e) => {
+                                    const newCols = parseInt(e.target.value);
+                                    try {
+                                        await api.put(`/dashboards/${id}`, { columns: newCols });
+                                        setDashboardData({ ...dashboardData, columns: newCols });
+                                    } catch (err) {
+                                        console.error("Failed to update density", err);
+                                    }
+                                }}
+                                className="bg-transparent text-sm font-bold focus:outline-none cursor-pointer"
+                            >
+                                <option value="6" className="bg-[#0f172a]">Low (6)</option>
+                                <option value="12" className="bg-[#0f172a]">Medium (12)</option>
+                                <option value="18" className="bg-[#0f172a]">High (18)</option>
+                                <option value="24" className="bg-[#0f172a]">Ultra (24)</option>
+                            </select>
+                        </div>
+                    )}
                     {canManageWidgets && (
                         <button
                             onClick={() => setIsModalOpen(true)}
@@ -188,7 +211,7 @@ const DashboardView = () => {
                         className="layout"
                         layouts={{ lg: widgets }}
                         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-                        cols={{ lg: 12, md: 6, sm: 4, xs: 2, xxs: 1 }} // 6 columns requirement
+                        cols={{ lg: dashboardData?.columns || 6, md: 6, sm: 4, xs: 2, xxs: 1 }} // Dynamic columns
                         rowHeight={100}
                         draggableHandle=".drag-handle"
                         onLayoutChange={handleLayoutChange}

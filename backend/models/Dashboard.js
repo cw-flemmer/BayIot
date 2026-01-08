@@ -33,6 +33,11 @@ const Dashboard = sequelize.define('Dashboard', {
             key: 'id',
         },
     },
+    columns: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 6,
+    },
 }, {
     tableName: 'dashboards',
     underscored: true,
