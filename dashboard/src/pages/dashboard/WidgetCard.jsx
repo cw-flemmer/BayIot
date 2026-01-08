@@ -50,11 +50,11 @@ const WidgetCard = ({ widget, onDelete, isEditMode }) => {
     };
 
     return (
-        <div className="h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 flex flex-col relative group overflow-hidden shadow-xl">
+        <div className={`h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 flex flex-col relative group overflow-hidden shadow-xl ${isEditMode ? 'cursor-move drag-handle' : ''}`}>
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                    <div className={`p-2 rounded-xl bg-white/5 ${isEditMode ? 'cursor-move drag-handle' : ''}`}>
+                    <div className="p-2 rounded-xl bg-white/5">
                         {getIcon()}
                     </div>
                     <div>
