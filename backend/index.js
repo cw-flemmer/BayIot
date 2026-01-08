@@ -9,6 +9,8 @@ const port = process.env.PORT || 3000;
 
 import authRoutes from './routes/authRoutes.js';
 import tenantRoutes from './routes/tenantRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import customerRoutes from './routes/customerRoutes.js';
 import tenantDetection from './middleware/tenantDetection.js';
 
 // Middleware
@@ -28,6 +30,8 @@ app.get('/api/tenant/info', tenantDetection, (req, res) => {
 // Auth Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tenant', tenantRoutes);
+app.use('/api/dashboards', dashboardRoutes);
+app.use('/api/customers', customerRoutes);
 
 app.get('/', (req, res) => {
     res.send('BayIot API is running...');

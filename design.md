@@ -80,6 +80,13 @@ Note: When creating models, please use sequelize and create models in model fold
 
 4. Settings Page
        - Create a tabbed panel for the settings page with the following tabs:
-        - General (Upload logo, and specify theme)
-        - Customers and Access (Manage customers and access)    
+       - General (Upload logo, and specify theme)
+       - Customers and Access (Manage customers and access)    
+5. Dashboards
+    -    Add a new sidebar menu for admin (Dashboards)
+    -    Create a new page for dashboards (Dashboards), review the @Dashboard.PNG in ref folder. Design a similar layout. When the new button is clicked, show a modal with the form to create a new dashboard. The form should have the following fields:
+    - Name
+    - Description
+    - Customer (Dropdown, select from TenantCustomers)
     
+        

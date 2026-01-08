@@ -12,10 +12,16 @@ import {
     X,
     Search,
     Bell,
-    ChevronRight
+    Bell,
+    ChevronRight,
+    Layout,
+    Plus,
+    Trash2,
+    Edit3
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SettingsPage from './Settings.jsx';
+import DashboardsPage from './Dashboards.jsx';
 
 const SidebarItem = ({ icon: Icon, label, to, active, isOpen }) => (
     <Link to={to}>
@@ -49,6 +55,7 @@ const DashboardLayout = () => {
 
     const menuItems = [
         { icon: LayoutDashboard, label: 'Overview', to: '/dashboard' },
+        { icon: Layout, label: 'Dashboards', to: '/dashboard/list', adminOnly: true },
         { icon: Cpu, label: 'Devices', to: '/dashboard/devices', adminOnly: true },
         { icon: Users, label: 'Users', to: '/dashboard/users', adminOnly: true },
         { icon: Settings, label: 'Settings', to: '/dashboard/settings', adminOnly: true },
@@ -155,6 +162,7 @@ const DashboardLayout = () => {
                 <main className="flex-1 overflow-y-auto p-8 relative z-10">
                     <Routes>
                         <Route path="/" element={<Overview />} />
+                        <Route path="/list" element={<DashboardsPage />} />
                         <Route path="/devices" element={<div className="text-2xl font-bold">Devices Management Coming Soon</div>} />
                         <Route path="/users" element={<div className="text-2xl font-bold">User Management Coming Soon</div>} />
                         <Route path="/settings" element={<SettingsPage />} />
