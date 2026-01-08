@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Responsive, WidthProvider } from 'react-grid-layout';
+import RGL from 'react-grid-layout';
 import { Plus, Save, ArrowLeft, Loader2, Layout, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
@@ -8,6 +8,7 @@ import WidgetCard from './WidgetCard';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
+const { Responsive, WidthProvider } = RGL;
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const DashboardView = () => {
@@ -224,8 +225,8 @@ const DashboardView = () => {
                                                 type="button"
                                                 onClick={() => setNewWidget({ ...newWidget, type })}
                                                 className={`p-3 rounded-xl border text-sm font-bold capitalize transition-all ${newWidget.type === type
-                                                        ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-600/20'
-                                                        : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                                                    ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-600/20'
+                                                    : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
                                                     }`}
                                             >
                                                 {type}
