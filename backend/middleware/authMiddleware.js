@@ -12,8 +12,10 @@ const authMiddleware = (req, res, next) => {
         req.user = decoded;
 
         // Ensure the user belongs to the current tenant, unless they are a site-admin
-        if (req.user.role !== 'site-admin' && req.user.tenant_id !== req.tenant.id) {
-            return res.status(403).json({ message: 'Access denied: Tenant mismatch.' });
+        if (req.user.role !== 'site-admin') {
+            if (!req.tenant || req.user.tenant_id !== req.tenant.id) {
+                return res.status(403).json({ message: 'Access denied: Tenant mismatch.' });
+            }
         }
 
         next();

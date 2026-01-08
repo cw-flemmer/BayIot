@@ -98,3 +98,8 @@ Adjust the signin to check for this role and allow the site-admin to create tena
 7. Site Admin Enhancements
 - Each tenant must have a unique uuid. This uuid will be used to link devices to the tenant.
 - When creating a tenant, generate a unique uuid for the tenant and store it in the database. I also want to be able to view the uuid in the Edit Tenant form, but it must be read only. Also, when creating the tenant, first check if a tenant with the domain, name and uuid already exists. If it does, reject the request and notify the user that a tenant with the same domain, name and uuid already exists.
+
+8. Site Admin
+- Completely remove site-admin login check in backend. Instead, create a new login page for site admin with route (/site-admin-8408), and allow the site admin to login via this page. The site admin will use credentials saved in .env file in backend. 
+Then show menu as previously implemented
+ 

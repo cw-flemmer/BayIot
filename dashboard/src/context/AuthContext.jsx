@@ -7,14 +7,29 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const fetchProfile = async () => {
+        try {
+            const response = await api.get('/auth/profile');
+            setUser(response.data.user);
+        } catch (error) {
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        // Check if user is logged in (e.g., by fetching profile or checking a session flag)
-        // For now, we'll assume the user needs to login if no state is found
-        setLoading(false);
+        fetchProfile();
     }, []);
 
     const login = async (email, password) => {
         const response = await api.post('/auth/login', { email, password });
+        setUser(response.data.user);
+        return response.data;
+    };
+
+    const siteAdminLogin = async (email, password) => {
+        const response = await api.post('/auth/site-admin-login', { email, password });
         setUser(response.data.user);
         return response.data;
     };
@@ -25,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, loading }}>
+        <AuthContext.Provider value={{ user, login, siteAdminLogin, logout, isAuthenticated: !!user, loading }}>
             {children}
         </AuthContext.Provider>
     );

@@ -3,6 +3,7 @@ import { TenantProvider, useTenant } from './context/TenantContext.jsx';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
 import Signin from './pages/auth/Signin';
 import Signup from './pages/auth/Signup';
+import SiteAdminLogin from './pages/auth/SiteAdminLogin';
 import Dashboard from './pages/dashboard/DashboardLayout';
 
 const ProtectedRoute = ({ children }) => {
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/site-admin-8408" element={<SiteAdminLogin />} />
             <Route
               path="/dashboard/*"
               element={

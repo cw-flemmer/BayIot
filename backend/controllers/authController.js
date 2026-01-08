@@ -85,12 +85,7 @@ export const login = async (req, res) => {
         const { email, password } = req.body;
         const tenant_id = req.tenant.id;
 
-        let user = await TenantCustomer.findOne({ where: { email, tenant_id } });
-
-        // If not found in current tenant, check if it's a global site-admin
-        if (!user) {
-            user = await TenantCustomer.findOne({ where: { email, role: 'site-admin' } });
-        }
+        const user = await TenantCustomer.findOne({ where: { email, tenant_id } });
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials.' });
@@ -111,6 +106,42 @@ export const login = async (req, res) => {
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Server error during login.' });
+    }
+};
+
+export const siteAdminLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const adminEmail = process.env.SITE_ADMIN_EMAIL;
+        const adminPassword = process.env.SITE_ADMIN_PASSWORD;
+
+        if (!adminEmail || !adminPassword) {
+            return res.status(500).json({ message: 'Site admin credentials not configured.' });
+        }
+
+        if (email !== adminEmail || password !== adminPassword) {
+            return res.status(401).json({ message: 'Invalid site admin credentials.' });
+        }
+
+        // Mock a "user" object for the site admin
+        const siteAdmin = {
+            id: 0,
+            email: adminEmail,
+            role: 'site-admin',
+            tenant_id: 0
+        };
+
+        const { accessToken, refreshToken } = generateTokens(siteAdmin);
+        setTokenCookies(res, accessToken, refreshToken);
+
+        res.json({
+            message: 'Site Admin Login successful',
+            user: { id: 0, name: 'Site Administrator', email: adminEmail, role: 'site-admin' }
+        });
+    } catch (error) {
+        console.error('Site admin login error:', error);
+        res.status(500).json({ message: 'Server error during site admin login.' });
     }
 };
 
@@ -141,4 +172,9 @@ export const refreshToken = async (req, res) => {
     } catch (error) {
         return res.status(401).json({ message: 'Invalid refresh token.' });
     }
+};
+
+export const getProfile = (req, res) => {
+    // req.user is populated by authMiddleware
+    res.json({ user: req.user });
 };
