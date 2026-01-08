@@ -28,6 +28,14 @@ const Device = sequelize.define('Device', {
         type: DataTypes.DATE,
         allowNull: false,
     },
+    dashboard_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'dashboards',
+            key: 'id',
+        },
+    },
 }, {
     tableName: 'tenant_devices',
     underscored: true,
@@ -37,5 +45,10 @@ const Device = sequelize.define('Device', {
 // Associations
 Tenant.hasMany(Device, { foreignKey: 'tenant_uuid', sourceKey: 'uuid' });
 Device.belongsTo(Tenant, { foreignKey: 'tenant_uuid', targetKey: 'uuid' });
+
+export const initDeviceAssociations = (Dashboard) => {
+    Dashboard.hasMany(Device, { foreignKey: 'dashboard_id' });
+    Device.belongsTo(Dashboard, { foreignKey: 'dashboard_id', as: 'allocatedDashboard' });
+};
 
 export default Device;

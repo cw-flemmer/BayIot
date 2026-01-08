@@ -6,28 +6,36 @@ import {
     Cpu,
     Plus,
     Trash2,
+    Edit3,
     Loader2,
     X,
     CheckCircle2,
     Search,
     Calendar,
-    Activity
+    Layout
 } from 'lucide-react';
 
 const Devices = () => {
     const { user } = useAuth();
     const isCustomer = user?.role === 'customer';
     const [devices, setDevices] = useState([]);
+    const [dashboards, setDashboards] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAllocateModalOpen, setIsAllocateModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedDevice, setSelectedDevice] = useState(null);
 
     // Form State
     const [formData, setFormData] = useState({
         device_id: ''
+    });
+
+    const [allocateData, setAllocateData] = useState({
+        dashboard_id: ''
     });
 
     const fetchDevices = async () => {
@@ -43,8 +51,18 @@ const Devices = () => {
         }
     };
 
+    const fetchDashboards = async () => {
+        try {
+            const response = await api.get('/dashboards');
+            setDashboards(response.data);
+        } catch (err) {
+            console.error('Fetch dashboards error:', err);
+        }
+    };
+
     useEffect(() => {
         fetchDevices();
+        if (!isCustomer) fetchDashboards();
     }, []);
 
     const handleCreate = async (e) => {
@@ -65,6 +83,24 @@ const Devices = () => {
         }
     };
 
+    const handleAllocate = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        setError('');
+        try {
+            await api.post(`/devices/${selectedDevice.id}/allocate`, allocateData);
+            setSuccessMessage('Device allocated successfully!');
+            setIsAllocateModalOpen(false);
+            setAllocateData({ dashboard_id: '' });
+            fetchDevices();
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to allocate device.');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this device?')) return;
         try {
@@ -77,9 +113,17 @@ const Devices = () => {
         }
     };
 
+    const openAllocateModal = (device) => {
+        setSelectedDevice(device);
+        setAllocateData({ dashboard_id: device.dashboard_id || '' });
+        setIsAllocateModalOpen(true);
+        setError('');
+    };
+
     const filteredDevices = devices.filter(d =>
         d.device_id?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        d.id.toString().includes(searchQuery.toLowerCase())
+        d.id.toString().includes(searchQuery.toLowerCase()) ||
+        d.allocatedDashboard?.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
@@ -106,7 +150,7 @@ const Devices = () => {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
                         type="text"
-                        placeholder="Search devices or customers..."
+                        placeholder="Search devices, IDs, or dashboards..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm"
@@ -132,6 +176,7 @@ const Devices = () => {
                             <tr className="border-b border-white/10 bg-white/[0.02]">
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Device ID</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Tenant UUID</th>
+                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Allocated Dashboard</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Created At</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Last Seen</th>
                                 {!isCustomer && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>}
@@ -167,6 +212,16 @@ const Devices = () => {
                                             <span className="text-xs text-gray-400 font-mono">{device.tenant_uuid}</span>
                                         </td>
                                         <td className="px-6 py-4">
+                                            {device.allocatedDashboard ? (
+                                                <div className="flex items-center space-x-2 text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full w-fit">
+                                                    <Layout size={14} />
+                                                    <span className="text-xs font-bold">{device.allocatedDashboard.name}</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-xs text-gray-500">Unallocated</span>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4">
                                             <div className="flex items-center space-x-2 text-sm text-gray-400">
                                                 <Calendar size={14} />
                                                 <span>{new Date(device.created_at || device.createdAt).toLocaleDateString()}</span>
@@ -182,12 +237,22 @@ const Devices = () => {
                                         </td>
                                         {!isCustomer && (
                                             <td className="px-6 py-4 text-right">
-                                                <button
-                                                    onClick={() => handleDelete(device.id)}
-                                                    className="p-2 text-gray-500 hover:text-red-400 transition-colors"
-                                                >
-                                                    <Trash2 size={18} />
-                                                </button>
+                                                <div className="flex items-center justify-end space-x-2">
+                                                    <button
+                                                        onClick={() => openAllocateModal(device)}
+                                                        className="p-2 text-gray-500 hover:text-blue-400 transition-colors"
+                                                        title="Allocate to Dashboard"
+                                                    >
+                                                        <Edit3 size={18} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(device.id)}
+                                                        className="p-2 text-gray-500 hover:text-red-400 transition-colors"
+                                                        title="Delete Device"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </div>
                                             </td>
                                         )}
                                     </tr>
@@ -255,6 +320,81 @@ const Devices = () => {
                                         className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-3 rounded-2xl font-bold text-white shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
                                     >
                                         {isSaving ? <Loader2 size={18} className="animate-spin" /> : <span>Register Device</span>}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Allocate Modal */}
+            <AnimatePresence>
+                {isAllocateModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsAllocateModalOpen(false)}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-[#0f172a] border border-white/10 w-full max-w-lg rounded-3xl p-8 relative z-10 shadow-2xl text-white"
+                        >
+                            <div className="flex items-center justify-between mb-8">
+                                <div>
+                                    <h3 className="text-2xl font-bold">Allocate Device</h3>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Assigning <span className="text-blue-400 font-bold">{selectedDevice?.device_id}</span>
+                                    </p>
+                                </div>
+                                <button onClick={() => setIsAllocateModalOpen(false)} className="text-gray-500 hover:text-white">
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            {error && (
+                                <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-2xl text-sm mb-6">
+                                    {error}
+                                </div>
+                            )}
+
+                            <form onSubmit={handleAllocate} className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300 ml-1">Target Dashboard</label>
+                                    <select
+                                        required
+                                        value={allocateData.dashboard_id}
+                                        onChange={(e) => setAllocateData({ ...allocateData, dashboard_id: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-['Outfit'] text-white"
+                                    >
+                                        <option value="" className="bg-[#0f172a]">Select a dashboard</option>
+                                        {dashboards.map((dash) => (
+                                            <option key={dash.id} value={dash.id} className="bg-[#0f172a]">
+                                                {dash.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="flex space-x-4 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAllocateModalOpen(false)}
+                                        className="flex-1 bg-white/5 hover:bg-white/10 py-3 rounded-2xl font-bold transition-all text-white"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isSaving}
+                                        className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-3 rounded-2xl font-bold text-white shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+                                    >
+                                        {isSaving ? <Loader2 size={18} className="animate-spin" /> : <span>Confirm Allocation</span>}
                                     </button>
                                 </div>
                             </form>

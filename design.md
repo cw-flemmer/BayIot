@@ -113,3 +113,6 @@ Then show menu as previously implemented
 - device_id (varchar)
 - created_at (datetime)
 - last_seen (datetime)
+
+11. dashboard -> Admin -> Devices
+- Add a new edit icon in the table in actions column. When clicked, show a modal. The modal must allow me to allocate the selected device to a dashboard. The device should only be allowed to be allocated to a single dashboard. If the device is already allocated to a dashboard, show an error message.Then, show the allocated dashboard in the devices table. Create the necessary models, sql scripts and other related files for this request.

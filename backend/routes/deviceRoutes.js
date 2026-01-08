@@ -11,8 +11,11 @@ router.use(tenantDetection);
 router.use(authMiddleware);
 
 // Admins can manage devices, customers can only view them (if permitted)
+import { getDevices, createDevice, deleteDevice, allocateDashboard } from '../controllers/deviceController.js';
+
 router.get('/', getDevices);
 router.post('/', adminMiddleware, createDevice);
+router.post('/:id/allocate', adminMiddleware, allocateDashboard);
 router.delete('/:id', adminMiddleware, deleteDevice);
 
 export default router;

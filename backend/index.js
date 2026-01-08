@@ -3,6 +3,11 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 import { connectDB } from './config/database.js';
+import Dashboard from './models/Dashboard.js';
+import Device, { initDeviceAssociations } from './models/Device.js';
+
+// Initialize associations
+initDeviceAssociations(Dashboard);
 
 const app = express();
 const port = process.env.PORT || 3000;
