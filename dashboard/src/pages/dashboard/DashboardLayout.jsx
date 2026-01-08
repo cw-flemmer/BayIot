@@ -20,6 +20,7 @@ import {
     Building
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '../../services/api'; // [NEW] Import API
 import SettingsPage from './Settings.jsx';
 import DashboardsPage from './Dashboards.jsx';
 import DashboardView from './DashboardView.jsx';
@@ -222,72 +223,96 @@ const DashboardLayout = () => {
     );
 };
 
-const Overview = () => (
-    <div className="space-y-8">
-        <div className="flex items-center justify-between">
-            <div>
-                <h2 className="text-3xl font-bold">Overview</h2>
-                <p className="text-gray-500 mt-1">Welcome back! Here's what's happening today.</p>
-            </div>
-            <button className="bg-white text-black px-4 py-2 rounded-xl text-sm font-bold flex items-center space-x-2 hover:bg-gray-200 transition-colors">
-                <span>Export Data</span>
-                <ChevronRight size={16} />
-            </button>
-        </div>
+const Overview = () => {
+    const [stats, setStats] = useState({ devices: '...', customers: '...' });
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-                { label: 'Active Devices', value: '1,284', change: '+12%', color: 'blue' },
-                { label: 'Total Users', value: '452', change: '+3%', color: 'purple' },
-                { label: 'Uptime', value: '99.99%', change: 'Stable', color: 'green' },
-                { label: 'Storage Used', value: '4.2 TB', change: '+1.2%', color: 'pink' },
-            ].map((stat, i) => (
-                <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="bg-white/5 border border-white/10 p-6 rounded-3xl hover:bg-white/[0.07] transition-all group"
-                >
-                    <p className="text-gray-400 text-sm font-medium">{stat.label}</p>
-                    <div className="flex items-end justify-between mt-2">
-                        <h3 className="text-2xl font-bold">{stat.value}</h3>
-                        <span className={`text-xs px-2 py-1 rounded-lg ${stat.color === 'green' ? 'bg-green-500/10 text-green-400' : 'bg-blue-500/10 text-blue-400'
-                            }`}>
-                            {stat.change}
-                        </span>
-                    </div>
-                </motion.div>
-            ))}
-        </div>
+    React.useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const [devicesRes, customersRes] = await Promise.all([
+                    api.get('/devices'),
+                    api.get('/customers')
+                ]);
+                setStats({
+                    devices: devicesRes.data.length,
+                    customers: customersRes.data.length
+                });
+            } catch (error) {
+                console.error("Failed to fetch dashboard stats", error);
+                setStats({ devices: '-', customers: '-' });
+            }
+        };
+        fetchStats();
+    }, []);
 
-        {/* Placeholder for Charts/Data */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-white/5 border border-white/10 h-[400px] rounded-3xl p-8">
-                <h3 className="text-xl font-bold mb-4">Device Activity</h3>
-                <div className="h-full w-full flex items-center justify-center text-gray-600 border-2 border-dashed border-white/10 rounded-2xl">
-                    Chart visualization will appear here
+    return (
+        <div className="space-y-8">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h2 className="text-3xl font-bold">Overview</h2>
+                    <p className="text-gray-500 mt-1">Welcome back! Here's what's happening today.</p>
                 </div>
+                <button className="bg-white text-black px-4 py-2 rounded-xl text-sm font-bold flex items-center space-x-2 hover:bg-gray-200 transition-colors">
+                    <span>Export Data</span>
+                    <ChevronRight size={16} />
+                </button>
             </div>
-            <div className="bg-white/5 border border-white/10 h-[400px] rounded-3xl p-8">
-                <h3 className="text-xl font-bold mb-4">Recent Alerts</h3>
-                <div className="space-y-4">
-                    {[1, 2, 3, 4].map(n => (
-                        <div key={n} className="flex items-center space-x-4 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
-                            <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
-                                <Cpu size={20} />
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-sm font-bold">Device #0{n} Offline</p>
-                                <p className="text-xs text-gray-500">2 mins ago</p>
-                            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                    { label: 'Active Devices', value: stats.devices, change: '+12%', color: 'blue' },
+                    { label: 'Total Customers', value: stats.customers, change: '+3%', color: 'purple' },
+                    { label: 'Uptime', value: '99.99%', change: 'Stable', color: 'green' },
+                    { label: 'Storage Used', value: '4.2 TB', change: '+1.2%', color: 'pink' },
+                ].map((stat, i) => (
+                    <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="bg-white/5 border border-white/10 p-6 rounded-3xl hover:bg-white/[0.07] transition-all group"
+                    >
+                        <p className="text-gray-400 text-sm font-medium">{stat.label}</p>
+                        <div className="flex items-end justify-between mt-2">
+                            <h3 className="text-2xl font-bold">{stat.value}</h3>
+                            <span className={`text-xs px-2 py-1 rounded-lg ${stat.color === 'green' ? 'bg-green-500/10 text-green-400' : 'bg-blue-500/10 text-blue-400'
+                                }`}>
+                                {stat.change}
+                            </span>
                         </div>
-                    ))}
+                    </motion.div>
+                ))}
+            </div>
+
+            {/* Placeholder for Charts/Data */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 bg-white/5 border border-white/10 h-[400px] rounded-3xl p-8">
+                    <h3 className="text-xl font-bold mb-4">Device Activity</h3>
+                    <div className="h-full w-full flex items-center justify-center text-gray-600 border-2 border-dashed border-white/10 rounded-2xl">
+                        Chart visualization will appear here
+                    </div>
+                </div>
+                <div className="bg-white/5 border border-white/10 h-[400px] rounded-3xl p-8">
+                    <h3 className="text-xl font-bold mb-4">Recent Alerts</h3>
+                    <div className="space-y-4">
+                        {[1, 2, 3, 4].map(n => (
+                            <div key={n} className="flex items-center space-x-4 p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10">
+                                <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
+                                    <Cpu size={20} />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold">Device #0{n} Offline</p>
+                                    <p className="text-xs text-gray-500">2 mins ago</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-);
+    );
+
+};
 
 export default DashboardLayout;
