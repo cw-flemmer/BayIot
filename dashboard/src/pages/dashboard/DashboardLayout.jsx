@@ -224,22 +224,24 @@ const DashboardLayout = () => {
 };
 
 const Overview = () => {
-    const [stats, setStats] = useState({ devices: '...', customers: '...' });
+    const [stats, setStats] = useState({ devices: '...', customers: '...', dashboards: '...' });
 
     React.useEffect(() => {
         const fetchStats = async () => {
             try {
-                const [devicesRes, customersRes] = await Promise.all([
+                const [devicesRes, customersRes, dashboardsRes] = await Promise.all([
                     api.get('/devices'),
-                    api.get('/customers')
+                    api.get('/customers'),
+                    api.get('/dashboards')
                 ]);
                 setStats({
                     devices: devicesRes.data.length,
-                    customers: customersRes.data.length
+                    customers: customersRes.data.length,
+                    dashboards: dashboardsRes.data.length
                 });
             } catch (error) {
                 console.error("Failed to fetch dashboard stats", error);
-                setStats({ devices: '-', customers: '-' });
+                setStats({ devices: '-', customers: '-', dashboards: '-' });
             }
         };
         fetchStats();
@@ -259,12 +261,11 @@ const Overview = () => {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
                     { label: 'Active Devices', value: stats.devices, change: '+12%', color: 'blue' },
                     { label: 'Total Customers', value: stats.customers, change: '+3%', color: 'purple' },
-                    { label: 'Uptime', value: '99.99%', change: 'Stable', color: 'green' },
-                    { label: 'Storage Used', value: '4.2 TB', change: '+1.2%', color: 'pink' },
+                    { label: 'Total Dashboards', value: stats.dashboards, change: 'New', color: 'green' },
                 ].map((stat, i) => (
                     <motion.div
                         key={i}

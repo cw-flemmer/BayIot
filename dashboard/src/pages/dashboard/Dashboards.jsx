@@ -165,7 +165,7 @@ const Dashboards = () => {
                             className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.07] transition-all group relative overflow-hidden"
                         >
                             <div className="flex items-start justify-between mb-4">
-                                <Link to={isCustomer ? `/dashboard/list/${db.id}` : '#'} className={`p-3 rounded-2xl bg-blue-600/10 text-blue-400 ${isCustomer ? 'hover:bg-blue-600/20 transition-colors' : ''}`}>
+                                <Link to={`/dashboard/list/${db.id}`} className="p-3 rounded-2xl bg-blue-600/10 text-blue-400 hover:bg-blue-600/20 transition-colors">
                                     <Layout size={24} />
                                 </Link>
                                 {!isCustomer && (
@@ -192,10 +192,10 @@ const Dashboards = () => {
                                     <p className="text-gray-500 text-sm line-clamp-2 mb-6 h-10">{db.description || 'No description provided.'}</p>
                                 </Link>
                             ) : (
-                                <>
+                                <Link to={`/dashboard/list/${db.id}`} className="block group-hover:opacity-80 transition-opacity">
                                     <h3 className="text-xl font-bold mb-2">{db.name}</h3>
                                     <p className="text-gray-500 text-sm line-clamp-2 mb-6 h-10">{db.description || 'No description provided.'}</p>
-                                </>
+                                </Link>
                             )}
 
                             <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
