@@ -16,11 +16,14 @@ import {
     Layout,
     Plus,
     Trash2,
-    Edit3
+    Edit3,
+    Building,
+    Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SettingsPage from './Settings.jsx';
 import DashboardsPage from './Dashboards.jsx';
+import TenantsPage from './Tenants.jsx';
 
 const SidebarItem = ({ icon: Icon, label, to, active, isOpen }) => (
     <Link to={to}>
@@ -55,10 +58,15 @@ const DashboardLayout = () => {
     const menuItems = [
         { icon: LayoutDashboard, label: 'Overview', to: '/dashboard' },
         { icon: Layout, label: 'Dashboards', to: '/dashboard/list', adminOnly: true },
+        { icon: Building, label: 'Tenants', to: '/dashboard/tenants', siteAdminOnly: true },
         { icon: Cpu, label: 'Devices', to: '/dashboard/devices', adminOnly: true },
         { icon: Users, label: 'Users', to: '/dashboard/users', adminOnly: true },
         { icon: Settings, label: 'Settings', to: '/dashboard/settings', adminOnly: true },
-    ].filter(item => !item.adminOnly || user?.role === 'admin');
+    ].filter(item => {
+        if (user?.role === 'site-admin') return true;
+        if (item.siteAdminOnly) return false;
+        return !item.adminOnly || user?.role === 'admin';
+    });
 
     return (
         <div className="min-h-screen bg-[#020617] text-white flex overflow-hidden font-['Outfit']">
@@ -162,6 +170,7 @@ const DashboardLayout = () => {
                     <Routes>
                         <Route path="/" element={<Overview />} />
                         <Route path="/list" element={<DashboardsPage />} />
+                        <Route path="/tenants" element={<TenantsPage />} />
                         <Route path="/devices" element={<div className="text-2xl font-bold">Devices Management Coming Soon</div>} />
                         <Route path="/users" element={<div className="text-2xl font-bold">User Management Coming Soon</div>} />
                         <Route path="/settings" element={<SettingsPage />} />

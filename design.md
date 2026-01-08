@@ -89,4 +89,8 @@ Note: When creating models, please use sequelize and create models in model fold
     - Description
     - Customer (Dropdown, select from TenantCustomers)
     
-        
+6. Site-Admin
+- I have manually added a new tenant customer and assigned it a role (site-admin). There will always only be 1 record in the tenants table with this role, which is me, the developer. This role will allow me to create tenants instead of having to manually add them in the database. When logging in, the site-admin will be able to create tenants.  
+Adjust the signin to check for this role and allow the site-admin to create tenants as well. 
+- Create a new page Tenants, then create a new sidebar menu for admin (Tenants), include all menus from the admin menu as well. The site admin has full access to all menus.
+- In the Tenants page, allow viewing a list of tenants, as well as creating and editing tenants. Use a layout similarthe Dashboard page layout, but instead of displaying tenants in cards, show them in a searchable table view       

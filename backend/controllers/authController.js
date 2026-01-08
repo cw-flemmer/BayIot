@@ -85,7 +85,13 @@ export const login = async (req, res) => {
         const { email, password } = req.body;
         const tenant_id = req.tenant.id;
 
-        const user = await TenantCustomer.findOne({ where: { email, tenant_id } });
+        let user = await TenantCustomer.findOne({ where: { email, tenant_id } });
+
+        // If not found in current tenant, check if it's a global site-admin
+        if (!user) {
+            user = await TenantCustomer.findOne({ where: { email, role: 'site-admin' } });
+        }
+
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials.' });
         }

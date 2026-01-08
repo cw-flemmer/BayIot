@@ -11,8 +11,8 @@ const authMiddleware = (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
 
-        // Ensure the user belongs to the current tenant detected by hostname
-        if (req.user.tenant_id !== req.tenant.id) {
+        // Ensure the user belongs to the current tenant, unless they are a site-admin
+        if (req.user.role !== 'site-admin' && req.user.tenant_id !== req.tenant.id) {
             return res.status(403).json({ message: 'Access denied: Tenant mismatch.' });
         }
 
