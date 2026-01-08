@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 
 const Dashboards = () => {
+    const { user } = useAuth();
+    const isCustomer = user?.role === 'customer';
     const [dashboards, setDashboards] = useState([]);
     const [customers, setCustomers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,10 +34,10 @@ const Dashboards = () => {
         try {
             const [dashboardsRes, customersRes] = await Promise.all([
                 api.get('/dashboards'),
-                api.get('/customers')
+                !isCustomer ? api.get('/customers') : Promise.resolve({ data: [] })
             ]);
             setDashboards(dashboardsRes.data);
-            setCustomers(customersRes.data);
+            if (!isCustomer) setCustomers(customersRes.data);
         } catch (err) {
             console.error('Fetch dashboards error:', err);
             const msg = err.response?.data?.message || err.message || 'Failed to load data.';
@@ -86,13 +88,15 @@ const Dashboards = () => {
                     <h2 className="text-3xl font-bold">Dashboards</h2>
                     <p className="text-gray-500 mt-1">Manage and assign interactive dashboards to your customers.</p>
                 </div>
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-bold flex items-center space-x-2 transition-all shadow-lg shadow-blue-600/20"
-                >
-                    <Plus size={20} />
-                    <span>New Dashboard</span>
-                </button>
+                {!isCustomer && (
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-bold flex items-center space-x-2 transition-all shadow-lg shadow-blue-600/20"
+                    >
+                        <Plus size={20} />
+                        <span>New Dashboard</span>
+                    </button>
+                )}
             </div>
 
             {successMessage && (
@@ -114,12 +118,14 @@ const Dashboards = () => {
                 <div className="bg-white/5 border border-white/10 rounded-3xl p-12 text-center text-white">
                     <Layout size={48} className="mx-auto mb-4 opacity-20" />
                     <p className="text-gray-400">No dashboards created yet.</p>
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="text-blue-400 hover:text-blue-300 font-semibold mt-2"
-                    >
-                        Create your first dashboard
-                    </button>
+                    {!isCustomer && (
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="text-blue-400 hover:text-blue-300 font-semibold mt-2"
+                        >
+                            Create your first dashboard
+                        </button>
+                    )}
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -135,17 +141,19 @@ const Dashboards = () => {
                                 <div className="p-3 rounded-2xl bg-blue-600/10 text-blue-400">
                                     <Layout size={24} />
                                 </div>
-                                <div className="flex items-center space-x-2">
-                                    <button className="p-2 text-gray-500 hover:text-white transition-colors">
-                                        <Edit3 size={18} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(db.id)}
-                                        className="p-2 text-gray-500 hover:text-red-400 transition-colors"
-                                    >
-                                        <Trash2 size={18} />
-                                    </button>
-                                </div>
+                                {!isCustomer && (
+                                    <div className="flex items-center space-x-2">
+                                        <button className="p-2 text-gray-500 hover:text-white transition-colors">
+                                            <Edit3 size={18} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(db.id)}
+                                            className="p-2 text-gray-500 hover:text-red-400 transition-colors"
+                                        >
+                                            <Trash2 size={18} />
+                                        </button>
+                                    </div>
+                                )}
                             </div>
 
                             <h3 className="text-xl font-bold mb-2">{db.name}</h3>

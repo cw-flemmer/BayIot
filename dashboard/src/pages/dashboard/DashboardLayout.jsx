@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useTenant } from '../../context/TenantContext.jsx';
 import {
@@ -54,6 +54,15 @@ const DashboardLayout = () => {
         navigate('/login');
     };
 
+    const isCustomer = user?.role === 'customer';
+
+    // Redirect customers from overview to list
+    React.useEffect(() => {
+        if (isCustomer && location.pathname === '/dashboard') {
+            navigate('/dashboard/list', { replace: true });
+        }
+    }, [isCustomer, location.pathname, navigate]);
+
     const getLogoUrl = (logoPath) => {
         if (!logoPath || logoPath === '') return null;
         if (logoPath.startsWith('http')) return logoPath;
@@ -77,63 +86,65 @@ const DashboardLayout = () => {
 
     return (
         <div className="min-h-screen bg-[#020617] text-white flex overflow-hidden font-['Outfit']">
-            {/* Sidebar */}
-            <motion.aside
-                initial={false}
-                animate={{ width: isSidebarOpen ? 260 : 80 }}
-                className="relative bg-white/5 border-r border-white/10 flex flex-col z-30"
-            >
-                <div className="p-6 flex items-center justify-between">
-                    <AnimatePresence mode="wait">
-                        {isSidebarOpen && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="flex items-center space-x-3"
-                            >
-                                {tenantInfo?.logo ? (
-                                    <img src={getLogoUrl(tenantInfo.logo)} alt="Logo" className="h-8" />
-                                ) : (
-                                    <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold">
-                                        {tenantInfo?.name?.[0] || 'B'}
-                                    </div>
-                                )}
-                                <span className="font-bold text-lg truncate max-w-[140px]">
-                                    {tenantInfo?.name || 'BayIot'}
-                                </span>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                    <button
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className="p-1.5 hover:bg-white/5 rounded-lg text-gray-400 transition-colors"
-                    >
-                        {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-                    </button>
-                </div>
+            {/* Sidebar - Hidden for customers */}
+            {!isCustomer && (
+                <motion.aside
+                    initial={false}
+                    animate={{ width: isSidebarOpen ? 260 : 80 }}
+                    className="relative bg-white/5 border-r border-white/10 flex flex-col z-30"
+                >
+                    <div className="p-6 flex items-center justify-between">
+                        <AnimatePresence mode="wait">
+                            {isSidebarOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="flex items-center space-x-3"
+                                >
+                                    {tenantInfo?.logo ? (
+                                        <img src={getLogoUrl(tenantInfo.logo)} alt="Logo" className="h-8" />
+                                    ) : (
+                                        <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold">
+                                            {tenantInfo?.name?.[0] || 'B'}
+                                        </div>
+                                    )}
+                                    <span className="font-bold text-lg truncate max-w-[140px]">
+                                        {tenantInfo?.name || 'BayIot'}
+                                    </span>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                        <button
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            className="p-1.5 hover:bg-white/5 rounded-lg text-gray-400 transition-colors"
+                        >
+                            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+                        </button>
+                    </div>
 
-                <nav className="flex-1 px-4 space-y-2 mt-4">
-                    {menuItems.map((item) => (
-                        <SidebarItem
-                            key={item.to}
-                            {...item}
-                            active={location.pathname === item.to}
-                            isOpen={isSidebarOpen}
-                        />
-                    ))}
-                </nav>
+                    <nav className="flex-1 px-4 space-y-2 mt-4">
+                        {menuItems.map((item) => (
+                            <SidebarItem
+                                key={item.to}
+                                {...item}
+                                active={location.pathname === item.to}
+                                isOpen={isSidebarOpen}
+                            />
+                        ))}
+                    </nav>
 
-                <div className="p-4 mt-auto">
-                    <button
-                        onClick={handleLogout}
-                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-400/10 transition-all ${!isSidebarOpen && 'justify-center'}`}
-                    >
-                        <LogOut className="w-5 h-5 flex-shrink-0" />
-                        {isSidebarOpen && <span className="font-medium">Logout</span>}
-                    </button>
-                </div>
-            </motion.aside>
+                    <div className="p-4 mt-auto">
+                        <button
+                            onClick={handleLogout}
+                            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-400/10 transition-all ${!isSidebarOpen && 'justify-center'}`}
+                        >
+                            <LogOut className="w-5 h-5 flex-shrink-0" />
+                            {isSidebarOpen && <span className="font-medium">Logout</span>}
+                        </button>
+                    </div>
+                </motion.aside>
+            )}
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col overflow-hidden relative">
@@ -155,10 +166,20 @@ const DashboardLayout = () => {
                     </div>
 
                     <div className="flex items-center space-x-6">
-                        <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
-                            <Bell size={20} />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-blue-600 rounded-full border-2 border-[#020617]" />
-                        </button>
+                        {!isCustomer ? (
+                            <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
+                                <Bell size={20} />
+                                <span className="absolute top-2 right-2 w-2 h-2 bg-blue-600 rounded-full border-2 border-[#020617]" />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center space-x-2 px-4 py-2 rounded-xl text-red-400 hover:bg-red-400/10 transition-all text-sm font-bold"
+                            >
+                                <LogOut size={18} />
+                                <span>Logout</span>
+                            </button>
+                        )}
                         <div className="h-8 w-px bg-white/10 mx-2" />
                         <div className="flex items-center space-x-3">
                             <div className="text-right hidden sm:block">
@@ -177,10 +198,20 @@ const DashboardLayout = () => {
                     <Routes>
                         <Route path="/" element={<Overview />} />
                         <Route path="/list" element={<DashboardsPage />} />
-                        <Route path="/tenants" element={<TenantsPage />} />
-                        <Route path="/devices" element={<div className="text-2xl font-bold">Devices Management Coming Soon</div>} />
-                        <Route path="/users" element={<div className="text-2xl font-bold">User Management Coming Soon</div>} />
-                        <Route path="/settings" element={<SettingsPage />} />
+
+                        {!isCustomer && (
+                            <>
+                                <Route path="/tenants" element={<TenantsPage />} />
+                                <Route path="/devices" element={<div className="text-2xl font-bold">Devices Management Coming Soon</div>} />
+                                <Route path="/users" element={<div className="text-2xl font-bold">User Management Coming Soon</div>} />
+                                <Route path="/settings" element={<SettingsPage />} />
+                            </>
+                        )}
+
+                        {/* Fallback for unauthorized pages */}
+                        {isCustomer && (
+                            <Route path="*" element={<Navigate to="/dashboard/list" replace />} />
+                        )}
                     </Routes>
                 </main>
             </div>

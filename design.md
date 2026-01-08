@@ -103,3 +103,5 @@ Adjust the signin to check for this role and allow the site-admin to create tena
 - Completely remove site-admin login check in backend. Instead, create a new login page for site admin with route (/site-admin-8408), and allow the site admin to login via this page. The site admin will use credentials saved in .env file in backend. 
 Then show menu as previously implemented
  
+9. Customer
+-  When a customer logs in, display a list of dashboards assigned to them. Use same layout as for admin dashboard, but without the sidebar menu. 
