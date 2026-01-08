@@ -42,7 +42,7 @@ services:
       saas:
         ipv4_address: 11.0.1.36  
     volumes:
-      - ./mysql:/var/lib/mysql
+      - /etc/bayiot/mysql/data:/var/lib/mysql
     ports:
       - "3206:3306"
 

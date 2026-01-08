@@ -1,0 +1,78 @@
+-- 1. Tenants Table
+CREATE TABLE IF NOT EXISTS tenants (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    domain VARCHAR(255) NOT NULL UNIQUE,
+    uuid UUID NOT NULL UNIQUE,
+    logo VARCHAR(255),
+    theme VARCHAR(255) DEFAULT 'light',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Tenant Customers Table
+CREATE TABLE IF NOT EXISTS tenant_customers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(255) NOT NULL DEFAULT 'customer',
+    tenant_id INTEGER NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Tenant Customer Devices Table (Legacy?)
+CREATE TABLE IF NOT EXISTS tenant_customer_devices (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    tenant_customer_id INTEGER NOT NULL REFERENCES tenant_customers(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. Dashboards Table
+CREATE TABLE IF NOT EXISTS dashboards (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    tenant_id INTEGER NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    customer_id INTEGER REFERENCES tenant_customers(id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. Tenant Devices Table
+CREATE TABLE IF NOT EXISTS tenant_devices (
+    id SERIAL PRIMARY KEY,
+    tenant_uuid UUID NOT NULL REFERENCES tenants(uuid) ON DELETE CASCADE,
+    device_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    last_seen TIMESTAMP WITH TIME ZONE NOT NULL,
+    dashboard_id INTEGER REFERENCES dashboards(id) ON DELETE SET NULL
+);
+
+-- 6. Widgets Table
+CREATE TABLE IF NOT EXISTS widgets (
+    id SERIAL PRIMARY KEY,
+    dashboard_id INTEGER NOT NULL REFERENCES dashboards(id) ON DELETE CASCADE,
+    type VARCHAR(255) NOT NULL,
+    title VARCHAR(255),
+    device_id VARCHAR(255),
+    telemetry_column VARCHAR(255),
+    position JSON,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 7. Telemetry Table
+CREATE TABLE IF NOT EXISTS telemetry (
+    id SERIAL PRIMARY KEY,
+    device_id VARCHAR(255) NOT NULL,
+    temperature FLOAT,
+    humidity FLOAT,
+    door_status BOOLEAN,
+    battery_level INTEGER,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
