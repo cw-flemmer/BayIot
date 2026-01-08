@@ -1,11 +1,11 @@
 import { Sequelize } from 'sequelize';
-import 'dotenv/config';
+
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
-    host: '11.0.1.36',
+    host: 'bayiot_mysql',
     database: 'BayIot',
-    username: 'BayIot',
+    username: 'root',
     password: 'Sp0ng3B0B@Umicore',
     logging: console.log,
     timezone: '+02:00', // Ensure UTC consistency
