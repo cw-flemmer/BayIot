@@ -15,7 +15,7 @@ router.get('/dashboard/:dashboardId', getWidgets);
 
 // CRUD
 router.post('/', adminMiddleware, createWidget);
-router.put('/:id', adminMiddleware, updateWidget);
+router.put('/:id', updateWidget); // Permission check moved to controller
 router.delete('/:id', adminMiddleware, deleteWidget);
 
 export default router;

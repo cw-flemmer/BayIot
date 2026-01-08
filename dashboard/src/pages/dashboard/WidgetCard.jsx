@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Trash2, Move, Thermometer, Droplets, Battery, DoorOpen, Bolt } from 'lucide-react';
 import api from '../../services/api';
 
-const WidgetCard = ({ widget, onDelete, isEditMode }) => {
+const WidgetCard = ({ widget, onDelete, isDraggable, showDelete }) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -50,7 +50,7 @@ const WidgetCard = ({ widget, onDelete, isEditMode }) => {
     };
 
     return (
-        <div className={`h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 flex flex-col relative group overflow-hidden shadow-xl ${isEditMode ? 'cursor-move drag-handle' : ''}`}>
+        <div className={`h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 flex flex-col relative group overflow-hidden shadow-xl ${isDraggable ? 'cursor-move drag-handle' : ''}`}>
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -62,7 +62,7 @@ const WidgetCard = ({ widget, onDelete, isEditMode }) => {
                         <p className="text-[10px] text-gray-500 font-mono tracking-wider">{widget.device_id}</p>
                     </div>
                 </div>
-                {isEditMode && (
+                {showDelete && (
                     <button
                         onMouseDown={(e) => e.stopPropagation()}
                         onClick={() => onDelete(widget.id)}

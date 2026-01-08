@@ -1,4 +1,5 @@
 import Widget from '../models/Widget.js';
+import Dashboard from '../models/Dashboard.js';
 
 export const createWidget = async (req, res) => {
     try {
@@ -40,13 +41,32 @@ export const updateWidget = async (req, res) => {
         const { id } = req.params;
         const { position, title, device_id, telemetry_column } = req.body;
 
-        const widget = await Widget.findByPk(id);
+        const widget = await Widget.findByPk(id, {
+            include: [{ model: Dashboard, as: 'dashboard' }]
+        });
+
         if (!widget) return res.status(404).json({ message: 'Widget not found' });
 
+        // Permission Check
+        const isAdmin = req.user.role === 'admin' || req.user.role === 'site-admin';
+        const isCustomer = req.user.role === 'customer';
+
+        if (isCustomer) {
+            // Check if dashboard is assigned to this customer
+            if (widget.dashboard?.customer_id !== req.user.id) {
+                return res.status(403).json({ message: 'Access denied: You do not own this dashboard.' });
+            }
+        }
+        // If (isAdmin), allow.
+
         if (position) widget.position = position;
-        if (title) widget.title = title;
-        if (device_id) widget.device_id = device_id;
-        if (telemetry_column) widget.telemetry_column = telemetry_column;
+
+        // Only admins can change configuration
+        if (isAdmin) {
+            if (title) widget.title = title;
+            if (device_id) widget.device_id = device_id;
+            if (telemetry_column) widget.telemetry_column = telemetry_column;
+        }
 
         await widget.save();
         res.json(widget);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 // @ts-ignore
 import { Responsive, WidthProvider } from 'react-grid-layout/legacy';
 import { Plus, Save, ArrowLeft, Loader2, Layout, X } from 'lucide-react';
@@ -14,10 +15,17 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 const DashboardView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useAuth(); // Get user from context
+    const isCustomer = user?.role === 'customer';
+
+    // Customers can edit layout (drag/resize) but cannot add/delete widgets
+    // Admins can do everything
+    const canManageWidgets = !isCustomer;
+    const isEditMode = true; // Use a simpler logic: Grid is always editable/interactive for allowed users
+
     const [widgets, setWidgets] = useState([]);
     const [devices, setDevices] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isEditMode, setIsEditMode] = useState(true); // Default to edit mode for Admin view
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Add Widget Form
@@ -159,13 +167,15 @@ const DashboardView = () => {
                     </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-bold flex items-center space-x-2 transition-all shadow-lg shadow-blue-600/20"
-                    >
-                        <Plus size={18} />
-                        <span>Add Widget</span>
-                    </button>
+                    {canManageWidgets && (
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-bold flex items-center space-x-2 transition-all shadow-lg shadow-blue-600/20"
+                        >
+                            <Plus size={18} />
+                            <span>Add Widget</span>
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -174,7 +184,7 @@ const DashboardView = () => {
                 {widgets.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-[400px] text-gray-500">
                         <Layout size={48} className="mb-4 opacity-20" />
-                        <p>No widgets yet. Click "Add Widget" to start.</p>
+                        <p>No widgets yet. {canManageWidgets ? 'Click "Add Widget" to start.' : ''}</p>
                     </div>
                 ) : (
                     <ResponsiveGridLayout
@@ -193,7 +203,8 @@ const DashboardView = () => {
                                 <WidgetCard
                                     widget={widget}
                                     onDelete={handleDeleteWidget}
-                                    isEditMode={isEditMode}
+                                    isDraggable={isEditMode}
+                                    showDelete={canManageWidgets}
                                 />
                             </div>
                         ))}
