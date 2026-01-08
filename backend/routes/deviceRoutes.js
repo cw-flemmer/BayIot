@@ -1,5 +1,5 @@
 import express from 'express';
-import { getDevices, createDevice, deleteDevice } from '../controllers/deviceController.js';
+import { getDevices, createDevice, deleteDevice, allocateDashboard } from '../controllers/deviceController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import adminMiddleware from '../middleware/adminMiddleware.js';
 import tenantDetection from '../middleware/tenantDetection.js';
@@ -11,7 +11,6 @@ router.use(tenantDetection);
 router.use(authMiddleware);
 
 // Admins can manage devices, customers can only view them (if permitted)
-import { getDevices, createDevice, deleteDevice, allocateDashboard } from '../controllers/deviceController.js';
 
 router.get('/', getDevices);
 router.post('/', adminMiddleware, createDevice);
