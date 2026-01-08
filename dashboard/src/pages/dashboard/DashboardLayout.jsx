@@ -23,6 +23,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SettingsPage from './Settings.jsx';
 import DashboardsPage from './Dashboards.jsx';
 import TenantsPage from './Tenants.jsx';
+import DevicesPage from './Devices.jsx';
 
 const SidebarItem = ({ icon: Icon, label, to, active, isOpen }) => (
     <Link to={to}>
@@ -202,7 +203,7 @@ const DashboardLayout = () => {
                         {!isCustomer && (
                             <>
                                 <Route path="/tenants" element={<TenantsPage />} />
-                                <Route path="/devices" element={<div className="text-2xl font-bold">Devices Management Coming Soon</div>} />
+                                <Route path="/devices" element={<DevicesPage />} />
                                 <Route path="/users" element={<div className="text-2xl font-bold">User Management Coming Soon</div>} />
                                 <Route path="/settings" element={<SettingsPage />} />
                             </>

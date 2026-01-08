@@ -12,6 +12,7 @@ import tenantRoutes from './routes/tenantRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
 import superTenantRoutes from './routes/superTenantRoutes.js';
+import deviceRoutes from './routes/deviceRoutes.js';
 import tenantDetection from './middleware/tenantDetection.js';
 
 // Middleware
@@ -49,6 +50,7 @@ app.use('/api/tenant', tenantRoutes);
 app.use('/api/dashboards', dashboardRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/super/tenants', superTenantRoutes);
+app.use('/api/devices', deviceRoutes);
 
 app.get('/', (req, res) => {
     res.send('BayIot API is running...');
