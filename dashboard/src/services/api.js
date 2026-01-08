@@ -15,8 +15,7 @@ api.interceptors.response.use(
                 await axios.post('/api/auth/refresh-token', {}, { withCredentials: true });
                 return api(originalRequest);
             } catch (refreshError) {
-                // Redirect to login if refresh fails
-                window.location.href = '/login';
+                // Return rejection without hard redirect to avoid loops
                 return Promise.reject(refreshError);
             }
         }
