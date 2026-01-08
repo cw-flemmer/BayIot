@@ -4,8 +4,11 @@ export const getDevices = async (req, res) => {
     try {
         // We link via tenant_uuid. req.tenant is populated by tenantDetection middleware.
         if (!req.tenant) {
+            console.error('Get devices: No tenant context in request');
             return res.status(404).json({ message: 'Tenant context missing.' });
         }
+
+        console.log(`Fetching devices for tenant UUID: ${req.tenant.uuid}`);
 
         const devices = await Device.findAll({
             where: { tenant_uuid: req.tenant.uuid },
@@ -14,8 +17,11 @@ export const getDevices = async (req, res) => {
 
         res.json(devices);
     } catch (error) {
-        console.error('Get devices error:', error);
-        res.status(500).json({ message: 'Server error while fetching devices.' });
+        console.error('Get devices database error details:', error);
+        res.status(500).json({
+            message: 'Server error while fetching devices.',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 };
 

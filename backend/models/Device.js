@@ -24,14 +24,10 @@ const Device = sequelize.define('Device', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    last_seen: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: DataTypes.NOW,
-    },
 }, {
     tableName: 'tenant_devices',
     underscored: true,
+    createdAt: 'created_at',
     updatedAt: 'last_seen'
 });
 

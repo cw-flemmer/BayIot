@@ -24,6 +24,7 @@ const tenantDetection = async (req, res, next) => {
             console.warn(`Tenant detection: No tenant found for domain ${domain}. Proceeding with req.tenant = null.`);
             req.tenant = null;
         } else {
+            console.log(`Tenant detected: ${tenant.name} (UUID: ${tenant.uuid})`);
             req.tenant = tenant;
         }
         next();

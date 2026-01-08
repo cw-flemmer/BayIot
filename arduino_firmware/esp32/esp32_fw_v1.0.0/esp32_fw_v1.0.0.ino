@@ -11,16 +11,24 @@ const char* mqtt_server = "156.155.253.143"; // e.g., 192.168.1.100
 const int mqtt_port = 8883;              // No TLS
 
 // identify customer + device (IMPORTANT)
-const char* customer = "shoprite";
+//const char* tenant_uuid = "fa34d9b6d15043c29efee776ab80fc42";
+String deviceId; //Wifi Mac Address
+
+const char* customer = "fa34d9b6-d150-43c2-9efe-e776ab80fc42";
 const char* site = "standfordsquare";
-const char* device = "liquorstore";
+const char* device = "5C013B32DD30";
 
 String mqtt_topic_telemetry = "coldchain/" + String(customer) + "/" + String(site) + "/" + String(device) + "/telemetry";
 String mqtt_topic_heartbeat = "coldchain/" + String(customer) + "/" + String(site) + "/" + String(device) + "/heartbeat";;
 
+//String mqtt_topic_telemetry = "coldchain/" + String(tenant_uuid)  + "/" + deviceId + "/telemetry";
+//String mqtt_topic_heartbeat = "coldchain/" + String(tenant_uuid)  + "/" + deviceId + "/heartbeat";;
+
 // ---------- Globals ----------
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+
 unsigned long lastTelemetry = 0;
 unsigned long lastHeartbeat = 0;
 
@@ -50,8 +58,10 @@ void setup_wifi() {
 // ---------- MQTT Connect ----------
 void reconnect() {
   while (!client.connected()) {
-    Serial.print("Connecting to MQTT... ");
-    if (client.connect("ESP32Client")) {
+    String clientId = "ESP32-" + deviceId;
+    Serial.print("Connecting to MQTT using device id... ");
+    Serial.println(deviceId);
+    if (client.connect(clientId.c_str())) {
       Serial.println("connected");
     } else {
       Serial.print("failed, rc=");
@@ -67,6 +77,9 @@ void setup() {
   Serial.begin(115200);    
   delay(1000);
   setup_wifi();
+  // Read device MAC and use as ID
+  deviceId = WiFi.macAddress();           // e.g. "AC:67:B2:1F:9A:3C"
+  deviceId.replace(":", "");              // clean -> "AC67B21F9A3C" (optional)
   client.setServer(mqtt_server, mqtt_port);  
 }
 
