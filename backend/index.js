@@ -24,8 +24,16 @@ app.use(cookieParser());
 
 // Tenant Branding Route (Public)
 app.get('/api/tenant/info', tenantDetection, (req, res) => {
-    const { name, logo, theme } = req.tenant;
-    res.json({ name, logo, theme });
+    try {
+        const tenantData = req.tenant.get({ plain: true });
+        console.log(`Branding fetch for ${req.tenant.domain}:`, tenantData);
+        // We only want to expose branding-related fields publicly
+        const { name, logo, theme } = tenantData;
+        res.json({ name, logo, theme });
+    } catch (error) {
+        console.error('Branding fetch error:', error);
+        res.status(500).json({ message: 'Error fetching branding info' });
+    }
 });
 
 // Auth Routes

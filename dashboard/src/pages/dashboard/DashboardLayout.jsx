@@ -54,6 +54,13 @@ const DashboardLayout = () => {
         navigate('/login');
     };
 
+    const getLogoUrl = (logoPath) => {
+        if (!logoPath) return null;
+        if (logoPath.startsWith('http')) return logoPath;
+        if (logoPath.startsWith('/')) return logoPath;
+        return `/images/${logoPath}`;
+    };
+
     const menuItems = [
         { icon: LayoutDashboard, label: 'Overview', to: '/dashboard' },
         { icon: Layout, label: 'Dashboards', to: '/dashboard/list', adminOnly: true },
@@ -85,7 +92,7 @@ const DashboardLayout = () => {
                                 className="flex items-center space-x-3"
                             >
                                 {tenantInfo?.logo ? (
-                                    <img src={tenantInfo.logo} alt="Logo" className="h-8" />
+                                    <img src={getLogoUrl(tenantInfo.logo)} alt="Logo" className="h-8" />
                                 ) : (
                                     <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold">
                                         {tenantInfo?.name?.[0] || 'B'}

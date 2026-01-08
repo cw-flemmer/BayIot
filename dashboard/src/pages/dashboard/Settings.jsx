@@ -19,6 +19,13 @@ const Settings = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [error, setError] = useState('');
 
+    const getLogoUrl = (logoPath) => {
+        if (!logoPath) return null;
+        if (logoPath.startsWith('http')) return logoPath;
+        if (logoPath.startsWith('/')) return logoPath;
+        return `/images/${logoPath}`;
+    };
+
     // General Form State
     const [name, setName] = useState(tenantInfo?.name || '');
     const [theme, setTheme] = useState(tenantInfo?.theme || 'dark');
@@ -81,8 +88,8 @@ const Settings = () => {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`flex items-center space-x-2 px-6 py-2.5 rounded-xl text-sm font-medium transition-all ${activeTab === tab.id
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                                : 'text-gray-400 hover:text-white hover:bg-white/5'
+                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                            : 'text-gray-400 hover:text-white hover:bg-white/5'
                             }`}
                     >
                         <tab.icon size={18} />
@@ -119,7 +126,7 @@ const Settings = () => {
                                 <div className="flex items-center space-x-6">
                                     <div className="w-24 h-24 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
                                         {logoPreview || tenantInfo?.logo ? (
-                                            <img src={logoPreview || tenantInfo.logo} alt="Preview" className="w-full h-full object-contain p-2" />
+                                            <img src={logoPreview || getLogoUrl(tenantInfo.logo)} alt="Preview" className="w-full h-full object-contain p-2" />
                                         ) : (
                                             <ShieldCheck size={40} className="text-gray-600" />
                                         )}

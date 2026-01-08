@@ -14,6 +14,13 @@ const Signin = () => {
     const { tenantInfo } = useTenant();
     const navigate = useNavigate();
 
+    const getLogoUrl = (logoPath) => {
+        if (!logoPath) return null;
+        if (logoPath.startsWith('http')) return logoPath;
+        if (logoPath.startsWith('/')) return logoPath;
+        return `/images/${logoPath}`;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -42,7 +49,7 @@ const Signin = () => {
                 <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl">
                     <div className="text-center mb-8">
                         {tenantInfo?.logo ? (
-                            <img src={tenantInfo.logo} alt={tenantInfo.name} className="h-16 mx-auto mb-4" />
+                            <img src={getLogoUrl(tenantInfo.logo)} alt={tenantInfo.name} className="h-16 mx-auto mb-4" />
                         ) : (
                             <div className="h-16 w-16 bg-gradient-to-tr from-blue-500 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center text-2xl font-bold">
                                 {tenantInfo?.name?.[0] || 'B'}
