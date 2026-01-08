@@ -32,6 +32,7 @@ const Device = sequelize.define('Device', {
 }, {
     tableName: 'tenant_devices',
     underscored: true,
+    updatedAt: 'last_seen'
 });
 
 // Associations
