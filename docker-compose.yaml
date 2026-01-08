@@ -70,6 +70,8 @@ services:
     networks:
       saas:
         ipv4_address: 11.0.1.40
+    volumes:
+      - images_data:/app/public/images
     depends_on:
       - mysql
 
@@ -79,6 +81,8 @@ services:
       context: .
       dockerfile: nginx/Dockerfile        
     restart: unless-stopped
+    volumes:
+      - images_data:/usr/share/nginx/html/images
     ports:
       - "8080:80"
     networks:
@@ -86,6 +90,9 @@ services:
         ipv4_address: 11.0.1.41
     depends_on:
       - backend
+
+volumes:
+  images_data:
 
 networks:
   saas:

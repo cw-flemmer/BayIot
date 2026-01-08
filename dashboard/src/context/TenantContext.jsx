@@ -7,23 +7,23 @@ export const TenantProvider = ({ children }) => {
     const [tenantInfo, setTenantInfo] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchTenantInfo = async () => {
-            try {
-                const response = await api.get('/tenant/info');
-                setTenantInfo(response.data);
-            } catch (error) {
-                console.error('Failed to fetch tenant info:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchTenantInfo = async () => {
+        try {
+            const response = await api.get('/tenant/info');
+            setTenantInfo(response.data);
+        } catch (error) {
+            console.error('Failed to fetch tenant info:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchTenantInfo();
     }, []);
 
     return (
-        <TenantContext.Provider value={{ tenantInfo, loading }}>
+        <TenantContext.Provider value={{ tenantInfo, loading, refreshTenantInfo: fetchTenantInfo }}>
             {children}
         </TenantContext.Provider>
     );

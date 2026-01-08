@@ -15,6 +15,7 @@ import {
     ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SettingsPage from './Settings.jsx';
 
 const SidebarItem = ({ icon: Icon, label, to, active, isOpen }) => (
     <Link to={to}>
@@ -156,7 +157,7 @@ const DashboardLayout = () => {
                         <Route path="/" element={<Overview />} />
                         <Route path="/devices" element={<div className="text-2xl font-bold">Devices Management Coming Soon</div>} />
                         <Route path="/users" element={<div className="text-2xl font-bold">User Management Coming Soon</div>} />
-                        <Route path="/settings" element={<div className="text-2xl font-bold">Settings Coming Soon</div>} />
+                        <Route path="/settings" element={<SettingsPage />} />
                     </Routes>
                 </main>
             </div>

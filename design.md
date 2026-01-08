@@ -75,3 +75,11 @@ Note: When creating models, please use sequelize and create models in model fold
 1. The tenant will already exist, but now, i want the tenant to be able to create an account for him/her self as admin in order to manage customer dashboards.The email address domain must match the tenant domain. If this is true, then the user will be created as admin. If not, the user will be created as customer. The customer at this point, will only be able to view the dashboard and not manage it.
 
 2. Only 1 admin can exist per tenant. If the tenant tries to create another admin, reject the request and notify the user that only 1 admin can exist per tenant. This also prevents fraudulent account creation.
+
+3. The tenant, after registering the admin account, can now upload the tenant logo and theme under the settings page. The logo url will be stored in the database and the theme will be stored in the database as well. The logo will be stored in the nginx container in the /usr/share/nginx/html/images folder.
+
+4. Settings Page
+       - Create a tabbed panel for the settings page with the following tabs:
+        - General (Upload logo, and specify theme)
+        - Customers and Access (Manage customers and access)    
+    
