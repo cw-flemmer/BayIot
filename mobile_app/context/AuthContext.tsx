@@ -45,23 +45,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const signIn = async (email: string, password: string, domain: string) => {
         try {
-            // Temporarily set domain for the login request (interceptor uses SecureStore)
-            await SecureStore.setItemAsync('tenant_domain', domain);
+            console.log(`[AuthContext] Attempting signin for ${email} at ${domain}`);
+
+            // Temporarily set domain for the login request
+            if (domain) {
+                await SecureStore.setItemAsync('tenant_domain', String(domain));
+            }
 
             const response = await api.post('/auth/login', { email, password }, {
-                headers: { 'X-Tenant-Domain': domain }
+                headers: { 'X-Tenant-Domain': String(domain) }
             });
 
-            const { accessToken, user: userData } = response.data;
+            console.log('[AuthContext] Login response data:', JSON.stringify(response.data));
 
-            await SecureStore.setItemAsync('auth_token', accessToken);
-            await SecureStore.setItemAsync('auth_user', JSON.stringify(userData));
+            const { token: accessToken, user: userData } = response.data;
+
+            if (!accessToken) {
+                throw new Error('No token received from server. Please ensure backend is updated.');
+            }
+
+            // Ensure values are strings
+            await SecureStore.setItemAsync('auth_token', String(accessToken));
+            if (userData) {
+                await SecureStore.setItemAsync('auth_user', JSON.stringify(userData));
+            }
 
             setToken(accessToken);
             setUser(userData);
             setTenantDomain(domain);
-        } catch (error) {
-            await SecureStore.deleteItemAsync('tenant_domain'); // Clean up on failure
+            console.log('[AuthContext] Signin successful');
+        } catch (error: any) {
+            console.error('[AuthContext] Signin error:', error);
+            await SecureStore.deleteItemAsync('tenant_domain').catch(() => { });
             throw error;
         }
     };

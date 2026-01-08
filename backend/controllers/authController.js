@@ -77,6 +77,7 @@ export const register = async (req, res) => {
 
         res.status(201).json({
             message: 'User registered successfully',
+            token: accessToken, // Added for Mobile App
             user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role }
         });
     } catch (error) {
@@ -111,6 +112,7 @@ export const login = async (req, res) => {
 
         res.json({
             message: 'Login successful',
+            token: accessToken, // Added for Mobile App
             user: { id: user.id, name: user.name, email: user.email, role: user.role }
         });
     } catch (error) {
@@ -147,6 +149,7 @@ export const siteAdminLogin = async (req, res) => {
 
         res.json({
             message: 'Site Admin Login successful',
+            token: accessToken, // Added for Mobile App
             user: { id: 0, name: 'Site Administrator', email: adminEmail, role: 'site-admin' }
         });
     } catch (error) {
