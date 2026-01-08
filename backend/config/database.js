@@ -8,7 +8,11 @@ const sequelize = new Sequelize({
     username: 'root',
     password: 'Sp0ng3B0B@Umicore',
     logging: console.log,
-    timezone: '+02:00', // Ensure UTC consistency
+    timezone: '+02:00',
+    define: {
+        timestamps: true,
+        underscored: true,
+    },
     pool: {
         max: 5,
         min: 0,
