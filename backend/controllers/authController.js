@@ -51,6 +51,14 @@ export const register = async (req, res) => {
         const tenantDomain = req.tenant.domain;
         const role = emailDomain === tenantDomain ? 'admin' : 'customer';
 
+        // Check if admin already exists for this tenant
+        if (role === 'admin') {
+            const adminExists = await TenantCustomer.findOne({ where: { tenant_id, role: 'admin' } });
+            if (adminExists) {
+                return res.status(400).json({ message: 'An administrator already exists for this tenant. Multiple admin accounts are not allowed.' });
+            }
+        }
+
         const newUser = await TenantCustomer.create({
             name,
             email,
