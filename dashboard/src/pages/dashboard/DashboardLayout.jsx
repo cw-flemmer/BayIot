@@ -17,8 +17,7 @@ import {
     Plus,
     Trash2,
     Edit3,
-    Building,
-    Search
+    Building
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SettingsPage from './Settings.jsx';
