@@ -172,7 +172,7 @@ const DashboardView = () => {
             </div>
 
             {/* Grid */}
-            <div className="bg-[#0f172a]/50 border border-white/5 rounded-3xl min-h-[600px] p-6">
+            <div className="min-h-[600px] p-6">
                 {widgets.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-[400px] text-gray-500">
                         <Layout size={48} className="mb-4 opacity-20" />
