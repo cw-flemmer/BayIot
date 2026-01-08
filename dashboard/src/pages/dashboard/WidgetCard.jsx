@@ -51,16 +51,16 @@ const WidgetCard = ({ widget, onDelete, isDraggable, showDelete }) => {
     };
 
     return (
-        <div className={`h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 flex flex-col relative group overflow-hidden shadow-xl ${isDraggable ? 'cursor-move drag-handle' : ''}`}>
+        <div className={`h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-3xl p-5 flex flex-col items-center relative group overflow-hidden shadow-xl ${isDraggable ? 'cursor-move drag-handle' : ''}`}>
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="w-full flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
                     <div className="p-2 rounded-xl bg-white/5">
                         {getIcon()}
                     </div>
                     <div>
-                        <h4 className="font-bold text-sm text-gray-200">{widget.title || widget.type}</h4>
-                        <p className="text-[10px] text-gray-500 font-mono tracking-wider">{widget.device_id}</p>
+                        <h4 className="font-bold text-sm text-gray-200 text-left">{widget.title || widget.type}</h4>
+                        <p className="text-[10px] text-gray-500 font-mono tracking-wider text-left">{widget.device_id}</p>
                     </div>
                 </div>
                 {showDelete && (
@@ -86,7 +86,7 @@ const WidgetCard = ({ widget, onDelete, isDraggable, showDelete }) => {
             </div>
 
             {/* Footer / Status */}
-            <div className="mt-auto pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-gray-500">
+            <div className="w-full mt-auto pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-gray-500">
                 <span>Updated just now</span>
                 {widget.type === 'battery' && (
                     <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
