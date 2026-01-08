@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import RGL from 'react-grid-layout';
+// @ts-ignore
+import { Responsive, WidthProvider } from 'react-grid-layout/legacy';
 import { Plus, Save, ArrowLeft, Loader2, Layout, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/api';
@@ -8,7 +9,6 @@ import WidgetCard from './WidgetCard';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
-const { Responsive, WidthProvider } = RGL;
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const DashboardView = () => {
