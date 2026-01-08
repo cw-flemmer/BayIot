@@ -38,7 +38,8 @@ const Dashboards = () => {
             setCustomers(customersRes.data);
         } catch (err) {
             console.error('Fetch dashboards error:', err);
-            setError('Failed to load data.');
+            const msg = err.response?.data?.message || err.message || 'Failed to load data.';
+            setError(`Error: ${msg}`);
         } finally {
             setIsLoading(false);
         }
