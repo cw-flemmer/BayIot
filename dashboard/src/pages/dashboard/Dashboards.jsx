@@ -24,12 +24,23 @@ const Dashboards = () => {
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
+    const [editingId, setEditingId] = useState(null);
     // Form State
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         customer_id: ''
     });
+
+    const handleEdit = (dashboard) => {
+        setEditingId(dashboard.id);
+        setFormData({
+            name: dashboard.name,
+            description: dashboard.description || '',
+            customer_id: dashboard.customer_id || ''
+        });
+        setIsModalOpen(true);
+    };
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -53,19 +64,25 @@ const Dashboards = () => {
         fetchData();
     }, []);
 
-    const handleCreate = async (e) => {
+    const handleSave = async (e) => {
         e.preventDefault();
         setIsSaving(true);
         setError('');
         try {
-            await api.post('/dashboards', formData);
-            setSuccessMessage('Dashboard created successfully!');
+            if (editingId) {
+                await api.put(`/dashboards/${editingId}`, formData);
+                setSuccessMessage('Dashboard updated successfully!');
+            } else {
+                await api.post('/dashboards', formData);
+                setSuccessMessage('Dashboard created successfully!');
+            }
             setIsModalOpen(false);
             setFormData({ name: '', description: '', customer_id: '' });
+            setEditingId(null);
             fetchData();
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to create dashboard.');
+            setError(err.response?.data?.message || 'Failed to save dashboard.');
         } finally {
             setIsSaving(false);
         }
@@ -92,7 +109,11 @@ const Dashboards = () => {
                 </div>
                 {!isCustomer && (
                     <button
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => {
+                            setEditingId(null);
+                            setFormData({ name: '', description: '', customer_id: '' });
+                            setIsModalOpen(true);
+                        }}
                         className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-bold flex items-center space-x-2 transition-all shadow-lg shadow-blue-600/20"
                     >
                         <Plus size={20} />
@@ -122,7 +143,11 @@ const Dashboards = () => {
                     <p className="text-gray-400">No dashboards created yet.</p>
                     {!isCustomer && (
                         <button
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => {
+                                setEditingId(null);
+                                setFormData({ name: '', description: '', customer_id: '' });
+                                setIsModalOpen(true);
+                            }}
                             className="text-blue-400 hover:text-blue-300 font-semibold mt-2"
                         >
                             Create your first dashboard
@@ -145,12 +170,12 @@ const Dashboards = () => {
                                 </Link>
                                 {!isCustomer && (
                                     <div className="flex items-center space-x-2">
-                                        <Link
-                                            to={`/dashboard/list/${db.id}`}
+                                        <button
+                                            onClick={() => handleEdit(db)}
                                             className="p-2 text-gray-500 hover:text-white transition-colors"
                                         >
                                             <Edit3 size={18} />
-                                        </Link>
+                                        </button>
                                         <button
                                             onClick={() => handleDelete(db.id)}
                                             className="p-2 text-gray-500 hover:text-red-400 transition-colors"
@@ -211,7 +236,7 @@ const Dashboards = () => {
                             className="bg-[#0f172a] border border-white/10 w-full max-w-lg rounded-3xl p-8 relative z-10 shadow-2xl text-white"
                         >
                             <div className="flex items-center justify-between mb-8">
-                                <h3 className="text-2xl font-bold">New Dashboard</h3>
+                                <h3 className="text-2xl font-bold">{editingId ? 'Edit Dashboard' : 'New Dashboard'}</h3>
                                 <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-white">
                                     <X size={24} />
                                 </button>
@@ -223,7 +248,7 @@ const Dashboards = () => {
                                 </div>
                             )}
 
-                            <form onSubmit={handleCreate} className="space-y-6">
+                            <form onSubmit={handleSave} className="space-y-6">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300 ml-1">Dashboard Name</label>
                                     <input
@@ -273,7 +298,7 @@ const Dashboards = () => {
                                         disabled={isSaving}
                                         className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-3 rounded-2xl font-bold text-white shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
                                     >
-                                        {isSaving ? <Loader2 size={18} className="animate-spin" /> : <span>Create Dashboard</span>}
+                                        {isSaving ? <Loader2 size={18} className="animate-spin" /> : <span>{editingId ? 'Update Dashboard' : 'Create Dashboard'}</span>}
                                     </button>
                                 </div>
                             </form>

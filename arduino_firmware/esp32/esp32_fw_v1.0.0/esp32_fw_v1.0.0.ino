@@ -14,7 +14,7 @@ const int mqtt_port = 8883;              // No TLS
 //const char* tenant_uuid = "fa34d9b6d15043c29efee776ab80fc42";
 String deviceId; //Wifi Mac Address
 
-const char* customer = "fa34d9b6-d150-43c2-9efe-e776ab80fc42";
+const char* customer = "491771d2-410d-4b8b-bbba-c0f180b5aa6f";
 const char* site = "standfordsquare";
 const char* device = "5C013B32DD30";
 
