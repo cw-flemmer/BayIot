@@ -46,7 +46,9 @@
           "icon": "./assets/images/icon.png",
           "color": "#3b82f6"
         }
-      ]
+      ],
+      "expo-task-manager",
+      "expo-background-fetch"
     ],
     "experiments": {
       "typedRoutes": true,

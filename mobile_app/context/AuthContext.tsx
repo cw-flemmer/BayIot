@@ -37,6 +37,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (storedDomain) {
                 setTenantDomain(storedDomain);
             }
+
+            if (storedUser && storedDomain) {
+                // Initialize notifications and background fetch on app load
+                initializeNotificationHandler();
+                const hasPermission = await requestNotificationPermissions();
+                if (hasPermission) {
+                    await registerBackgroundFetchAsync();
+                    console.log('[AuthContext] Background fetch registered on app load');
+                }
+            }
         } catch (e) {
             console.error('Failed to load auth state', e);
         } finally {
