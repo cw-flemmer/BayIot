@@ -24,6 +24,7 @@ import notificationRoutes from './routes/notificationRoutes.js';
 import mobileAuthRoutes from './routes/mobileAuthRoutes.js';
 import mobileDashboardRoutes from './routes/mobileDashboardRoutes.js';
 import mobileWidgetRoutes from './routes/mobileWidgetRoutes.js';
+import mobileTelemetryRoutes from './routes/mobileTelemetryRoutes.js';
 import tenantDetection from './middleware/tenantDetection.js';
 
 // Middleware
@@ -69,6 +70,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/mobile/auth', mobileAuthRoutes);
 app.use('/api/mobile/dashboards', mobileDashboardRoutes);
 app.use('/api/mobile/widgets', mobileWidgetRoutes);
+app.use('/api/mobile/telemetry', mobileTelemetryRoutes);
 
 app.get('/', (req, res) => {
     res.send('BayIot API is running...');
