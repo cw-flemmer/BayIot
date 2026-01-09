@@ -287,7 +287,8 @@ const Overview = () => {
             </div>
 
             {/* Placeholder for Charts/Data */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/*<div className="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">*/}
+            <div className="hidden">
                 <div className="lg:col-span-2 bg-white/5 border border-white/10 h-[400px] rounded-3xl p-8">
                     <h3 className="text-xl font-bold mb-4">Device Activity</h3>
                     <div className="h-full w-full flex items-center justify-center text-gray-600 border-2 border-dashed border-white/10 rounded-2xl">
