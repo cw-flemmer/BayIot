@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl, Dimensions } from 'react-native';
 import { useLocalSearchParams, router, Stack } from 'expo-router';
 import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import { ChevronLeft, Layout, RefreshCw } from 'lucide-react-native';
 import MobileWidgetCard from '../../components/MobileWidgetCard';
 
@@ -15,14 +16,18 @@ interface Widget {
 
 export default function DashboardDetailScreen() {
     const { id, name } = useLocalSearchParams();
+    const { user, tenantDomain } = useAuth();
     const [widgets, setWidgets] = useState<Widget[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
     const fetchWidgets = useCallback(async () => {
         try {
-            // Backend route is /api/widgets/dashboard/:dashboardId
-            const response = await api.get(`/widgets/dashboard/${id}`);
+            if (!user?.email || !tenantDomain) return;
+            const response = await api.post(`/mobile/widgets/dashboard/${id}`, {
+                email: user.email,
+                domain: tenantDomain
+            });
             setWidgets(response.data);
         } catch (error) {
             console.error('Failed to fetch widgets', error);
@@ -30,7 +35,7 @@ export default function DashboardDetailScreen() {
             setLoading(false);
             setRefreshing(false);
         }
-    }, [id]);
+    }, [id, user, tenantDomain]);
 
     useEffect(() => {
         fetchWidgets();
