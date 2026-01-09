@@ -12,14 +12,18 @@ interface Dashboard {
 }
 
 export default function HomeScreen() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, tenantDomain } = useAuth();
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchDashboards = useCallback(async () => {
     try {
-      const response = await api.get('/dashboards');
+      if (!user?.email || !tenantDomain) return; // Wait for auth loading if needed
+      const response = await api.post('/mobile/dashboards/list', {
+        email: user.email,
+        domain: tenantDomain
+      });
       setDashboards(response.data);
     } catch (error) {
       console.error('Failed to fetch dashboards', error);
@@ -27,7 +31,7 @@ export default function HomeScreen() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, []);
+  }, [user, tenantDomain]);
 
   useEffect(() => {
     fetchDashboards();
