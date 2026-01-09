@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { Thermometer, Droplets, Battery, DoorOpen, Bolt, AlertCircle } from 'lucide-react-native';
 
 interface WidgetProps {
@@ -14,14 +15,18 @@ interface WidgetProps {
 }
 
 const MobileWidgetCard: React.FC<WidgetProps> = ({ widget }) => {
+    const { user, tenantDomain } = useAuth();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     const fetchTelemetry = useCallback(async () => {
-        if (!widget.device_id) return;
+        if (!widget.device_id || !user?.email || !tenantDomain) return;
         try {
-            const response = await api.get(`/telemetry/latest/${widget.device_id}`);
+            const response = await api.post(`/mobile/telemetry/latest/${widget.device_id}`, {
+                email: user.email,
+                domain: tenantDomain
+            });
             setData(response.data);
             setError(false);
         } catch (err) {
@@ -30,7 +35,7 @@ const MobileWidgetCard: React.FC<WidgetProps> = ({ widget }) => {
         } finally {
             setLoading(false);
         }
-    }, [widget.device_id]);
+    }, [widget.device_id, user, tenantDomain]);
 
     useEffect(() => {
         fetchTelemetry();
