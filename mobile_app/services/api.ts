@@ -10,20 +10,6 @@ const api = axios.create({
     timeout: 10000,
 });
 
-// Interceptor to attach Tenant Domain and Token
-api.interceptors.request.use(async (config) => {
-    const tenantDomain = await SecureStore.getItemAsync('tenant_domain');
-    const token = await SecureStore.getItemAsync('auth_token');
 
-    if (tenantDomain) {
-        config.headers['X-Tenant-Domain'] = tenantDomain;
-    }
-
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-});
 
 export default api;

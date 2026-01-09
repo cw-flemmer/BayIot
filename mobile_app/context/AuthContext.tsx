@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import api from '../services/api';
+import { requestNotificationPermissions, registerBackgroundFetchAsync, initializeNotificationHandler } from '../services/notificationService';
 
 interface AuthContextType {
     user: any | null;
@@ -45,34 +46,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const signIn = async (email: string, password: string, domain: string) => {
         try {
-            console.log(`[AuthContext] Attempting signin for ${email} at ${domain}`);
+            console.log(`[AuthContext] Attempting mobile signin for ${email} at ${domain}`);
 
-            // Temporarily set domain for the login request
-            if (domain) {
-                await SecureStore.setItemAsync('tenant_domain', String(domain));
-            }
-
-            const response = await api.post('/auth/login', { email, password }, {
-                headers: { 'X-Tenant-Domain': String(domain) }
-            });
+            const response = await api.post('/mobile/auth/login', { email, password, domain });
 
             console.log('[AuthContext] Login response data:', JSON.stringify(response.data));
 
-            const { token: accessToken, user: userData } = response.data;
+            const { user: userData } = response.data;
 
-            if (!accessToken) {
-                throw new Error('No token received from server. Please ensure backend is updated.');
+            if (!userData) {
+                throw new Error('No user data received from server.');
             }
+
+            // For now, use a placeholder token to maintain "logged in" state in the app logic
+            // providing the user didn't request valid JWTs yet.
+            const accessToken = "MOBILE-SESSION-TOKEN";
 
             // Ensure values are strings
             await SecureStore.setItemAsync('auth_token', String(accessToken));
-            if (userData) {
-                await SecureStore.setItemAsync('auth_user', JSON.stringify(userData));
-            }
+            await SecureStore.setItemAsync('auth_user', JSON.stringify(userData));
+            await SecureStore.setItemAsync('tenant_domain', String(domain));
 
             setToken(accessToken);
             setUser(userData);
             setTenantDomain(domain);
+
+            // Initialize notifications after successful login
+            initializeNotificationHandler();
+            const hasPermission = await requestNotificationPermissions();
+            if (hasPermission) {
+                await registerBackgroundFetchAsync();
+                console.log('[AuthContext] Notification service initialized');
+            }
+
             console.log('[AuthContext] Signin successful');
         } catch (error: any) {
             console.error('[AuthContext] Signin error:', error);

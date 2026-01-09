@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, FlatList, TouchableOpacity, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
-import { useAuth } from '@/context/AuthContext';
-import api from '@/services/api';
+import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
+import { router } from 'expo-router';
 import { Layout, ChevronRight, LogOut, RefreshCw } from 'lucide-react-native';
 
 interface Dashboard {
@@ -38,7 +39,11 @@ export default function HomeScreen() {
   };
 
   const renderItem = ({ item }: { item: Dashboard }) => (
-    <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.7}
+      onPress={() => router.push(`/dashboard/${item.id}?name=${encodeURIComponent(item.name)}` as any)}
+    >
       <View style={styles.cardIcon}>
         <Layout color="#3b82f6" size={24} />
       </View>

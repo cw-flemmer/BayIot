@@ -36,7 +36,7 @@ export default function LoginScreen() {
             style={styles.container}
         >
             <ScrollView contentContainerStyle={styles.scrollContent}>
-                <View className="items-center mb-10">
+                <View style={{ alignItems: 'center', marginBottom: 40 }}>
                     <View style={styles.iconContainer}>
                         <Thermometer color="#3b82f6" size={48} />
                     </View>
