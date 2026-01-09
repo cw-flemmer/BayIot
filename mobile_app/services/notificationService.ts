@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
+import * as SecureStore from 'expo-secure-store';
 import api from './api';
 
 
@@ -22,13 +23,31 @@ TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
     try {
         console.log('[Background Task] Checking for new notifications...');
 
-        // Fetch unread notifications count
-        const response = await api.get('/notifications/unread-count');
+        // 1. Retrieve credentials from SecureStore
+        const storedUser = await SecureStore.getItemAsync('auth_user');
+        const storedDomain = await SecureStore.getItemAsync('tenant_domain');
+
+        if (!storedUser || !storedDomain) {
+            console.log('[Background Task] No credentials found, skipping.');
+            return BackgroundFetch.BackgroundFetchResult.NoData;
+        }
+
+        const user = JSON.parse(storedUser);
+        const email = user.email;
+
+        // 2. Fetch unread notifications count using mobile endpoint
+        const response = await api.post('/mobile/notifications/unread-count', {
+            email,
+            domain: storedDomain
+        });
         const { count } = response.data;
 
         if (count > 0) {
-            // Fetch the latest notifications
-            const notificationsResponse = await api.get('/notifications');
+            // 3. Fetch the latest notifications using mobile endpoint
+            const notificationsResponse = await api.post('/mobile/notifications/latest', {
+                email,
+                domain: storedDomain
+            });
             const notifications = notificationsResponse.data;
 
             // Show notification for the most recent unread one
