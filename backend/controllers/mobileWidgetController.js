@@ -45,7 +45,7 @@ export const getWidgets = async (req, res) => {
         // 4. Fetch Widgets
         const widgets = await Widget.findAll({
             where: { dashboard_id: dashboardId },
-            order: [['order', 'ASC']]
+            order: [['id', 'ASC']]
         });
 
         res.json(widgets);
