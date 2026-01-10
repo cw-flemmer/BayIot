@@ -23,6 +23,7 @@ const AboutUs = () => {
                     </div>
 
                     <div className="order-1 md:order-2">
+                        <h2 className="text-2xl font-bold mb-6">About Us</h2>
                         <h2 className="text-4xl font-bold mb-6">Innovative IoT Solutions for Modern Business</h2>
                         <p className="text-lg text-gray-400 mb-8 leading-relaxed">
                             At BayIoT, we believe that the future is connected. Our mission is to provide
