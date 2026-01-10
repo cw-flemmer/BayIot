@@ -6,6 +6,7 @@ import AboutUs from './components/AboutUs';
 import ContactUs from './components/ContactUs';
 import Pricing from './components/Pricing';
 import Footer from './components/Footer';
+import LiveSensorStats from './components/LiveSensorStats';
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -45,6 +46,7 @@ const App = () => {
           navigateToDemo={navigateToDemo}
           scrollToSection={scrollToSection}
         />
+        <LiveSensorStats />
         <ColdChain />
         <AboutUs />
         <ContactUs />
