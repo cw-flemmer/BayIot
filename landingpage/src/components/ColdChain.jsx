@@ -12,21 +12,23 @@ const DeviceCard = ({ device, index, onImageClick }) => {
 
     return (
         <div
-            className="relative h-[450px] w-full perspective-1000 cursor-pointer group"
+            className="relative h-[480px] w-full perspective-1000 cursor-pointer group"
             onClick={handleFlip}
+            style={{ WebkitTapHighlightColor: 'transparent' }}
         >
             <motion.div
-                className="relative w-full h-full preserve-3d"
+                className="relative w-full h-full preserve-3d will-change-transform"
                 initial={false}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 25 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
             >
                 {/* Front Side */}
                 <div
-                    className={`absolute flex flex-col items-center justify-between p-8 rounded-3xl border backface-hidden h-full w-full ${isAvailable
-                        ? "bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-blue-500/30 group-hover:border-blue-500/50 group-hover:bg-blue-500/[0.08]"
-                        : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 group-hover:border-orange-500/50 group-hover:bg-orange-500/[0.08]"
+                    className={`absolute flex flex-col items-center justify-between p-8 rounded-3xl border backface-hidden h-full w-full shadow-lg ${isAvailable
+                        ? "bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-blue-500/30 group-hover:border-blue-500/50"
+                        : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 group-hover:border-orange-500/50"
                         }`}
+                    style={{ transform: 'translateZ(1px)' }}
                 >
                     {/* Status Tag */}
                     <div className={`absolute top-0 right-8 -translate-y-1/2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg z-20 ${isAvailable
@@ -38,7 +40,7 @@ const DeviceCard = ({ device, index, onImageClick }) => {
 
                     <div className="w-full flex-1 flex flex-col items-center justify-center">
                         <div
-                            className="w-24 h-24 mx-auto mb-6 relative"
+                            className="w-32 h-32 mx-auto mb-6 relative flex items-center justify-center"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 onImageClick(device.image);
@@ -53,7 +55,7 @@ const DeviceCard = ({ device, index, onImageClick }) => {
                             />
                         </div>
                         <h4 className="text-xl font-bold mb-3 text-white">{device.name}</h4>
-                        <p className="text-gray-400 text-sm leading-relaxed mb-6">{device.description}</p>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-6 px-4">{device.description}</p>
                     </div>
 
                     {isAvailable && (
@@ -62,7 +64,7 @@ const DeviceCard = ({ device, index, onImageClick }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full py-2.5 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 z-10 text-center"
+                            className="w-full py-3 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-500/20 z-10 text-center"
                         >
                             Buy Now
                         </a>
@@ -71,13 +73,14 @@ const DeviceCard = ({ device, index, onImageClick }) => {
 
                 {/* Back Side */}
                 <div
-                    className={`absolute flex flex-col items-center justify-center p-8 rounded-3xl border backface-hidden rotate-y-180 h-full w-full ${isAvailable
-                        ? "bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-blue-500/30 shadow-2xl shadow-blue-500/20"
-                        : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 shadow-2xl shadow-orange-500/20"
+                    className={`absolute flex flex-col items-center justify-center p-8 rounded-3xl border backface-hidden rotate-y-180 h-full w-full shadow-2xl ${isAvailable
+                        ? "bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-[#020617] border-blue-500/30"
+                        : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-[#020617] border-orange-500/30"
                         }`}
+                    style={{ transform: 'rotateY(180deg) translateZ(1px)' }}
                 >
                     <div
-                        className="w-full h-full relative overflow-hidden rounded-2xl flex items-center justify-center"
+                        className="w-full h-full relative overflow-hidden rounded-2xl flex items-center justify-center p-4"
                         onClick={(e) => {
                             e.stopPropagation();
                             onImageClick(device.altimg);
@@ -95,7 +98,7 @@ const DeviceCard = ({ device, index, onImageClick }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="mt-4 w-full py-2.5 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all text-center"
+                            className="mt-4 w-full py-3 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all text-center"
                         >
                             Go to Shop
                         </a>
