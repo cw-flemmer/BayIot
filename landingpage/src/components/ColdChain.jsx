@@ -199,26 +199,25 @@ const ColdChain = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelectedImage(null)}
-                        className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 cursor-pointer"
+                        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out"
                     >
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="relative max-w-5xl w-full h-full flex items-center justify-center"
-                            onClick={(e) => e.stopPropagation()}
+                            className="relative max-w-5xl h-full flex items-center justify-center pointer-events-none"
                         >
                             <img
                                 src={selectedImage}
                                 alt="Product Preview"
-                                className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl shadow-blue-500/10"
+                                className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl pointer-events-auto"
                             />
 
                             <button
                                 onClick={() => setSelectedImage(null)}
-                                className="absolute top-0 right-0 -translate-y-full md:translate-y-0 md:translate-x-full mb-4 md:mb-0 md:ml-4 p-2 text-white hover:text-blue-500 transition-colors"
+                                className="fixed top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md transition-all z-[110] pointer-events-auto"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
