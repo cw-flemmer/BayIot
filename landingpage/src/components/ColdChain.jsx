@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const DeviceCard = ({ device, index }) => {
+const DeviceCard = ({ device, index, onImageClick }) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
     const handleFlip = () => {
@@ -37,7 +37,13 @@ const DeviceCard = ({ device, index }) => {
                     </div>
 
                     <div className="w-full flex-1 flex flex-col items-center justify-center">
-                        <div className="w-24 h-24 mx-auto mb-6 relative">
+                        <div
+                            className="w-24 h-24 mx-auto mb-6 relative"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onImageClick(device.image);
+                            }}
+                        >
                             <div className={`absolute inset-0 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${isAvailable ? "bg-blue-500/20" : "bg-orange-500/20"
                                 }`} />
                             <img
@@ -70,7 +76,13 @@ const DeviceCard = ({ device, index }) => {
                         : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 shadow-2xl shadow-orange-500/20"
                         }`}
                 >
-                    <div className="w-full h-full relative overflow-hidden rounded-2xl flex items-center justify-center">
+                    <div
+                        className="w-full h-full relative overflow-hidden rounded-2xl flex items-center justify-center"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onImageClick(device.altimg);
+                        }}
+                    >
                         <img
                             src={device.altimg}
                             alt={`${device.name} product`}
@@ -95,6 +107,8 @@ const DeviceCard = ({ device, index }) => {
 };
 
 const ColdChain = () => {
+    const [selectedImage, setSelectedImage] = useState(null);
+
     const devices = [
         {
             name: "Wifi Temperature Sensor",
@@ -156,10 +170,51 @@ const ColdChain = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {devices.map((device, i) => (
-                        <DeviceCard key={i} device={device} index={i} />
+                        <DeviceCard
+                            key={i}
+                            device={device}
+                            index={i}
+                            onImageClick={(img) => setSelectedImage(img)}
+                        />
                     ))}
                 </div>
             </div>
+
+            {/* Image Modal */}
+            <AnimatePresence>
+                {selectedImage && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedImage(null)}
+                        className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 cursor-pointer"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="relative max-w-5xl w-full h-full flex items-center justify-center"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <img
+                                src={selectedImage}
+                                alt="Product Preview"
+                                className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl shadow-blue-500/10"
+                            />
+
+                            <button
+                                onClick={() => setSelectedImage(null)}
+                                className="absolute top-0 right-0 -translate-y-full md:translate-y-0 md:translate-x-full mb-4 md:mb-0 md:ml-4 p-2 text-white hover:text-blue-500 transition-colors"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 };
