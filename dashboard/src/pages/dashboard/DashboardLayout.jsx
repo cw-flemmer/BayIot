@@ -106,7 +106,7 @@ const DashboardLayout = () => {
                                     className="flex items-center space-x-3"
                                 >
                                     {tenantInfo?.logo ? (
-                                        <img src={getLogoUrl(tenantInfo.logo)} alt="Logo" className="h-8" />
+                                        <img src={getLogoUrl(tenantInfo.logo)} alt="Logo" className="h-10" />
                                     ) : (
                                         <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold">
                                             {tenantInfo?.name?.[0] || 'B'}
