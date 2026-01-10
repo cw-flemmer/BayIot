@@ -172,9 +172,17 @@ const ColdChain = () => {
                 <div className="text-center mb-16">
                     <h2 className="text-2xl font-bold mb-4 text-blue-500">Solutions</h2>
                     <h3 className="text-4xl font-bold mb-4 text-white">Cold Chain & Environmental Monitoring</h3>
-                    <p className="text-gray-400 max-w-2xl mx-auto">
+                    <p className="text-gray-400 max-w-2xl mx-auto mb-8">
                         Our specialized sensors provide unparalleled visibility into your most critical assets and environments.
                     </p>
+
+                    <motion.div
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        className="inline-block px-4 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-400 text-xs font-medium tracking-wide"
+                    >
+                        (Click to view sensor)
+                    </motion.div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
