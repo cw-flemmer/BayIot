@@ -16,22 +16,22 @@ const DeviceCard = ({ device, index }) => {
             onClick={handleFlip}
         >
             <motion.div
-                className="relative w-full h-full transition-all duration-500 preserve-3d"
+                className="relative w-full h-full preserve-3d"
                 initial={false}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 25 }}
             >
                 {/* Front Side */}
                 <div
                     className={`absolute flex flex-col items-center justify-between p-8 rounded-3xl border backface-hidden h-full w-full ${isAvailable
-                            ? "bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-blue-500/30 group-hover:border-blue-500/50 group-hover:bg-blue-500/[0.08]"
-                            : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 group-hover:border-orange-500/50 group-hover:bg-orange-500/[0.08]"
+                        ? "bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-blue-500/30 group-hover:border-blue-500/50 group-hover:bg-blue-500/[0.08]"
+                        : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 group-hover:border-orange-500/50 group-hover:bg-orange-500/[0.08]"
                         }`}
                 >
                     {/* Status Tag */}
                     <div className={`absolute top-0 right-8 -translate-y-1/2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg z-20 ${isAvailable
-                            ? "bg-blue-500 text-white shadow-blue-500/20"
-                            : "bg-orange-500 text-white border border-white/10"
+                        ? "bg-blue-500 text-white shadow-blue-500/20"
+                        : "bg-orange-500 text-white border border-white/10"
                         }`}>
                         {device.status}
                     </div>
@@ -56,7 +56,7 @@ const DeviceCard = ({ device, index }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full py-2.5 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 z-10"
+                            className="w-full py-2.5 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 z-10 text-center"
                         >
                             Buy Now
                         </a>
@@ -66,8 +66,8 @@ const DeviceCard = ({ device, index }) => {
                 {/* Back Side */}
                 <div
                     className={`absolute flex flex-col items-center justify-center p-8 rounded-3xl border backface-hidden rotate-y-180 h-full w-full ${isAvailable
-                            ? "bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-blue-500/30 shadow-2xl shadow-blue-500/20"
-                            : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 shadow-2xl shadow-orange-500/20"
+                        ? "bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-blue-500/30 shadow-2xl shadow-blue-500/20"
+                        : "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 shadow-2xl shadow-orange-500/20"
                         }`}
                 >
                     <div className="w-full h-full relative overflow-hidden rounded-2xl flex items-center justify-center">
@@ -83,7 +83,7 @@ const DeviceCard = ({ device, index }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="mt-4 w-full py-2.5 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all"
+                            className="mt-4 w-full py-2.5 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all text-center"
                         >
                             Go to Shop
                         </a>
