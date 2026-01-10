@@ -112,9 +112,9 @@ const DashboardLayout = () => {
                                             {tenantInfo?.name?.[0] || 'B'}
                                         </div>
                                     )}
-                                    <span className="font-bold text-lg truncate max-w-[140px]">
+                                    {/*<span className="font-bold text-lg truncate max-w-[140px]">
                                         {tenantInfo?.name || 'BayIot'}
-                                    </span>
+                                    </span>*/}
                                 </motion.div>
                             )}
                         </AnimatePresence>
