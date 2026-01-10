@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-COPY . .
+COPY ./landingpage .
 RUN npm run build
 
 # Copy landing page build
