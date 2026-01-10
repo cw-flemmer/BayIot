@@ -64,14 +64,14 @@ const ColdChain = () => {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1 }}
                             className={`relative p-8 rounded-3xl border transition-all duration-300 group text-center ${device.status === 'Available'
-                                    ? "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 hover:border-orange-500/50 hover:bg-orange-500/[0.08]"
-                                    : "bg-white/[0.02] border-white/5 hover:bg-blue-500/[0.03] hover:border-blue-500/30"
+                                ? "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 hover:border-orange-500/50 hover:bg-orange-500/[0.08]"
+                                : "bg-white/[0.02] border-white/5 hover:bg-blue-500/[0.03] hover:border-blue-500/30"
                                 }`}
                         >
                             {/* Status Tag */}
                             <div className={`absolute top-0 right-8 -translate-y-1/2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg ${device.status === 'Available'
-                                    ? "bg-orange-500 text-white shadow-orange-500/20"
-                                    : "bg-gray-800 text-gray-400 border border-white/10"
+                                ? "bg-orange-500 text-white shadow-orange-500/20"
+                                : "bg-gray-800 text-gray-400 border border-white/10"
                                 }`}>
                                 {device.status}
                             </div>
@@ -86,7 +86,18 @@ const ColdChain = () => {
                                 />
                             </div>
                             <h4 className="text-xl font-bold mb-3 text-white">{device.name}</h4>
-                            <p className="text-gray-400 text-sm leading-relaxed">{device.description}</p>
+                            <p className="text-gray-400 text-sm leading-relaxed mb-6">{device.description}</p>
+
+                            {device.status === 'Available' && (
+                                <a
+                                    href="https://shop.cwf-cloud.co.za"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-orange-500/20"
+                                >
+                                    Buy Now
+                                </a>
+                            )}
                         </motion.div>
                     ))}
                 </div>
