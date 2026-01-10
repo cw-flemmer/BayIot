@@ -41,7 +41,7 @@ services:
       dockerfile: landingpage/Dockerfile        
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "8081:80"
     networks:
       saas:
         ipv4_address: 11.0.1.42
