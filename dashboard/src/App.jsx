@@ -9,6 +9,7 @@ import LandingPage from './pages/landingpage/LandingPage';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
+  console.log('[App] ProtectedRoute: isAuthenticated=', isAuthenticated, 'loading=', loading);
 
   if (loading) {
     return (
@@ -25,6 +26,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  console.log('[App] Rendering App component');
   return (
     <TenantProvider>
       <AuthProvider>

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Cpu, Shield, Zap, Mail, Phone, MapPin, ChevronRight, Menu, X } from 'lucide-react';
 
 const LandingPage = () => {
+    console.log('[LandingPage] Rendering LandingPage');
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
