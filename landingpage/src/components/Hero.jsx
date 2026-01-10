@@ -26,7 +26,8 @@ const Hero = ({ navigateToDemo, scrollToSection }) => {
                             Seamlessly monitor, control, and optimize your IoT devices with our
                             enterprise-ready dashboard solution. Real-time data, anytime, anywhere.
                         </p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        {/*<div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">*/}
+                        <div className="hidden">
                             <button
                                 onClick={navigateToDemo}
                                 className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl text-lg font-bold transition-all flex items-center justify-center group cursor-pointer"
