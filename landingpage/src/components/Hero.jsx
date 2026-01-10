@@ -55,7 +55,7 @@ const Hero = ({ navigateToDemo, scrollToSection }) => {
                 </div>
 
                 {/* Feature Grid Preview */}
-                <motion.div
+                {/*<motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2, duration: 0.8 }}
@@ -74,7 +74,7 @@ const Hero = ({ navigateToDemo, scrollToSection }) => {
                             <p className="text-gray-400 group-hover:text-gray-300 transition-colors">{feature.desc}</p>
                         </div>
                     ))}
-                </motion.div>
+                </motion.div>*/}
             </div>
         </section>
     );
