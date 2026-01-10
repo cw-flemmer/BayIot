@@ -7,12 +7,13 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen, navLinks, scrollToSection, navigate
         <nav className="fixed top-0 w-full z-50 bg-[#020617]/80 backdrop-blur-xl border-b border-white/5">
             <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                    <div className="p-2 bg-blue-500 rounded-lg">
+                    {/*<div className="p-2 bg-blue-500 rounded-lg">
                         <Cpu className="w-6 h-6 text-white" />
                     </div>
                     <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                         BayIoT
-                    </span>
+                    </span>*/}
+                    <img src="/images/Logo.png" alt="BayIoT" />
                 </div>
 
                 {/* Desktop Nav */}
