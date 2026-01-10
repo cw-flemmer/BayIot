@@ -20,7 +20,7 @@ const Hero = ({ navigateToDemo, scrollToSection }) => {
                             The Future of IoT Management
                         </span>
                         <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-                            Empower Your Customers with <span className="text-blue-500 tracking-tight">BayIoT</span>
+                            24/7 Remote Monitoring with <span className="text-blue-500 tracking-tight">BayIoT</span>
                         </h1>
                         <p className="text-xl text-gray-400 mb-12 leading-relaxed">
                             Seamlessly monitor, control, and optimize your IoT devices with our
