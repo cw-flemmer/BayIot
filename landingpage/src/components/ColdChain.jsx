@@ -127,19 +127,19 @@ const ColdChain = () => {
             show: true
         },
         {
-            name: "Air Quality Monitor",
-            image: "/images/Air-Quality@2x-150x150.png",
-            altimg: "/images/airqualitysensor.png",
-            description: "Monitor CO2, VOCs, and particulate matter for safety.",
-            status: "Coming Soon",
-            show: true
-        },
-        {
             name: "Door Sensor",
             image: "/images/icon-door-sensor.png",
             altimg: "/images/doorsensor.png",
             description: "Instant alerts for unauthorized access or open fridge doors.",
             status: "Available",
+            show: true
+        },
+        {
+            name: "Air Quality Monitor",
+            image: "/images/Air-Quality@2x-150x150.png",
+            altimg: "/images/airqualitysensor.png",
+            description: "Monitor CO2, VOCs, and particulate matter for safety.",
+            status: "Coming Soon",
             show: true
         },
         {
