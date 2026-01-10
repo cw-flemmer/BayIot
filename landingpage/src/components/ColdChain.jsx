@@ -115,42 +115,48 @@ const ColdChain = () => {
             image: "/images/icon-temperature@4x-270x300.png",
             altimg: "/images/wifisensor.png",
             description: "High-precision thermal monitoring for sensitive environments.",
-            status: "Available"
+            status: "Available",
+            show: true
         },
         {
             name: "Humidity Sensor",
             image: "/images/Humidity@2x-150x150.png",
             altimg: "/images/humiditysensor.png",
             description: "Real-time humidity tracking to prevent moisture damage.",
-            status: "Available"
+            status: "Available",
+            show: true
         },
         {
             name: "Air Quality Monitor",
             image: "/images/Air-Quality@2x-150x150.png",
             altimg: "/images/airqualitysensor.png",
             description: "Monitor CO2, VOCs, and particulate matter for safety.",
-            status: "Coming Soon"
+            status: "Coming Soon",
+            show: false
         },
         {
             name: "Door Sensor",
             image: "/images/icon-door-sensor.png",
             altimg: "/images/doorsensor.png",
             description: "Instant alerts for unauthorized access or open fridge doors.",
-            status: "Available"
+            status: "Available",
+            show: true
         },
         {
             name: "Water Leak Detector",
             image: "/images/Water-Moisture@2x-150x150.png",
             altimg: "/images/waterleakdetector.png",
             description: "Detect leaks early to prevent catastrophic infrastructure damage.",
-            status: "Available"
+            status: "Available",
+            show: true
         },
         {
             name: "Frequency & Vibration",
             image: "/images/icon-frequency@4x-1-300x252.png",
             altimg: "/images/frequencyvibrationsensor.png",
             description: "Monitor machinery health and structural integrity.",
-            status: "Coming Soon"
+            status: "Coming Soon",
+            show: false
         }
     ];
 
@@ -169,14 +175,16 @@ const ColdChain = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {devices.map((device, i) => (
-                        <DeviceCard
-                            key={i}
-                            device={device}
-                            index={i}
-                            onImageClick={(img) => setSelectedImage(img)}
-                        />
-                    ))}
+                    {devices
+                        .filter(device => device.show)
+                        .map((device, i) => (
+                            <DeviceCard
+                                key={i}
+                                device={device}
+                                index={i}
+                                onImageClick={(img) => setSelectedImage(img)}
+                            />
+                        ))}
                 </div>
             </div>
 
