@@ -1,10 +1,8 @@
 FROM node:20-alpine
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY ./landingpage/package*.json ./
 RUN npm ci
 
 COPY ./landingpage .
