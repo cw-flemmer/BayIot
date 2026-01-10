@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import ColdChain from './components/ColdChain';
 import AboutUs from './components/AboutUs';
 import ContactUs from './components/ContactUs';
 import Pricing from './components/Pricing';
@@ -24,6 +25,7 @@ const App = () => {
 
   const navLinks = [
     { name: 'About Us', id: 'about' },
+    { name: 'Solutions', id: 'cold-chain' },
     { name: 'Pricing', id: 'pricing' },
     { name: 'Contact Us', id: 'contact' },
   ];
@@ -43,8 +45,9 @@ const App = () => {
           navigateToDemo={navigateToDemo}
           scrollToSection={scrollToSection}
         />
+        <ColdChain />
         <AboutUs />
-        <ContactUs />
+        {/*<ContactUs />*/}
         <Pricing />
       </main>
 
