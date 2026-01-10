@@ -79,7 +79,7 @@ const DashboardLayout = () => {
         { icon: Layout, label: 'Dashboards', to: '/dashboard/list', adminOnly: true },
         { icon: Building, label: 'Tenants', to: '/dashboard/tenants', siteAdminOnly: true },
         { icon: Cpu, label: 'Devices', to: '/dashboard/devices', adminOnly: true },
-        { icon: Users, label: 'Users', to: '/dashboard/users', adminOnly: true },
+        { icon: Users, label: 'Customers', to: '/dashboard/users', adminOnly: true },
         { icon: Settings, label: 'Settings', to: '/dashboard/settings', adminOnly: true },
     ].filter(item => {
         if (user?.role === 'site-admin') return true;

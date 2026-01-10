@@ -6,6 +6,10 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '../hooks/use-color-scheme';
 import { AuthProvider, useAuth } from '../context/AuthContext';
+import { initializeNotificationHandler } from '../services/notificationService';
+
+// Initialize notification handler early
+initializeNotificationHandler();
 
 export const unstable_settings = {
   anchor: '(tabs)',

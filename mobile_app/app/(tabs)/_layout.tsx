@@ -5,9 +5,20 @@ import { HapticTab } from '../../components/haptic-tab';
 import { IconSymbol } from '../../components/ui/icon-symbol';
 import { Colors } from '../../constants/theme';
 import { useColorScheme } from '../../hooks/use-color-scheme';
+import { requestNotificationPermissions, registerBackgroundFetchAsync } from '../../services/notificationService';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  React.useEffect(() => {
+    const setupNotifications = async () => {
+      const granted = await requestNotificationPermissions();
+      if (granted) {
+        await registerBackgroundFetchAsync();
+      }
+    };
+    setupNotifications();
+  }, []);
 
   return (
     <Tabs
