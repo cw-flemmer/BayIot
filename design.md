@@ -121,7 +121,8 @@ Then show menu as previously implemented
 - Create a new page (DashboardView). This page must only be shown when the edit icon is clicked on the dashboard card. Only admin is allowed to edit the dashboard.
 - On this page, i want to be able to add widgets to the dashboard. The widgets should be displayed in a grid layout. The grid layout should be responsive. The grid layout should have 6 columns. The widgets should be draggable, re-orderable and resizable. The widgets should be saved in the database and linked to the dashboard. There should be an (Add Widget) button at the top of the page. When clicked, show a modal with a list of available widgets. For now, create a tempareture widget, humidity widget, door widget, battery widget. Show nice colourfull icons for the widgets, as well as the widget name as specified, and a value. Then, i want to link the widget to a  column in the telemetry table,which is also linked to the device allocated to the dashboard, see the @TelemetryTable.PNG, to create the model and relevant files.
 
-13. Landingpage (dashboard)
+13. Landingpage 
+- There is a new project folder (@landingpage) in the root of BayIot for the landing page.
+- The project uses tailwindcss for styling.
 - Go and view the design patterns of this website (https://xemoteiot.co.za/)
-- There is a new folder (@dashboard/src/pages/landingpage) specifically for the landing page.
 - For the navigation bar, i only want (About Us, Contact Us, Demo) items. When demo is clicked, show the login screen. When the site loads, the landingpage must be shown, instead of the login page. Normal flow when on the login page

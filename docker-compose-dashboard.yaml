@@ -34,6 +34,17 @@ services:
     depends_on:
       - backend
 
+  landingpage:
+    container_name: bayiot_landingpage
+    build:
+      context: .
+      dockerfile: landingpage/Dockerfile        
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      saas:
+        ipv4_address: 11.0.1.42
 
 volumes:
   images_data:
