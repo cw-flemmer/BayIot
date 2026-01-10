@@ -9,7 +9,7 @@ COPY ./landingpage .
 RUN npm run build
 
 # Copy landing page build
-COPY app/dist/ /usr/share/nginx/html/landing
+COPY ./landingpage/app/dist/ /usr/share/nginx/html/landing
 
 # Copy custom nginx configuration
 COPY ./landingpage/nginx.conf /etc/nginx/conf.d/nginx.conf
