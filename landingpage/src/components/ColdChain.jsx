@@ -132,7 +132,7 @@ const ColdChain = () => {
             altimg: "/images/airqualitysensor.png",
             description: "Monitor CO2, VOCs, and particulate matter for safety.",
             status: "Coming Soon",
-            show: false
+            show: true
         },
         {
             name: "Door Sensor",
@@ -148,7 +148,7 @@ const ColdChain = () => {
             altimg: "/images/waterleakdetector.png",
             description: "Detect leaks early to prevent catastrophic infrastructure damage.",
             status: "Available",
-            show: true
+            show: false
         },
         {
             name: "Frequency & Vibration",
