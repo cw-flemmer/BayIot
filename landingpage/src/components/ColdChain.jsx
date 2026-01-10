@@ -166,8 +166,30 @@ const ColdChain = () => {
     ];
 
     const activeDevices = devices.filter(d => d.show);
-    const cardsToShow = 3;
+
+    // Responsive cards to show
+    const [cardsToShow, setCardsToShow] = useState(3);
+
+    React.useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 640) setCardsToShow(1);
+            else if (window.innerWidth < 1024) setCardsToShow(2);
+            else setCardsToShow(3);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const maxIndex = Math.max(0, activeDevices.length - cardsToShow);
+
+    // Reset index if it exceeds new maxIndex on resize
+    React.useEffect(() => {
+        if (currentIndex > maxIndex) {
+            setCurrentIndex(maxIndex);
+        }
+    }, [maxIndex, currentIndex]);
 
     const nextSlide = () => {
         setCurrentIndex(prev => (prev >= maxIndex ? 0 : prev + 1));
@@ -243,13 +265,13 @@ const ColdChain = () => {
                         </motion.div>
                     </div>
 
-                    {/* Mobile Navigation Indicators */}
-                    <div className="flex justify-center gap-2 mt-8 md:hidden">
-                        {activeDevices.map((_, i) => (
+                    {/* Navigation Indicators */}
+                    <div className="flex justify-center gap-2 mt-8">
+                        {activeDevices.length > cardsToShow && Array.from({ length: maxIndex + 1 }).map((_, i) => (
                             <button
                                 key={i}
-                                onClick={() => setCurrentIndex(Math.min(i, maxIndex))}
-                                className={`h-1.5 rounded-full transition-all ${(currentIndex === i || (i >= maxIndex && currentIndex === maxIndex)) ? "w-8 bg-blue-500" : "w-1.5 bg-white/10"
+                                onClick={() => setCurrentIndex(i)}
+                                className={`h-1.5 rounded-full transition-all ${currentIndex === i ? "w-8 bg-blue-500" : "w-1.5 bg-white/10"
                                     }`}
                             />
                         ))}
