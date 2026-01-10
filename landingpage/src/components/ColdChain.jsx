@@ -90,7 +90,7 @@ const ColdChain = () => {
 
                             {device.status === 'Available' && (
                                 <a
-                                    href="https://shop.cwf-cloud.co.za"
+                                    href="https://shop.cwf-cloud.co.za/category/4"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-block w-full py-2.5 border border-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20"
