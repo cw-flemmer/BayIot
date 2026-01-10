@@ -13,7 +13,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen, navLinks, scrollToSection, navigate
                     <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                         BayIoT
                     </span>*/}
-                    <img src="/images/Logo.png" alt="BayIoT" />
+                    <img src="/images/Logo.png" className='w-20 h-auto' alt="BayIoT" />
                 </div>
 
                 {/* Desktop Nav */}
