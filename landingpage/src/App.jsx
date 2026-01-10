@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import AboutUs from './components/AboutUs';
 import ContactUs from './components/ContactUs';
+import Pricing from './components/Pricing';
 import Footer from './components/Footer';
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
 
   const navLinks = [
     { name: 'About Us', id: 'about' },
+    { name: 'Pricing', id: 'pricing' },
     { name: 'Contact Us', id: 'contact' },
   ];
 
@@ -43,6 +45,7 @@ const App = () => {
         />
         <AboutUs />
         <ContactUs />
+        <Pricing />
       </main>
 
       <Footer />
