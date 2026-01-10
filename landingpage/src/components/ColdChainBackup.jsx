@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const DeviceCard = ({ device, index, onImageClick }) => {
     const [isFlipped, setIsFlipped] = useState(false);
@@ -112,7 +111,6 @@ const DeviceCard = ({ device, index, onImageClick }) => {
 
 const ColdChain = () => {
     const [selectedImage, setSelectedImage] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
 
     const devices = [
         {
@@ -165,18 +163,6 @@ const ColdChain = () => {
         }
     ];
 
-    const activeDevices = devices.filter(d => d.show);
-    const cardsToShow = 3;
-    const maxIndex = Math.max(0, activeDevices.length - cardsToShow);
-
-    const nextSlide = () => {
-        setCurrentIndex(prev => (prev >= maxIndex ? 0 : prev + 1));
-    };
-
-    const prevSlide = () => {
-        setCurrentIndex(prev => (prev <= 0 ? maxIndex : prev - 1));
-    };
-
     return (
         <section id="cold-chain" className="py-24 relative overflow-hidden">
             {/* Background Accent */}
@@ -199,61 +185,17 @@ const ColdChain = () => {
                     </motion.div>
                 </div>
 
-                <div className="relative group/carousel">
-                    {/* Navigation Buttons */}
-                    {activeDevices.length > cardsToShow && (
-                        <>
-                            <button
-                                onClick={prevSlide}
-                                className="absolute -left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-white backdrop-blur-md opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-blue-500/20 hidden md:block"
-                            >
-                                <ChevronLeft className="w-6 h-6" />
-                            </button>
-                            <button
-                                onClick={nextSlide}
-                                className="absolute -right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-white backdrop-blur-md opacity-0 group-hover/carousel:opacity-100 transition-all hover:bg-blue-500/20 hidden md:block"
-                            >
-                                <ChevronRight className="w-6 h-6" />
-                            </button>
-                        </>
-                    )}
-
-                    <div className="overflow-hidden">
-                        <motion.div
-                            className="flex gap-8"
-                            animate={{ x: `-${currentIndex * (100 / (activeDevices.length < cardsToShow ? activeDevices.length : cardsToShow))}%` }}
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            style={{
-                                width: activeDevices.length <= cardsToShow ? '100%' : `${(activeDevices.length / cardsToShow) * 100}%`
-                            }}
-                        >
-                            {activeDevices.map((device, i) => (
-                                <div
-                                    key={i}
-                                    className="w-full"
-                                    style={{ flex: `0 0 calc(${100 / cardsToShow}% - ${(32 * (cardsToShow - 1)) / cardsToShow}px)` }}
-                                >
-                                    <DeviceCard
-                                        device={device}
-                                        index={i}
-                                        onImageClick={(img) => setSelectedImage(img)}
-                                    />
-                                </div>
-                            ))}
-                        </motion.div>
-                    </div>
-
-                    {/* Mobile Navigation Indicators */}
-                    <div className="flex justify-center gap-2 mt-8 md:hidden">
-                        {activeDevices.map((_, i) => (
-                            <button
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {devices
+                        .filter(device => device.show)
+                        .map((device, i) => (
+                            <DeviceCard
                                 key={i}
-                                onClick={() => setCurrentIndex(Math.min(i, maxIndex))}
-                                className={`h-1.5 rounded-full transition-all ${(currentIndex === i || (i >= maxIndex && currentIndex === maxIndex)) ? "w-8 bg-blue-500" : "w-1.5 bg-white/10"
-                                    }`}
+                                device={device}
+                                index={i}
+                                onImageClick={(img) => setSelectedImage(img)}
                             />
                         ))}
-                    </div>
                 </div>
             </div>
 
