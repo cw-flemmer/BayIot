@@ -16,7 +16,7 @@ const App = () => {
   const navigateToDemo = () => {
     // Redirect to the dashboard project's login page
     // Assuming the dashboard is running on port 5173
-    window.location.href = 'http://localhost:5173/login';
+    window.location.href = 'http://bayiot.cwf-cloud.co.za';
   };
 
   const navLinks = [
