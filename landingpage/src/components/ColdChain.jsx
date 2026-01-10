@@ -6,32 +6,38 @@ const ColdChain = () => {
         {
             name: "Temperature Sensor",
             image: "/images/icon-temperature@4x-270x300.png",
-            description: "High-precision thermal monitoring for sensitive environments."
+            description: "High-precision thermal monitoring for sensitive environments.",
+            status: "Available"
         },
         {
             name: "Humidity Sensor",
             image: "/images/Humidity@2x-150x150.png",
-            description: "Real-time humidity tracking to prevent moisture damage."
+            description: "Real-time humidity tracking to prevent moisture damage.",
+            status: "Available"
         },
         {
             name: "Air Quality Monitor",
             image: "/images/Air-Quality@2x-150x150.png",
-            description: "Monitor CO2, VOCs, and particulate matter for safety."
+            description: "Monitor CO2, VOCs, and particulate matter for safety.",
+            status: "Coming Soon"
         },
         {
             name: "Door Sensor",
             image: "/images/icon-door-sensor.png",
-            description: "Instant alerts for unauthorized access or open fridge doors."
+            description: "Instant alerts for unauthorized access or open fridge doors.",
+            status: "Available"
         },
         {
             name: "Water Leak Detector",
             image: "/images/Water-Moisture@2x-150x150.png",
-            description: "Detect leaks early to prevent catastrophic infrastructure damage."
+            description: "Detect leaks early to prevent catastrophic infrastructure damage.",
+            status: "Available"
         },
         {
             name: "Frequency & Vibration",
             image: "/images/icon-frequency@4x-1-300x252.png",
-            description: "Monitor machinery health and structural integrity."
+            description: "Monitor machinery health and structural integrity.",
+            status: "Coming Soon"
         }
     ];
 
@@ -57,10 +63,22 @@ const ColdChain = () => {
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1 }}
-                            className="bg-white/[0.02] border border-white/5 p-8 rounded-3xl hover:bg-blue-500/[0.03] hover:border-blue-500/30 transition-all group text-center"
+                            className={`relative p-8 rounded-3xl border transition-all duration-300 group text-center ${device.status === 'Available'
+                                    ? "bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border-orange-500/30 hover:border-orange-500/50 hover:bg-orange-500/[0.08]"
+                                    : "bg-white/[0.02] border-white/5 hover:bg-blue-500/[0.03] hover:border-blue-500/30"
+                                }`}
                         >
+                            {/* Status Tag */}
+                            <div className={`absolute top-0 right-8 -translate-y-1/2 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg ${device.status === 'Available'
+                                    ? "bg-orange-500 text-white shadow-orange-500/20"
+                                    : "bg-gray-800 text-gray-400 border border-white/10"
+                                }`}>
+                                {device.status}
+                            </div>
+
                             <div className="w-24 h-24 mx-auto mb-6 relative">
-                                <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className={`absolute inset-0 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${device.status === 'Available' ? "bg-orange-500/20" : "bg-blue-500/20"
+                                    }`} />
                                 <img
                                     src={device.image}
                                     alt={device.name}
