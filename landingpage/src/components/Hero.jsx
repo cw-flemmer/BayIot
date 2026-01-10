@@ -24,7 +24,7 @@ const Hero = ({ navigateToDemo, scrollToSection }) => {
                         </h1>
                         <p className="text-xl text-gray-400 mb-12 leading-relaxed">
                             Seamlessly monitor, control, and optimize your IoT devices with our
-                            enterprise-ready dashboard solution. Real-time data, anytime, anywhere.
+                            enterprise-ready dashboard and sensor solutions. Real-time data, anytime, anywhere.
                         </p>
                         {/*<div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">*/}
                         <div className="hidden">
