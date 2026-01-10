@@ -47,7 +47,7 @@ const App = () => {
         />
         <ColdChain />
         <AboutUs />
-        {/*<ContactUs />*/}
+        <ContactUs />
         <Pricing />
       </main>
 
