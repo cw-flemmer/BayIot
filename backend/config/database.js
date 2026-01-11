@@ -3,11 +3,12 @@ import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize({
     dialect: 'mysql',
-    host: 'bayiot_mysql',
-    database: 'BayIot',
-    username: 'root',
-    password: 'Sp0ng3B0B@Umicore',
-    logging: console.log,
+    host: process.env.DB_HOST || 'bayiot_mysql',
+    port: process.env.DB_PORT || 3306,
+    database: process.env.DB_NAME || 'BayIot',
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASS || 'Sp0ng3B0B@Umicore',
+    logging: false, // Set to console.log for debugging
     timezone: '+02:00',
     define: {
         timestamps: true,

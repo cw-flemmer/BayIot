@@ -7,18 +7,23 @@ import { Op } from 'sequelize';
 
 // Helper to authenticate user from body
 const getAuthenticatedUser = async (domain, email) => {
-    if (!domain || !email) return null;
+    try {
+        if (!domain || !email) return null;
 
-    const tenant = await Tenant.findOne({ where: { domain } });
-    if (!tenant) return null;
+        const tenant = await Tenant.findOne({ where: { domain } });
+        if (!tenant) return null;
 
-    const user = await TenantCustomer.findOne({
-        where: { email, tenant_id: tenant.id }
-    });
+        const user = await TenantCustomer.findOne({
+            where: { email, tenant_id: tenant.id }
+        });
 
-    if (!user) return null;
+        if (!user) return null;
 
-    return { user, tenant };
+        return { user, tenant };
+    } catch (error) {
+        console.error('getAuthenticatedUser error:', error);
+        return null;
+    }
 };
 
 // Helper to get device IDs relevant to the user
@@ -71,7 +76,7 @@ export const getUnreadCount = async (req, res) => {
         res.json({ count });
     } catch (error) {
         console.error('Mobile unread count error:', error);
-        res.status(500).json({ message: 'Server error fetching unread count.' });
+        res.status(500).json({ message: 'Server error fetching unread count.', error: error.message });
     }
 };
 
@@ -105,6 +110,6 @@ export const getLatestNotifications = async (req, res) => {
         res.json(notifications);
     } catch (error) {
         console.error('Mobile notifications error:', error);
-        res.status(500).json({ message: 'Server error fetching notifications.' });
+        res.status(500).json({ message: 'Server error fetching notifications.', error: error.message });
     }
 };

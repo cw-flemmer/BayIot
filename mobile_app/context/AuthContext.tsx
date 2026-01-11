@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import api from '../services/api';
-import { requestNotificationPermissions, registerBackgroundFetchAsync, initializeNotificationHandler } from '../services/notificationService';
+import { requestNotificationPermissions, registerBackgroundFetchAsync, initializeNotificationHandler, startForegroundPoll, stopForegroundPoll } from '../services/notificationService';
 
 interface AuthContextType {
     user: any | null;
@@ -44,7 +44,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const hasPermission = await requestNotificationPermissions();
                 if (hasPermission) {
                     await registerBackgroundFetchAsync();
-                    console.log('[AuthContext] Background fetch registered on app load');
+                    startForegroundPoll();
+                    console.log('[AuthContext] Background & Foreground fetch registered on app load');
                 }
             }
         } catch (e) {
@@ -86,6 +87,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const hasPermission = await requestNotificationPermissions();
             if (hasPermission) {
                 await registerBackgroundFetchAsync();
+                startForegroundPoll();
                 console.log('[AuthContext] Notification service initialized');
             }
 
@@ -101,6 +103,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await SecureStore.deleteItemAsync('auth_token');
         await SecureStore.deleteItemAsync('auth_user');
         await SecureStore.deleteItemAsync('tenant_domain');
+        stopForegroundPoll();
         setToken(null);
         setUser(null);
         setTenantDomain(null);

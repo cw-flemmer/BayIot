@@ -18,24 +18,22 @@ export function initializeNotificationHandler() {
     });
 }
 
-// Define the background task
-TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
+// Helper to fetch and show notifications
+export async function fetchAndNotify() {
     try {
-        console.log('[Background Task] Checking for new notifications...');
+        console.log('[Notification Service] Checking for new notifications...');
 
-        // 1. Retrieve credentials from SecureStore
         const storedUser = await SecureStore.getItemAsync('auth_user');
         const storedDomain = await SecureStore.getItemAsync('tenant_domain');
 
         if (!storedUser || !storedDomain) {
-            console.log('[Background Task] No credentials found, skipping.');
-            return BackgroundFetch.BackgroundFetchResult.NoData;
+            return { result: BackgroundFetch.BackgroundFetchResult.NoData, count: 0 };
         }
 
         const user = JSON.parse(storedUser);
         const email = user.email;
 
-        // 2. Fetch unread notifications count using mobile endpoint
+        // Fetch unread notifications count
         const response = await api.post('/mobile/notifications/unread-count', {
             email,
             domain: storedDomain
@@ -43,7 +41,7 @@ TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
         const { count } = response.data;
 
         if (count > 0) {
-            // 3. Fetch the latest notifications using mobile endpoint
+            // Fetch the latest notifications
             const notificationsResponse = await api.post('/mobile/notifications/latest', {
                 email,
                 domain: storedDomain
@@ -59,21 +57,54 @@ TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
                         title: 'BayIot Alert',
                         body: latestUnread.message,
                         data: { notificationId: latestUnread.id, deviceId: latestUnread.device_id },
-                        sound: true,
+                        sound: 'default', // Explicit sound
+                        priority: Notifications.AndroidNotificationPriority.HIGH,
                     },
-                    trigger: null, // Show immediately
+                    trigger: null,
                 });
 
-                console.log('[Background Task] Notification displayed:', latestUnread.message);
+                console.log('[Notification Service] Notification displayed:', latestUnread.message);
             }
+            return { result: BackgroundFetch.BackgroundFetchResult.NewData, count };
         }
 
-        return BackgroundFetch.BackgroundFetchResult.NewData;
-    } catch (error) {
-        console.error('[Background Task] Error:', error);
-        return BackgroundFetch.BackgroundFetchResult.Failed;
+        return { result: BackgroundFetch.BackgroundFetchResult.NoData, count: 0 };
+    } catch (error: any) {
+        if (error.response) {
+            console.error('[Notification Service] Error Response:', error.response.data);
+        } else {
+            console.error('[Notification Service] Error:', error.message);
+        }
+        return { result: BackgroundFetch.BackgroundFetchResult.Failed, count: 0 };
     }
+}
+
+// Define the background task
+TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async () => {
+    const { result } = await fetchAndNotify();
+    return result;
 });
+
+// Start a 60-second "Foreground Poll"
+// Note: This works while app is open, but combined with a Foreground Service permission 
+// and a sticky notification, it becomes much more reliable than BackgroundFetch.
+let pollInterval: NodeJS.Timeout | null = null;
+
+export function startForegroundPoll() {
+    if (pollInterval) return;
+
+    console.log('[Notification Service] Starting 60s foreground poll');
+    pollInterval = setInterval(async () => {
+        await fetchAndNotify();
+    }, 60000); // 60 seconds
+}
+
+export function stopForegroundPoll() {
+    if (pollInterval) {
+        clearInterval(pollInterval);
+        pollInterval = null;
+    }
+}
 
 // Register the background fetch task
 export async function registerBackgroundFetchAsync() {
