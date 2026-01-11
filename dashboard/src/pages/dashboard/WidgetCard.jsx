@@ -50,7 +50,7 @@ const WidgetCard = ({ widget, onDelete, isDraggable, showDelete }) => {
     };
 
     return (
-        <div className={`h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-orange-400 rounded-3xl p-5 flex flex-col items-center relative group overflow-hidden shadow-xl ${isDraggable ? 'cursor-move drag-handle' : ''}`}>
+        <div className={`h-full w-full bg-[#1e293b]/80 backdrop-blur-md border border-orange-200 rounded-3xl p-5 flex flex-col items-center relative group overflow-hidden shadow-xl ${isDraggable ? 'cursor-move drag-handle' : ''}`}>
             {/* Header */}
             <div className="w-full flex items-center justify-center mb-4">
                 <div className="flex items-center justify-center space-x-3">
