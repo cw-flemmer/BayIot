@@ -20,12 +20,10 @@ import superTenantRoutes from './routes/superTenantRoutes.js';
 import deviceRoutes from './routes/deviceRoutes.js';
 import widgetRoutes from './routes/widgetRoutes.js';
 import telemetryRoutes from './routes/telemetryRoutes.js';
-import notificationRoutes from './routes/notificationRoutes.js';
 import mobileAuthRoutes from './routes/mobileAuthRoutes.js';
 import mobileDashboardRoutes from './routes/mobileDashboardRoutes.js';
 import mobileWidgetRoutes from './routes/mobileWidgetRoutes.js';
 import mobileTelemetryRoutes from './routes/mobileTelemetryRoutes.js';
-import mobileNotificationRoutes from './routes/mobileNotificationRoutes.js';
 import tenantDetection from './middleware/tenantDetection.js';
 
 // Middleware
@@ -67,12 +65,10 @@ app.use('/api/super/tenants', superTenantRoutes);
 app.use('/api/devices', deviceRoutes);
 app.use('/api/widgets', widgetRoutes);
 app.use('/api/telemetry', telemetryRoutes);
-app.use('/api/notifications', notificationRoutes);
 app.use('/api/mobile/auth', mobileAuthRoutes);
 app.use('/api/mobile/dashboards', mobileDashboardRoutes);
 app.use('/api/mobile/widgets', mobileWidgetRoutes);
 app.use('/api/mobile/telemetry', mobileTelemetryRoutes);
-app.use('/api/mobile/notifications', mobileNotificationRoutes);
 
 app.get('/', (req, res) => {
     res.send('BayIot API is running...');
