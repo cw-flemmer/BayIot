@@ -67,7 +67,7 @@ const Specifications = () => {
                             Built for reliability and precision. Our hardware is designed to perform in the most demanding environments.
                         </p>
 
-                        <div className="space-y-6">
+                        <div className="space-y-2">
                             {specs.map((spec, index) => (
                                 <motion.div
                                     key={index}
@@ -75,7 +75,7 @@ const Specifications = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.1 + 0.3 }}
-                                    className="flex items-center p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-blue-500/30 transition-all hover:bg-blue-500/[0.02] group"
+                                    className="flex items-center p-2 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-blue-500/30 transition-all hover:bg-blue-500/[0.02] group"
                                 >
                                     <div className={`w-14 h-14 rounded-xl ${spec.bg} ${spec.color} flex items-center justify-center mr-6 group-hover:scale-110 transition-transform duration-300`}>
                                         <spec.icon size={28} />
