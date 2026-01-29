@@ -35,7 +35,7 @@ const Pricing = () => {
                 "Unlimited Users"
             ],
             buttonText: "Contact Us",
-            highlight: true
+            highlight: false
         }
     ];
 
@@ -93,15 +93,6 @@ const Pricing = () => {
                                     </li>
                                 ))}
                             </ul>
-
-                            <button
-                                className={`w-full py-4 rounded-2xl font-bold transition-all cursor-pointer ${plan.highlight
-                                    ? "bg-blue-500 hover:bg-blue-400 text-white shadow-lg shadow-blue-500/30"
-                                    : "bg-white/5 hover:bg-white/10 text-white border border-white/10"
-                                    }`}
-                            >
-                                {plan.buttonText}
-                            </button>
                         </motion.div>
                     ))}
                 </div>
