@@ -47,7 +47,7 @@ const App = () => {
           scrollToSection={scrollToSection}
         />
         {/* <LiveSensorStats /> */}
-        <ColdChain />
+        {/*<ColdChain />*/}
         {/*<AboutUs />*/}
         {/*<ContactUs />*/}
         <Pricing />
