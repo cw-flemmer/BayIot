@@ -40,7 +40,7 @@ const Specifications = () => {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6 relative">
-                <div className="grid grid-cols-3 lg:grid-cols-3 gap-16 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
                     {/* Left Column: Image */}
                     <motion.div
