@@ -45,7 +45,7 @@ const Specifications = () => {
                 <p className="text-gray-400 mb-10 text-lg leading-relaxed text-center">
                     We work with our customers to provide solutions tailored specifically to their needs.
                 </p>
-                <div className="h-1 w-1/2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 my-4" />
+                <div className="h-1 w-1/2 mx-auto bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 my-4" />
             </div>
             <div className="max-w-7xl mx-auto px-6 relative">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
