@@ -40,7 +40,7 @@ const Pricing = () => {
     ];
 
     return (
-        <section id="pricing" className="py-24 bg-white/[0.01]">
+        <section id="pricing" className="py-24 bg-black">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-16">
                     <h2 className="text-2xl font-bold mb-4 text-blue-500">Pricing</h2>
@@ -59,8 +59,8 @@ const Pricing = () => {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.2 }}
                             className={`relative p-8 rounded-3xl border transition-all duration-300 flex flex-col ${plan.highlight
-                                    ? "bg-blue-600/10 border-blue-500 shadow-xl shadow-blue-500/10"
-                                    : "bg-white/[0.02] border-white/5 hover:border-white/20"
+                                ? "bg-blue-600/10 border-blue-500 shadow-xl shadow-blue-500/10"
+                                : "bg-white/[0.02] border-white/5 hover:border-white/20"
                                 }`}
                         >
                             {plan.highlight && (
@@ -96,8 +96,8 @@ const Pricing = () => {
 
                             <button
                                 className={`w-full py-4 rounded-2xl font-bold transition-all cursor-pointer ${plan.highlight
-                                        ? "bg-blue-500 hover:bg-blue-400 text-white shadow-lg shadow-blue-500/30"
-                                        : "bg-white/5 hover:bg-white/10 text-white border border-white/10"
+                                    ? "bg-blue-500 hover:bg-blue-400 text-white shadow-lg shadow-blue-500/30"
+                                    : "bg-white/5 hover:bg-white/10 text-white border border-white/10"
                                     }`}
                             >
                                 {plan.buttonText}
