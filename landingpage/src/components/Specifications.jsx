@@ -93,7 +93,7 @@ const Specifications = () => {
                                     className="flex items-center p-2 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-blue-500/30 transition-all hover:bg-blue-500/[0.02] group"
                                 >
                                     <div className={`w-14 h-14 rounded-xl ${spec.bg} ${spec.color} flex items-center justify-center mr-6 group-hover:scale-110 transition-transform duration-300`}>
-                                        <spec.icon size={14} />
+                                        <spec.icon size={24} />
                                     </div>
                                     <div>
                                         <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">
