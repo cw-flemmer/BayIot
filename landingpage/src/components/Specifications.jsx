@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Wifi, Thermometer, Ruler, Activity, Zap } from 'lucide-react';
+import { Wifi, Thermometer, Ruler, Activity, Zap, ShoppingCart } from 'lucide-react';
 
 const Specifications = () => {
     const specs = [
