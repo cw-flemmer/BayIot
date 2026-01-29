@@ -26,7 +26,7 @@ const App = () => {
   };
 
   const navLinks = [
-    { name: 'Solutions', id: 'specifications' },
+    { name: 'Cold Chain', id: 'specifications' },
     { name: 'Pricing', id: 'pricing' },
     { name: 'Contact Us', id: 'contact' },
   ];

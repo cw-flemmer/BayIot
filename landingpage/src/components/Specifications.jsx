@@ -40,7 +40,7 @@ const Specifications = () => {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
             <div className="max-w-7xl mx-auto px-6 relative justify-center">
                 <h2 className="text-2xl md:text-2xl font-bold mb-4 text-center">
-                    <span className="text-blue-500">Design</span>|<span className="text-blue-500">Build.</span>|<span className="text-blue-500">Deploy.</span>
+                    <span className="text-blue-500">Design.</span>|<span className="text-blue-500">Build.</span>|<span className="text-blue-500">Deploy.</span>
                 </h2>
                 <p className="text-gray-400 mb-10 text-lg leading-relaxed text-center">
                     We work with our customers to provide solutions tailored specifically to their needs.
@@ -57,7 +57,7 @@ const Specifications = () => {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="relative group"
                     >
-                        <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-[2.5rem] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+                        {/*<div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-[2.5rem] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />*/}
                         <div className="relative rounded-[2rem] overflow-hidden border border-white/10 bg-white/[0.02] backdrop-blur-sm p-4">
                             <img
                                 src="/images/BayIot-05.png"
@@ -75,11 +75,9 @@ const Specifications = () => {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
                         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
-                            Technical <span className="text-blue-500">Specifications</span>
-                        </h2>
-                        <h2 className="text-2xl md:text-2xl font-bold mb-4 text-gray-800">
                             Wifi Temperature Sensor (Standard)
                         </h2>
+
                         <p className="text-gray-400 mb-10 text-lg leading-relaxed">
                             Built for reliability and precision. Our hardware is designed to perform in the most demanding environments.
                         </p>
