@@ -67,7 +67,7 @@ const Specifications = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
                             Technical <span className="text-blue-500">Specifications</span>
                         </h2>
                         <p className="text-gray-400 mb-10 text-lg leading-relaxed">
@@ -91,7 +91,7 @@ const Specifications = () => {
                                         <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">
                                             {spec.label}
                                         </p>
-                                        <p className="text-xl font-bold text-white">
+                                        <p className="text-xl font-bold text-gray-800">
                                             {spec.value}
                                         </p>
                                     </div>
