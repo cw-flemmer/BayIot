@@ -21,7 +21,7 @@ const Pricing = () => {
                 "Regular feature improvements"
             ],
             buttonText: "Get Started",
-            important: "The monthly fee keeps your system secure, updated, and fully supported",
+            important: "The monthly fee keeps you updated and fully supported",
             highlight: false
         },
         {
