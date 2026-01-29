@@ -7,6 +7,7 @@ import ContactUs from './components/ContactUs';
 import Pricing from './components/Pricing';
 import Footer from './components/Footer';
 import LiveSensorStats from './components/LiveSensorStats';
+import Specifications from './components/Specifications';
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -46,6 +47,7 @@ const App = () => {
           navigateToDemo={navigateToDemo}
           scrollToSection={scrollToSection}
         />
+        <Specifications />
         {/* <LiveSensorStats /> */}
         {/*<ColdChain />*/}
         {/*<AboutUs />*/}
