@@ -19,4 +19,17 @@
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
   }
+  
+  @keyframes spin-slow {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+  }
 }

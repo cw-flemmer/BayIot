@@ -50,7 +50,7 @@ const Pricing = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
                     {plans.map((plan, i) => (
                         <motion.div
                             key={i}
@@ -58,44 +58,45 @@ const Pricing = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.2 }}
-                            className={`relative p-8 rounded-3xl border transition-all duration-300 flex flex-col ${plan.highlight
-                                ? "bg-blue-600/10 border-blue-500 shadow-xl shadow-blue-500/10"
-                                : "bg-white/[0.02] border-white/5 hover:border-white/20"
-                                }`}
+                            className="relative group h-full"
                         >
-                            {plan.highlight && (
-                                <div className="absolute top-0 right-8 -translate-y-1/2 bg-blue-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
-                                    Recommended
-                                </div>
-                            )}
-
-                            <div className="mb-8">
-                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${plan.highlight ? "bg-blue-500 text-white" : "bg-blue-500/10 text-blue-500"
-                                    }`}>
-                                    <plan.icon size={28} />
-                                </div>
-                                <h4 className="text-2xl font-bold mb-2 text-white">{plan.name}</h4>
-                                <p className="text-gray-400 text-sm">{plan.description}</p>
+                            {/* Animated Border Container */}
+                            <div className="absolute -inset-[1px] rounded-[2.2rem] overflow-hidden">
+                                <div className="absolute top-1/2 left-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_150deg,#3b82f6_180deg,transparent_210deg,transparent_360deg)] animate-spin-slow" />
                             </div>
 
-                            <div className="mb-8">
-                                <div className="flex items-baseline space-x-1">
-                                    <span className="text-5xl font-bold text-white">{plan.price}</span>
-                                    <span className="text-gray-500 text-sm font-medium">{plan.period}</span>
+                            {/* Main Card Content */}
+                            <div className={`relative h-full p-8 rounded-[2.1rem] bg-black/90 backdrop-blur-xl border border-white/5 transition-all duration-500 group-hover:bg-black/80 flex flex-col`}>
+                                <div className="mb-8">
+                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-blue-500/10 text-blue-500 group-hover:scale-110 transition-transform duration-500`}>
+                                        <plan.icon size={28} />
+                                    </div>
+                                    <h4 className="text-2xl font-bold mb-2 text-white">{plan.name}</h4>
+                                    <p className="text-gray-400 text-sm leading-relaxed">{plan.description}</p>
                                 </div>
-                            </div>
 
-                            <ul className="space-y-4 mb-10 flex-1">
-                                {plan.features.map((feature, j) => (
-                                    <li key={j} className="flex items-center text-gray-300">
-                                        <Check size={18} className="text-blue-500 mr-3 flex-shrink-0" />
-                                        <span className="text-sm">{feature}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                                <div className="mb-8">
+                                    <div className="flex items-baseline space-x-1">
+                                        <span className="text-5xl font-bold text-white leading-tight">{plan.price}</span>
+                                        <span className="text-gray-500 text-sm font-medium">{plan.period}</span>
+                                    </div>
+                                </div>
+
+                                <ul className="space-y-4 mb-10 flex-1">
+                                    {plan.features.map((feature, j) => (
+                                        <li key={j} className="flex items-center text-gray-300">
+                                            <div className="w-5 h-5 rounded-full bg-blue-500/10 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <Check size={12} className="text-blue-500" />
+                                            </div>
+                                            <span className="text-sm">{feature}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </motion.div>
                     ))}
                 </div>
+
             </div>
         </section>
     );
