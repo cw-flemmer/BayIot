@@ -4,10 +4,27 @@ import { Cpu, Shield, Zap, ChevronRight } from 'lucide-react';
 
 const Hero = ({ navigateToDemo, scrollToSection }) => {
     return (
-        <section className="relative pt-32 pb-20 overflow-hidden">
-            {/* Background Gradients */}
+        <section className="relative pt-32 pb-20 overflow-hidden min-h-[80vh] flex items-center">
+            {/* Video Background */}
+            <div className="absolute inset-0 z-0">
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover opacity-40"
+                >
+                    <source src="/video/bgnd_video.mp4" type="video/mp4" />
+                </video>
+                {/* Overlay Gradients */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 via-transparent to-[#020617]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-transparent to-[#020617]/80" />
+            </div>
+
+            {/* Background Gradients (Kept for depth) */}
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] bg-blue-500/10 blur-[120px] rounded-full" />
             <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[400px] h-[400px] bg-indigo-500/10 blur-[100px] rounded-full" />
+
 
             <div className="max-w-7xl mx-auto px-6 relative">
                 <div className="text-center max-w-4xl mx-auto">
