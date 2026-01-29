@@ -40,7 +40,7 @@ const Specifications = () => {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
             <div className="max-w-7xl mx-auto px-6 relative">
                 <h2 className="text-2xl md:text-2xl font-bold mb-4 justify-center">
-                    <span className="text-blue-500">Design</span> <span className="text-blue-500">Build</span><span className="text-blue-500">DeployCustomize</span>
+                    <span className="text-blue-500">Design</span>|<span className="text-blue-500">Build</span>|<span className="text-blue-500">Customize</span>
                 </h2>
             </div>
             <div className="max-w-7xl mx-auto px-6 relative">
