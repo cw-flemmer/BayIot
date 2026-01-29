@@ -59,15 +59,6 @@ const Hero = ({ navigateToDemo, scrollToSection }) => {
                                 Learn More
                             </button>
                         </div>
-                        <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                            <button
-                                onClick={navigateToDemo}
-                                className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl text-lg font-bold transition-all flex items-center justify-center group cursor-pointer"
-                            >
-                                Request Demo
-                                <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </button>
-                        </div>
                     </motion.div>
                 </div>
 

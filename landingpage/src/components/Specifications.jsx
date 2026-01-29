@@ -70,6 +70,9 @@ const Specifications = () => {
                         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
                             Technical <span className="text-blue-500">Specifications</span>
                         </h2>
+                        <h2 className="text-2xl md:text-2xl font-bold mb-4 text-gray-800">
+                            Wifi Temperature Sensor (Standard)
+                        </h2>
                         <p className="text-gray-400 mb-10 text-lg leading-relaxed">
                             Built for reliability and precision. Our hardware is designed to perform in the most demanding environments.
                         </p>
@@ -99,12 +102,12 @@ const Specifications = () => {
                             ))}
                         </div>
 
-                        <div className="mt-12 p-6 rounded-2xl bg-blue-500/5 border border-blue-500/20">
+                        <div className="mt-12 p-6 rounded-2xl bg-black border border-blue-500/20">
                             <p className="text-blue-400 text-sm font-medium bg-blue-400/10 px-3 py-1 rounded-full inline-block mb-3">
-                                Ready for Enterprise
+                                Please note
                             </p>
                             <p className="text-gray-300 text-sm italic">
-                                * Custom sensor configurations available upon request for industrial applications.
+                                * 2 Week Lead Time after purchase. We assemble and test all units locally in South Africa, before sending out to the customer.
                             </p>
                         </div>
                     </motion.div>
