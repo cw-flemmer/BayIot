@@ -43,7 +43,7 @@ const Specifications = () => {
                     <span className="text-slate-500">Design.</span>|<span className="text-slate-500">Build.</span>|<span className="text-slate-500">Deploy.</span>
                 </h2>
                 <p className="text-gray-400 mb-10 text-lg leading-relaxed text-center">
-                    We work direclty with our customers to provide solutions tailored specifically to their needs.
+                    We work directly with our customers to provide solutions tailored specifically to their needs.
                 </p>
                 <div className="h-1 w-1/2 mx-auto bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 my-2" />
             </div>
