@@ -40,7 +40,7 @@ const Pricing = () => {
                 "Unlimited Users"
             ],
             buttonText: "Contact Us",
-            important: "The monthly fee keeps your system secure, updated, and fully supported",
+            important: "",
             highlight: false
         }
     ];
