@@ -17,13 +17,13 @@ const Hero = ({ navigateToDemo, scrollToSection }) => {
                         transition={{ duration: 0.5 }}
                     >
                         <span className="px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold tracking-widest uppercase mb-6 inline-block">
-                            The Future of IoT Management
+                            Turn IoT Monitoring Into Your Product
                         </span>
                         <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-                            <span className="bg-gradient-to-r from-orange-500 to-orange-400 bg-clip-text text-transparent tracking-tight">24/7</span> Remote Monitoring with <span className="bg-gradient-to-r from-blue-500 to-blue-400 bg-clip-text text-transparent tracking-tight">BayIoT</span>
+                            Loss prevention + Compliance + Peace of Mind
                         </h1>
                         <p className="text-xl text-gray-400 mb-12 leading-relaxed">
-                            Seamlessly monitor, control, and optimize your IoT devices with our
+                            BayIoT is a white-label IoT platform that helps you monitor, control, and optimize your devices with our
                             enterprise-ready dashboard and sensor solutions. Real-time data, anytime, anywhere.
                         </p>
                         {/*<div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">*/}
