@@ -53,7 +53,7 @@ const App = () => {
         {/* <LiveSensorStats /> */}
         {/*<ColdChain />*/}
         {/*<AboutUs />*/}
-        {/*<ContactUs />*/}
+        <ContactUs />
         <Pricing />
       </main>
 

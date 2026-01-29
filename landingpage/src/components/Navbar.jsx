@@ -54,12 +54,6 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen, navLinks, scrollToSection, navigate
                             {link.name}
                         </button>
                     ))}
-                    <button
-                        onClick={navigateToDemo}
-                        className="w-full py-4 bg-blue-600 text-white rounded-xl text-lg font-semibold cursor-pointer"
-                    >
-                        Demo
-                    </button>
                 </motion.div>
             )}
         </nav>
