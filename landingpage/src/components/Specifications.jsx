@@ -106,7 +106,7 @@ const Specifications = () => {
                             <p className="text-red-400 text-sm font-medium bg-red-400/10 border border-red-400/20 px-3 py-1 rounded-full inline-block mb-3">
                                 Please note
                             </p>
-                            <p className="text-white text-sm italic">
+                            <p className="text-black text-sm italic">
                                 * 2 Week Lead Time after purchase. We assemble and test all units locally in South Africa, before sending out to the customer.
                             </p>
                         </div>
