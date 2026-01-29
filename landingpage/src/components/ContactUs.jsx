@@ -19,14 +19,13 @@ const ContactUs = () => {
                         <h2 className="text-2xl font-bold mb-4 text-blue-500 uppercase tracking-widest text-sm text-left">Contact Us</h2>
                         <h2 className="text-4xl font-bold mb-6 text-white text-left">Let's Build the Future Together</h2>
                         <p className="text-lg text-gray-400 mb-12 leading-relaxed text-left">
-                            Have questions about our hardware or custom dashboard solutions? Our engineering team is ready to help you scale your IoT infrastructure.
+                            Have questions about our hardware or white label solutions? We are ready to assist you.
                         </p>
 
                         <div className="space-y-8">
                             {[
-                                { icon: Mail, label: "Email", value: "contact@bayiot.com", desc: "Drop us a line anytime" },
-                                { icon: Phone, label: "Phone", value: "+27 (0) 12 345 6789", desc: "Mon-Fri from 8am to 5pm" },
-                                { icon: MapPin, label: "Office", value: "Cape Town, South Africa", desc: "Visit our HQ by the coast" }
+                                { icon: Mail, label: "Email", value: "sales@cwf-electronics.co.za", desc: "Drop us a line anytime" },
+                                { icon: Phone, label: "Whatsapp", value: "0751204552", desc: "Mon-Fri from 8am to 5pm" }
                             ].map((item, i) => (
                                 <div key={i} className="flex items-start group">
                                     <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 mr-6 group-hover:scale-110 transition-transform flex-shrink-0">
@@ -54,14 +53,14 @@ const ContactUs = () => {
                                 <div className="p-4 bg-blue-500/20 rounded-2xl inline-block mb-6 text-blue-400">
                                     <MessageSquare size={32} />
                                 </div>
-                                <h3 className="text-2xl font-bold text-white mb-4">Quick Support</h3>
+                                <h3 className="text-2xl font-bold text-white mb-4">Enquiry</h3>
                                 <p className="text-gray-400 leading-relaxed">
-                                    Need immediate assistance? Our technical support team is available 24/7 for enterprise clients. Reach out through your dedicated account portal.
+                                    Send us a message and we will get back to you as soon as possible.
                                 </p>
                             </div>
 
                             <a
-                                href="mailto:contact@bayiot.com"
+                                href="mailto:sales@cwf-electronics.co.za"
                                 className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold text-center transition-all flex items-center justify-center group shadow-lg shadow-blue-500/20"
                             >
                                 <Send className="mr-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
