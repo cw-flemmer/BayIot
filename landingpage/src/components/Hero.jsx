@@ -19,7 +19,7 @@ const Hero = ({ navigateToDemo, scrollToSection }) => {
                         <span className="px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold tracking-widest uppercase mb-6 inline-block">
                             Turn IoT Monitoring Into Your Product
                         </span>
-                        <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+                        <h1 className="text-3xl md:text-5xl font-bold mb-8 leading-tight">
                             Loss prevention + Compliance + Peace of Mind
                         </h1>
                         <p className="text-xl text-gray-400 mb-12 leading-relaxed">
