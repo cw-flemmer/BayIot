@@ -8,7 +8,7 @@ const Pricing = () => {
             name: "Single Device",
             icon: Cpu,
             description: "Perfect for small schools, clubs, makers, and individuals",
-            other: "You still have to purchase the device, once-off cost",
+            other: "You still have to purchase a device, once-off cost. You own it.",
             price: "R399.00",
             period: "/month per device",
             features: [
@@ -21,6 +21,7 @@ const Pricing = () => {
                 "Regular feature improvements"
             ],
             buttonText: "Get Started",
+            important: "The monthly fee keeps your system secure, updated, and fully supported",
             highlight: false
         },
         {
@@ -39,6 +40,7 @@ const Pricing = () => {
                 "Unlimited Users"
             ],
             buttonText: "Contact Us",
+            important: "The monthly fee keeps your system secure, updated, and fully supported",
             highlight: false
         }
     ];
@@ -99,6 +101,9 @@ const Pricing = () => {
                                         </li>
                                     ))}
                                 </ul>
+                                {plan.important && (
+                                    <p className="text-yellow-500 text-sm leading-relaxed mt-2">{plan.important}</p>
+                                )}
                             </div>
                         </motion.div>
                     ))}
