@@ -5,17 +5,19 @@ import { Check, Cpu, Building2 } from 'lucide-react';
 const Pricing = () => {
     const plans = [
         {
-            name: "Per Device",
+            name: "Single Device",
             icon: Cpu,
-            description: "Ideal for small to medium sensor networks.",
-            price: "R50",
-            period: "/device/month",
+            description: "Perfect for small schools, clubs, makers, and individuals",
+            price: "R399.00",
+            period: "/month per device",
             features: [
-                "Real-time monitoring",
-                "Standard Dashboard Data",
-                "Email Notifications",
-                "Secure Connectivity",
-                "API Access"
+                "1 connected device",
+                "Up to 50 users",
+                "Full platform access",
+                "Automatic updates",
+                "Secure cloud hosting",
+                "Email / WhatsApp support",
+                "Regular feature improvements"
             ],
             buttonText: "Get Started",
             highlight: false
