@@ -102,7 +102,7 @@ const Pricing = () => {
                                     ))}
                                 </ul>
                                 {plan.important && (
-                                    <p className="text-yellow-500 text-sm leading-relaxed mt-2">{plan.important}</p>
+                                    <p className="bg-green-400/10 text-green-700 border border-green-700/10 rounded-lg p-2 text-sm leading-relaxed mt-2">{plan.important}</p>
                                 )}
                             </div>
                         </motion.div>
