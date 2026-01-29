@@ -8,6 +8,7 @@ const Pricing = () => {
             name: "Single Device",
             icon: Cpu,
             description: "Perfect for small schools, clubs, makers, and individuals",
+            other: "You still have to purchase the device, once-off cost",
             price: "R399.00",
             period: "/month per device",
             features: [
@@ -26,6 +27,7 @@ const Pricing = () => {
             name: "White Label",
             icon: Building2,
             description: "Scale your business with tailored IoT branding.",
+            other: "",
             price: "Custom",
             period: "Contact for pricing",
             features: [
@@ -75,6 +77,9 @@ const Pricing = () => {
                                     </div>
                                     <h4 className="text-2xl font-bold mb-2 text-white">{plan.name}</h4>
                                     <p className="text-gray-400 text-sm leading-relaxed">{plan.description}</p>
+                                    {plan.other && (
+                                        <p className="text-yellow-500 text-sm leading-relaxed mt-2">{plan.other}</p>
+                                    )}
                                 </div>
 
                                 <div className="mb-8">
