@@ -41,33 +41,6 @@ const ContactUs = () => {
                         </div>
                     </motion.div>
 
-                    {/* Right Side: Simple Message UI */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="relative"
-                    >
-                        <div className="p-8 rounded-3xl bg-blue-500/5 border border-blue-500/10 backdrop-blur-sm h-full flex flex-col justify-center">
-                            <div className="mb-8 text-left">
-                                <div className="p-4 bg-blue-500/20 rounded-2xl inline-block mb-6 text-blue-400">
-                                    <MessageSquare size={32} />
-                                </div>
-                                <h3 className="text-2xl font-bold text-white mb-4">Enquiry</h3>
-                                <p className="text-gray-400 leading-relaxed">
-                                    Send us a message and we will get back to you as soon as possible.
-                                </p>
-                            </div>
-
-                            <a
-                                href="mailto:sales@cwf-electronics.co.za"
-                                className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold text-center transition-all flex items-center justify-center group shadow-lg shadow-blue-500/20"
-                            >
-                                <Send className="mr-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                Send Message
-                            </a>
-                        </div>
-                    </motion.div>
                 </div>
             </div>
         </section>
