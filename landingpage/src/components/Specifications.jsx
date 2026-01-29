@@ -38,10 +38,13 @@ const Specifications = () => {
         <section id="specifications" className="py-24 relative overflow-hidden">
             {/* Background Decorations */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
-            <div className="max-w-7xl mx-auto px-6 relative">
-                <h2 className="text-2xl md:text-2xl font-bold mb-4 justify-center">
+            <div className="max-w-7xl mx-auto px-6 relative justify-center">
+                <h2 className="text-2xl md:text-2xl font-bold mb-4 text-center">
                     <span className="text-blue-500">Design</span>|<span className="text-blue-500">Build</span>|<span className="text-blue-500">Customize</span>
                 </h2>
+                <p className="text-gray-400 mb-10 text-lg leading-relaxed">
+                    We work with our customers to provide solutions tailored specifically to their needs.
+                </p>
             </div>
             <div className="max-w-7xl mx-auto px-6 relative">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
