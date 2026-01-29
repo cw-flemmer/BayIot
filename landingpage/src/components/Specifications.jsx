@@ -108,6 +108,18 @@ const Specifications = () => {
                             ))}
                         </div>
 
+                        <div className="mt-8 mb-6">
+                            <a
+                                href="https://cwf-electronics.co.za/product/38"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl text-lg font-bold transition-all shadow-lg shadow-blue-500/25 group cursor-pointer"
+                            >
+                                <ShoppingCart className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                                Buy Now
+                            </a>
+                        </div>
+
                         <div className="mt-4 p-6 rounded-2xl bg-red-400/10 border border-red-400/20">
                             <p className="text-red-400 text-sm font-medium bg-red-400/10 border border-red-400/20 px-3 py-1 rounded-full inline-block mb-3">
                                 Please note
