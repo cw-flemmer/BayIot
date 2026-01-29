@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Wifi, Thermometer, Ruler, Activity } from 'lucide-react';
+import { Wifi, Thermometer, Ruler, Activity, Zap } from 'lucide-react';
 
 const Specifications = () => {
     const specs = [
@@ -24,6 +24,13 @@ const Specifications = () => {
             icon: Activity,
             color: "text-cyan-500",
             bg: "bg-cyan-500/10"
+        },
+        {
+            label: "Power",
+            value: "230VAC",
+            icon: Zap,
+            color: "text-yellow-500",
+            bg: "bg-yellow-500/10"
         }
     ];
 
