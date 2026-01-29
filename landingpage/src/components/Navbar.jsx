@@ -27,12 +27,6 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen, navLinks, scrollToSection, navigate
                             {link.name}
                         </button>
                     ))}
-                    <button
-                        onClick={navigateToDemo}
-                        className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 cursor-pointer"
-                    >
-                        Demo
-                    </button>
                 </div>
 
                 {/* Mobile Menu Button */}
