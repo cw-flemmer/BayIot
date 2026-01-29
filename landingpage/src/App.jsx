@@ -48,7 +48,7 @@ const App = () => {
         />
         {/* <LiveSensorStats /> */}
         <ColdChain />
-        <AboutUs />
+        {/*<AboutUs />*/}
         {/*<ContactUs />*/}
         <Pricing />
       </main>

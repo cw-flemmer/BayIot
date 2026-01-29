@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import api from '../services/api';
-import { requestNotificationPermissions, registerBackgroundFetchAsync, initializeNotificationHandler, startForegroundPoll, stopForegroundPoll } from '../services/notificationService';
+
 
 interface AuthContextType {
     user: any | null;
@@ -40,13 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             if (storedUser && storedDomain) {
                 // Initialize notifications and background fetch on app load
-                initializeNotificationHandler();
-                const hasPermission = await requestNotificationPermissions();
-                if (hasPermission) {
-                    await registerBackgroundFetchAsync();
-                    startForegroundPoll();
-                    console.log('[AuthContext] Background & Foreground fetch registered on app load');
-                }
+                // Notification service removed
             }
         } catch (e) {
             console.error('Failed to load auth state', e);
@@ -83,13 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setTenantDomain(domain);
 
             // Initialize notifications after successful login
-            initializeNotificationHandler();
-            const hasPermission = await requestNotificationPermissions();
-            if (hasPermission) {
-                await registerBackgroundFetchAsync();
-                startForegroundPoll();
-                console.log('[AuthContext] Notification service initialized');
-            }
+            // Notification service removed
 
             console.log('[AuthContext] Signin successful');
         } catch (error: any) {
@@ -103,7 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await SecureStore.deleteItemAsync('auth_token');
         await SecureStore.deleteItemAsync('auth_user');
         await SecureStore.deleteItemAsync('tenant_domain');
-        stopForegroundPoll();
+
         setToken(null);
         setUser(null);
         setTenantDomain(null);
