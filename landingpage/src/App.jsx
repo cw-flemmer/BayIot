@@ -47,7 +47,9 @@ const App = () => {
           navigateToDemo={navigateToDemo}
           scrollToSection={scrollToSection}
         />
-        <Specifications />
+        <div className='bg-white'>
+          <Specifications />
+        </div>
         {/* <LiveSensorStats /> */}
         {/*<ColdChain />*/}
         {/*<AboutUs />*/}
