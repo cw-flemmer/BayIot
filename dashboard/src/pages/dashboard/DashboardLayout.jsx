@@ -26,6 +26,7 @@ import DashboardsPage from './Dashboards.jsx';
 import DashboardView from './DashboardView.jsx';
 import TenantsPage from './Tenants.jsx';
 import DevicesPage from './Devices.jsx';
+import CustomersPage from './Customers.jsx';
 
 const SidebarItem = ({ icon: Icon, label, to, active, isOpen }) => (
     <Link to={to}>
@@ -79,7 +80,7 @@ const DashboardLayout = () => {
         { icon: Layout, label: 'Dashboards', to: '/dashboard/list', adminOnly: true },
         { icon: Building, label: 'Tenants', to: '/dashboard/tenants', siteAdminOnly: true },
         { icon: Cpu, label: 'Devices', to: '/dashboard/devices', adminOnly: true },
-        { icon: Users, label: 'Customers', to: '/dashboard/users', adminOnly: true },
+        { icon: Users, label: 'Customers', to: '/dashboard/customers', adminOnly: true },
         { icon: Settings, label: 'Settings', to: '/dashboard/settings', adminOnly: true },
     ].filter(item => {
         if (user?.role === 'site-admin') return true;
@@ -207,7 +208,7 @@ const DashboardLayout = () => {
                             <>
                                 <Route path="/tenants" element={<TenantsPage />} />
                                 <Route path="/devices" element={<DevicesPage />} />
-                                <Route path="/users" element={<div className="text-2xl font-bold">User Management Coming Soon</div>} />
+                                <Route path="/customers" element={<CustomersPage />} />
                                 <Route path="/settings" element={<SettingsPage />} />
                             </>
                         )}
