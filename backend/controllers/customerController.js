@@ -48,3 +48,31 @@ export const createCustomer = async (req, res) => {
         res.status(500).json({ message: 'Server error during customer creation.' });
     }
 };
+
+export const createCustomerTest = async (req, res) => {
+    try {
+        const { name, email, password, role, tenant_id } = req.body;
+
+        if (!name || !email || !password || !tenant_id) {
+            return res.status(400).json({ message: 'Name, email, password, and tenant_id are required.' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await TenantCustomer.create({
+            name,
+            email,
+            password: hashedPassword,
+            tenant_id,
+            role: role || 'customer'
+        });
+
+        res.status(201).json({
+            message: 'Customer (Test) created successfully',
+            user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role, tenant_id: newUser.tenant_id }
+        });
+    } catch (error) {
+        console.error('Create customer test error:', error);
+        res.status(500).json({ message: 'Server error during test customer creation.' });
+    }
+};
