@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View, Text, ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/authStore';
 import { router } from 'expo-router';
 import { Thermometer } from 'lucide-react-native';
 
 export default function LoginScreen() {
-    const { signIn } = useAuth();
+    const { signIn } = useAuthStore();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [domain, setDomain] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async () => {
-        if (!email || !password || !domain) {
+        if (!email || !password) {
             Alert.alert('Error', 'Please fill in all fields');
             return;
         }
 
         setLoading(true);
         try {
-            await signIn(email, password, domain);
+            await signIn(email, password);
             router.replace('/(tabs)');
         } catch (error: any) {
             console.error(error);
@@ -45,18 +44,6 @@ export default function LoginScreen() {
                 </View>
 
                 <View style={styles.form}>
-                    <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Tenant Domain</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="client-x.bayiot.com"
-                            placeholderTextColor="#64748b"
-                            value={domain}
-                            onChangeText={setDomain}
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                        />
-                    </View>
 
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Email Address</Text>

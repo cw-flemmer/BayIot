@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl, Dimensions } from 'react-native';
 import { useLocalSearchParams, router, Stack } from 'expo-router';
 import api from '../../services/api';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthStore } from '../../store/authStore';
 import { ChevronLeft, Layout, RefreshCw } from 'lucide-react-native';
 import MobileWidgetCard from '../../components/MobileWidgetCard';
 
@@ -16,7 +16,7 @@ interface Widget {
 
 export default function DashboardDetailScreen() {
     const { id, name } = useLocalSearchParams();
-    const { user, tenantDomain } = useAuth();
+    const { user, tenantDomain } = useAuthStore();
     const [widgets, setWidgets] = useState<Widget[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);

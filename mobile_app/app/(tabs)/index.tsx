@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, FlatList, TouchableOpacity, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthStore } from '../../store/authStore';
 import api from '../../services/api';
 import { router } from 'expo-router';
 import { Layout, ChevronRight, LogOut, RefreshCw } from 'lucide-react-native';
@@ -12,7 +12,7 @@ interface Dashboard {
 }
 
 export default function HomeScreen() {
-  const { user, signOut, tenantDomain } = useAuth();
+  const { user, signOut, tenantDomain } = useAuthStore();
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

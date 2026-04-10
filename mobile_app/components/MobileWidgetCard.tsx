@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import api from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/authStore';
 import { Thermometer, Droplets, Battery, DoorOpen, Bolt, AlertCircle } from 'lucide-react-native';
 
 interface WidgetProps {
@@ -15,7 +15,7 @@ interface WidgetProps {
 }
 
 const MobileWidgetCard: React.FC<WidgetProps> = ({ widget }) => {
-    const { user, tenantDomain } = useAuth();
+    const { user, tenantDomain } = useAuthStore();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);

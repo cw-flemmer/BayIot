@@ -6,23 +6,40 @@ export const login = async (req, res) => {
     try {
         const { domain, email, password } = req.body;
 
-        if (!domain || !email || !password) {
-            return res.status(400).json({ message: 'Domain, email, and password are required.' });
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required.' });
         }
 
-        // 1. Check if tenant exists
-        const tenant = await Tenant.findOne({ where: { domain } });
-        if (!tenant) {
-            return res.status(404).json({ message: 'Tenant not found.' });
-        }
+        let tenant;
+        let user;
 
-        // 2. Check if user exists in that tenant
-        const user = await TenantCustomer.findOne({
-            where: {
-                email,
-                tenant_id: tenant.id
+        if (domain) {
+            // 1a. Find tenant by provided domain
+            tenant = await Tenant.findOne({ where: { domain } });
+            if (!tenant) {
+                return res.status(404).json({ message: 'Tenant not found.' });
             }
-        });
+
+            // 1b. Find user in that tenant
+            user = await TenantCustomer.findOne({
+                where: {
+                    email,
+                    tenant_id: tenant.id
+                }
+            });
+        } else {
+            // 2a. Find user globally by email (Unique constraint makes this safe)
+            user = await TenantCustomer.findOne({ where: { email } });
+            if (!user) {
+                return res.status(401).json({ message: 'Invalid credentials.' });
+            }
+
+            // 2b. Find associated tenant
+            tenant = await Tenant.findByPk(user.tenant_id);
+            if (!tenant) {
+                return res.status(404).json({ message: 'Associated tenant not found.' });
+            }
+        }
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials.' });

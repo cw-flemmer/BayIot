@@ -3,7 +3,9 @@
 #include <ArduinoJson.h>
 
 // ---------- WiFi Settings ----------
-const char* ssid = "FLEMMER-2.4G";
+//const char* ssid = "FLEMMER-2.4G";
+//const char* password = "0677521411";
+const char* ssid = "CWF-Shop";
 const char* password = "0677521411";
 
 // ---------- MQTT Settings ----------

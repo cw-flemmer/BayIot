@@ -21,6 +21,7 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.infoonsyte.bayiot",
+      "usesCleartextTraffic": true,
       "permissions": [
       ]
     },
