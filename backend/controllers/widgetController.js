@@ -3,7 +3,7 @@ import Dashboard from '../models/Dashboard.js';
 
 export const createWidget = async (req, res) => {
     try {
-        const { dashboard_id, type, title, device_id, telemetry_column, position } = req.body;
+        const { dashboard_id, type, title, device_id, telemetry_column, position, settings } = req.body;
 
         // Basic validation could go here
 
@@ -13,7 +13,8 @@ export const createWidget = async (req, res) => {
             title,
             device_id,
             telemetry_column,
-            position
+            position,
+            settings
         });
 
         res.status(201).json(widget);
@@ -39,7 +40,7 @@ export const getWidgets = async (req, res) => {
 export const updateWidget = async (req, res) => {
     try {
         const { id } = req.params;
-        const { position, title, device_id, telemetry_column } = req.body;
+        const { position, title, device_id, telemetry_column, settings } = req.body;
 
         const widget = await Widget.findByPk(id, {
             include: [{ model: Dashboard, as: 'dashboard' }]
@@ -64,6 +65,7 @@ export const updateWidget = async (req, res) => {
         // If (isAdmin), allow.
 
         if (position) widget.position = position;
+        if (settings) widget.settings = settings;
 
         // Only admins can change configuration
         if (isAdmin) {

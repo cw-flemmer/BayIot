@@ -148,6 +148,15 @@ const DashboardView = () => {
         }
     };
 
+    const handleUpdateWidget = async (widgetId, updates) => {
+        try {
+            const res = await api.put(`/widgets/${widgetId}`, updates);
+            setWidgets(prev => prev.map(w => w.id === widgetId ? { ...w, ...res.data } : w));
+        } catch (error) {
+            console.error('Update widget error:', error);
+        }
+    };
+
     // ... (Loading state)
 
     return (
@@ -223,8 +232,10 @@ const DashboardView = () => {
                                 <WidgetCard
                                     widget={widget}
                                     onDelete={handleDeleteWidget}
+                                    onUpdate={handleUpdateWidget}
                                     isDraggable={isEditMode}
                                     showDelete={canManageWidgets}
+                                    canManageSettings={true}
                                 />
                             </div>
                         ))}

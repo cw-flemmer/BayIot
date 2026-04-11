@@ -35,6 +35,10 @@ const Widget = sequelize.define('Widget', {
     position: {
         type: DataTypes.JSON,
         allowNull: true,
+    },
+    settings: {
+        type: DataTypes.JSON,
+        allowNull: true,
     }
 }, {
     tableName: 'widgets',
