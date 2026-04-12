@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, Thermometer, Droplets, Battery, DoorOpen, Bolt, Settings as SettingsIcon, X, Loader2, Bell } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
@@ -198,10 +199,10 @@ const WidgetCard = ({ widget, onDelete, onUpdate, isDraggable, showDelete, canMa
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl pointer-events-none" />
 
-            {/* Settings Modal (full-screen overlay on the page) */}
-            <AnimatePresence>
-                {showSettings && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onMouseDown={(e) => e.stopPropagation()}>
+            {/* Settings Modal — rendered via portal into document.body */}
+            {showSettings && ReactDOM.createPortal(
+                <AnimatePresence>
+                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                         {/* Backdrop */}
                         <motion.div
                             initial={{ opacity: 0 }}
@@ -333,7 +334,7 @@ const WidgetCard = ({ widget, onDelete, onUpdate, isDraggable, showDelete, canMa
                                                 </label>
                                             </div>
 
-                                            {/* Phone Number — always visible */}
+                                            {/* Phone Number */}
                                             <div className="space-y-2">
                                                 <label className="text-sm font-medium text-gray-300 ml-1">Alert Phone Number</label>
                                                 <input
@@ -407,8 +408,9 @@ const WidgetCard = ({ widget, onDelete, onUpdate, isDraggable, showDelete, canMa
                             </form>
                         </motion.div>
                     </div>
-                )}
-            </AnimatePresence>
+                </AnimatePresence>,
+                document.body
+            )}
         </div>
     );
 };
