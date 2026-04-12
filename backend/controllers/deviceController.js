@@ -106,6 +106,31 @@ export const deleteDevice = async (req, res) => {
     }
 };
 
+export const findDeviceByStringId = async (req, res) => {
+    try {
+        const { device_id } = req.params;
+        const device = await Device.findOne({
+            where: {
+                device_id,
+                tenant_uuid: req.tenant.uuid
+            },
+            attributes: [
+                'id', 'device_id', 'min_temperature', 'max_temperature',
+                'door_open_time_limit', 'alert_phone_number', 'sms_alerts_enabled'
+            ]
+        });
+
+        if (!device) {
+            return res.status(404).json({ message: 'Device not found.' });
+        }
+
+        res.json(device);
+    } catch (error) {
+        console.error('Find device by string ID error:', error);
+        res.status(500).json({ message: 'Server error.' });
+    }
+};
+
 export const updateDevice = async (req, res) => {
     try {
         const { id } = req.params;
