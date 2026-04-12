@@ -513,20 +513,16 @@ const Devices = () => {
                                         <div className={`w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${isCustomer ? '' : 'peer-checked:bg-purple-500'}`}></div>
                                     </label>
                                 </div>
-                                
-                                {settingsData.sms_alerts_enabled && (
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-300 ml-1">Alert Phone Number</label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={settingsData.alert_phone_number}
-                                            onChange={(e) => setSettingsData({ ...settingsData, alert_phone_number: e.target.value })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
-                                            placeholder="+27821234567"
-                                        />
-                                    </div>
-                                )}
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300 ml-1">Alert Phone Number</label>
+                                    <input
+                                        type="text"
+                                        value={settingsData.alert_phone_number}
+                                        onChange={(e) => setSettingsData({ ...settingsData, alert_phone_number: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
+                                        placeholder="+27821234567"
+                                    />
+                                </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
