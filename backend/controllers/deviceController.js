@@ -105,3 +105,34 @@ export const deleteDevice = async (req, res) => {
         res.status(500).json({ message: 'Server error during device deletion.' });
     }
 };
+
+export const updateDevice = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { min_temperature, max_temperature, alert_phone_number, sms_alerts_enabled, door_open_time_limit } = req.body;
+
+        const device = await Device.findOne({
+            where: {
+                id,
+                tenant_uuid: req.tenant.uuid
+            }
+        });
+
+        if (!device) {
+            return res.status(404).json({ message: 'Device not found.' });
+        }
+
+        if (min_temperature !== undefined) device.min_temperature = min_temperature;
+        if (max_temperature !== undefined) device.max_temperature = max_temperature;
+        if (alert_phone_number !== undefined) device.alert_phone_number = alert_phone_number;
+        if (sms_alerts_enabled !== undefined) device.sms_alerts_enabled = sms_alerts_enabled;
+        if (door_open_time_limit !== undefined) device.door_open_time_limit = door_open_time_limit;
+
+        await device.save();
+
+        res.json({ message: 'Device config updated successfully', device });
+    } catch (error) {
+        console.error('Update device error:', error);
+        res.status(500).json({ message: 'Server error during device update.' });
+    }
+};

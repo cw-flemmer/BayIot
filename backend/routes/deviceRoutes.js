@@ -1,5 +1,5 @@
 import express from 'express';
-import { getDevices, createDevice, deleteDevice, allocateDashboard } from '../controllers/deviceController.js';
+import { getDevices, createDevice, deleteDevice, allocateDashboard, updateDevice } from '../controllers/deviceController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import adminMiddleware from '../middleware/adminMiddleware.js';
 import tenantDetection from '../middleware/tenantDetection.js';
@@ -15,6 +15,7 @@ router.use(authMiddleware);
 router.get('/', getDevices);
 router.post('/', adminMiddleware, createDevice);
 router.post('/:id/allocate', adminMiddleware, allocateDashboard);
+router.put('/:id', adminMiddleware, updateDevice);
 router.delete('/:id', adminMiddleware, deleteDevice);
 
 export default router;

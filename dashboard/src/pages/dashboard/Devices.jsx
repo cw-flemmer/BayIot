@@ -22,6 +22,7 @@ const Devices = () => {
     const [dashboards, setDashboards] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAllocateModalOpen, setIsAllocateModalOpen] = useState(false);
+    const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState('');
@@ -36,6 +37,14 @@ const Devices = () => {
 
     const [allocateData, setAllocateData] = useState({
         dashboard_id: ''
+    });
+
+    const [settingsData, setSettingsData] = useState({
+        min_temperature: '',
+        max_temperature: '',
+        door_open_time_limit: '',
+        alert_phone_number: '',
+        sms_alerts_enabled: false
     });
 
     const fetchDevices = async () => {
@@ -101,6 +110,29 @@ const Devices = () => {
         }
     };
 
+    const handleSaveSettings = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        setError('');
+        try {
+            const dataToSubmit = {
+                ...settingsData,
+                min_temperature: settingsData.min_temperature !== '' ? Number(settingsData.min_temperature) : null,
+                max_temperature: settingsData.max_temperature !== '' ? Number(settingsData.max_temperature) : null,
+                door_open_time_limit: settingsData.door_open_time_limit !== '' ? Number(settingsData.door_open_time_limit) : null,
+            };
+            await api.put(`/devices/${selectedDevice.id}`, dataToSubmit);
+            setSuccessMessage('Device settings updated successfully!');
+            setIsSettingsModalOpen(false);
+            fetchDevices();
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to update device settings.');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this device?')) return;
         try {
@@ -117,6 +149,19 @@ const Devices = () => {
         setSelectedDevice(device);
         setAllocateData({ dashboard_id: device.dashboard_id || '' });
         setIsAllocateModalOpen(true);
+        setError('');
+    };
+
+    const openSettingsModal = (device) => {
+        setSelectedDevice(device);
+        setSettingsData({
+            min_temperature: device.min_temperature ?? '',
+            max_temperature: device.max_temperature ?? '',
+            door_open_time_limit: device.door_open_time_limit ?? '',
+            alert_phone_number: device.alert_phone_number || '',
+            sms_alerts_enabled: device.sms_alerts_enabled || false
+        });
+        setIsSettingsModalOpen(true);
         setError('');
     };
 
@@ -239,11 +284,18 @@ const Devices = () => {
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex items-center justify-end space-x-2">
                                                     <button
+                                                        onClick={() => openSettingsModal(device)}
+                                                        className="p-2 text-gray-500 hover:text-purple-400 transition-colors"
+                                                        title="Configure SMS Thresholds"
+                                                    >
+                                                        <Edit3 size={18} />
+                                                    </button>
+                                                    <button
                                                         onClick={() => openAllocateModal(device)}
                                                         className="p-2 text-gray-500 hover:text-blue-400 transition-colors"
                                                         title="Allocate to Dashboard"
                                                     >
-                                                        <Edit3 size={18} />
+                                                        <Layout size={18} />
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(device.id)}
@@ -395,6 +447,134 @@ const Devices = () => {
                                         className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-3 rounded-2xl font-bold text-white shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
                                     >
                                         {isSaving ? <Loader2 size={18} className="animate-spin" /> : <span>Confirm Allocation</span>}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Settings Modal */}
+            <AnimatePresence>
+                {isSettingsModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsSettingsModalOpen(false)}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-[#0f172a] border border-white/10 w-full max-w-xl rounded-3xl p-8 relative z-10 shadow-2xl text-white max-h-[90vh] overflow-y-auto"
+                        >
+                            <div className="flex items-center justify-between mb-8">
+                                <div>
+                                    <h3 className="text-2xl font-bold">Device Settings</h3>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Configure alerts for <span className="text-purple-400 font-bold">{selectedDevice?.device_id}</span>
+                                    </p>
+                                </div>
+                                <button onClick={() => setIsSettingsModalOpen(false)} className="text-gray-500 hover:text-white">
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            {error && (
+                                <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-2xl text-sm mb-6">
+                                    {error}
+                                </div>
+                            )}
+
+                            <form onSubmit={handleSaveSettings} className="space-y-6">
+                                {/* SMS Toggle */}
+                                <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/10">
+                                    <div>
+                                        <h4 className="font-bold text-gray-200">Enable SMS Alerts</h4>
+                                        <p className="text-xs text-gray-500">Send SMS when thresholds are breached</p>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only peer"
+                                            checked={settingsData.sms_alerts_enabled}
+                                            onChange={(e) => setSettingsData({ ...settingsData, sms_alerts_enabled: e.target.checked })}
+                                        />
+                                        <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                                    </label>
+                                </div>
+
+                                {settingsData.sms_alerts_enabled && (
+                                    <>
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-gray-300 ml-1">Alert Phone Number</label>
+                                            <input
+                                                type="text"
+                                                required
+                                                value={settingsData.alert_phone_number}
+                                                onChange={(e) => setSettingsData({ ...settingsData, alert_phone_number: e.target.value })}
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
+                                                placeholder="+27821234567"
+                                            />
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-medium text-gray-300 ml-1">Min Temp (°C)</label>
+                                                <input
+                                                    type="number"
+                                                    step="0.1"
+                                                    value={settingsData.min_temperature}
+                                                    onChange={(e) => setSettingsData({ ...settingsData, min_temperature: e.target.value })}
+                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
+                                                    placeholder="No limit"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-medium text-gray-300 ml-1">Max Temp (°C)</label>
+                                                <input
+                                                    type="number"
+                                                    step="0.1"
+                                                    value={settingsData.max_temperature}
+                                                    onChange={(e) => setSettingsData({ ...settingsData, max_temperature: e.target.value })}
+                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
+                                                    placeholder="No limit"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-gray-300 ml-1">Door Open Time Limit (sec)</label>
+                                            <input
+                                                type="number"
+                                                value={settingsData.door_open_time_limit}
+                                                onChange={(e) => setSettingsData({ ...settingsData, door_open_time_limit: e.target.value })}
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
+                                                placeholder="e.g. 60"
+                                            />
+                                            <p className="text-xs text-gray-500 ml-1 mt-1">Alert if door stays open longer than this duration.</p>
+                                        </div>
+                                    </>
+                                )}
+
+                                <div className="flex space-x-4 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsSettingsModalOpen(false)}
+                                        className="flex-1 bg-white/5 hover:bg-white/10 py-3 rounded-2xl font-bold transition-all text-white"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isSaving}
+                                        className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 py-3 rounded-2xl font-bold text-white shadow-lg shadow-purple-600/25 transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+                                    >
+                                        {isSaving ? <Loader2 size={18} className="animate-spin" /> : <span>Save Settings</span>}
                                     </button>
                                 </div>
                             </form>

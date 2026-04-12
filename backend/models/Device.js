@@ -28,6 +28,34 @@ const Device = sequelize.define('Device', {
         type: DataTypes.DATE,
         allowNull: false,
     },
+    min_temperature: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
+    max_temperature: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
+    door_open_time_limit: {
+        type: DataTypes.INTEGER, // Time in seconds before alerting
+        allowNull: true,
+    },
+    alert_phone_number: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    sms_alerts_enabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+    last_sms_sent_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    door_opened_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
 }, {
     tableName: 'tenant_devices',
     underscored: true,
