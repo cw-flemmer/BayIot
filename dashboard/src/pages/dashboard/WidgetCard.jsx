@@ -116,7 +116,9 @@ const WidgetCard = ({ widget, onDelete, onUpdate, isDraggable, showDelete, canMa
 
             {/* Footer / Status */}
             <div className="w-full mt-auto pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-gray-500">
-                <span>Updated just now</span>
+                <span className="truncate pr-2">
+                    {data?.created_at ? new Date(data.created_at).toLocaleString() : 'Waiting for data...'}
+                </span>
                 {widget.type === 'battery' && (
                     <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
                         <div

@@ -1,13 +1,9 @@
 #include <WiFi.h>
+#include <WiFiManager.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
 // ===== USER CONFIG =====
-//const char* ssid = "FLEMMER-2.4G";
-//const char* password = "0677521411";
-const char* ssid = "CWF-Shop";
-const char* password = "0677521411";
-
 String deviceId; //Wifi Mac Address
 const char* customer = "491771d2-410d-4b8b-bbba-c0f180b5aa6f";
 const char* site = "standfordsquare";
@@ -34,19 +30,28 @@ const long telemetryInterval = 15000; // 15 minutes (Testing: Set to 1 minute)
 const long heartbeatInterval = 15000;  // 5 minutes (Testing: Set to 1 minute)
 
 void setup_wifi() {
-  delay(10);
-  Serial.println("Connecting to WiFi...");
+  WiFiManager wm;
   
-  WiFi.begin(ssid, password);
+  // Set captive portal timeout to 3 minutes (180 seconds)
+  // If it can't connect, it will start AP. If nobody sets credentials within 3 minutes, it resets.
+  wm.setConfigPortalTimeout(180);
 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+  String apName = "BayIoT_" + deviceId;
+  Serial.print("Starting WiFiManager AP / Connecting to known WiFi. AP Name: ");
+  Serial.println(apName);
+
+  bool res = wm.autoConnect(apName.c_str());
+
+  if (!res) {
+    Serial.println("Failed to connect or hit timeout. Restarting...");
+    delay(3000);
+    ESP.restart(); // Restart ESP32 and try again
+  } 
+  else {
+    Serial.println("\nWiFi connected");
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
   }
-
-  Serial.println("\nWiFi connected");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
 }
 
 void reconnect_mqtt() {
@@ -71,10 +76,14 @@ void setup() {
 
   pinMode(doorPin, INPUT_PULLUP);
 
-  setup_wifi();
+  // Initialize WiFi mode to STAtion
+  WiFi.mode(WIFI_STA);
+  uint64_t chipid = ESP.getEfuseMac(); // Safely read hardware MAC without WiFi radio running
+  char macStr[13];
+  snprintf(macStr, 13, "%04X%08X", (uint16_t)(chipid >> 32), (uint32_t)chipid);
+  deviceId = String(macStr);
 
-  deviceId = WiFi.macAddress();           // e.g. "AC:67:B2:1F:9A:3C"
-  deviceId.replace(":", "");              // clean -> "AC67B21F9A3C" (optional)
+  setup_wifi();
 
   client.setServer(mqtt_server, mqtt_port);
 
