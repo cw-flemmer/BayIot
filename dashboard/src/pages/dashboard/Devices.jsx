@@ -12,7 +12,8 @@ import {
     CheckCircle2,
     Search,
     Calendar,
-    Layout
+    Layout,
+    Settings
 } from 'lucide-react';
 
 const Devices = () => {
@@ -288,7 +289,7 @@ const Devices = () => {
                                                         className="p-2 text-gray-500 hover:text-purple-400 transition-colors"
                                                         title="Configure SMS Thresholds"
                                                     >
-                                                        <Edit3 size={18} />
+                                                        <Settings size={18} />
                                                     </button>
                                                     <button
                                                         onClick={() => openAllocateModal(device)}
