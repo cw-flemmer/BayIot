@@ -67,9 +67,9 @@ export const ingestTelemetry = async (req, res) => {
         }
 
         // -- Door Check --
-        // door_status: 0 = OPEN, 1 = CLOSED
+        // door_status: 0 = OPEN, 1 = CLOSED (may arrive as string from Node-RED)
         if (doorStatus !== undefined && doorStatus !== null) {
-            const isDoorOpen = doorStatus === false || doorStatus === 0;
+            const isDoorOpen = Number(doorStatus) === 0;
             console.log(`[INGEST] Door check: doorStatus=${doorStatus}, isDoorOpen=${isDoorOpen}, door_opened_at=${device.door_opened_at}, limit=${device.door_open_time_limit}s`);
 
             if (isDoorOpen) {
