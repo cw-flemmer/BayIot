@@ -225,7 +225,7 @@ const Devices = () => {
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Allocated Dashboard</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Created At</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Last Seen</th>
-                                {!isCustomer && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>}
+                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
@@ -281,7 +281,6 @@ const Devices = () => {
                                                 </span>
                                             </div>
                                         </td>
-                                        {!isCustomer && (
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex items-center justify-end space-x-2">
                                                     <button
@@ -291,23 +290,26 @@ const Devices = () => {
                                                     >
                                                         <Settings size={18} />
                                                     </button>
-                                                    <button
-                                                        onClick={() => openAllocateModal(device)}
-                                                        className="p-2 text-gray-500 hover:text-blue-400 transition-colors"
-                                                        title="Allocate to Dashboard"
-                                                    >
-                                                        <Layout size={18} />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDelete(device.id)}
-                                                        className="p-2 text-gray-500 hover:text-red-400 transition-colors"
-                                                        title="Delete Device"
-                                                    >
-                                                        <Trash2 size={18} />
-                                                    </button>
+                                                    {!isCustomer && (
+                                                        <>
+                                                            <button
+                                                                onClick={() => openAllocateModal(device)}
+                                                                className="p-2 text-gray-500 hover:text-blue-400 transition-colors"
+                                                                title="Allocate to Dashboard"
+                                                            >
+                                                                <Layout size={18} />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDelete(device.id)}
+                                                                className="p-2 text-gray-500 hover:text-red-400 transition-colors"
+                                                                title="Delete Device"
+                                                            >
+                                                                <Trash2 size={18} />
+                                                            </button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </td>
-                                        )}
                                     </tr>
                                 ))
                             )}
@@ -492,43 +494,46 @@ const Devices = () => {
                             )}
 
                             <form onSubmit={handleSaveSettings} className="space-y-6">
-                                {/* SMS Toggle */}
                                 <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/10">
                                     <div>
                                         <h4 className="font-bold text-gray-200">Enable SMS Alerts</h4>
-                                        <p className="text-xs text-gray-500">Send SMS when thresholds are breached</p>
+                                        <p className="text-xs text-gray-500 flex items-center gap-1">
+                                            Send SMS when thresholds are breached
+                                            {isCustomer && <span className="text-gray-400 italic">(Admin Only)</span>}
+                                        </p>
                                     </div>
-                                    <label className="relative inline-flex items-center cursor-pointer">
+                                    <label className={`relative inline-flex items-center ${isCustomer ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
                                         <input
                                             type="checkbox"
                                             className="sr-only peer"
                                             checked={settingsData.sms_alerts_enabled}
                                             onChange={(e) => setSettingsData({ ...settingsData, sms_alerts_enabled: e.target.checked })}
+                                            disabled={isCustomer}
                                         />
-                                        <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                                        <div className={`w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${isCustomer ? '' : 'peer-checked:bg-purple-500'}`}></div>
                                     </label>
                                 </div>
-
+                                
                                 {settingsData.sms_alerts_enabled && (
-                                    <>
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-medium text-gray-300 ml-1">Alert Phone Number</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={settingsData.alert_phone_number}
-                                                onChange={(e) => setSettingsData({ ...settingsData, alert_phone_number: e.target.value })}
-                                                className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
-                                                placeholder="+27821234567"
-                                            />
-                                        </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300 ml-1">Alert Phone Number</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={settingsData.alert_phone_number}
+                                            onChange={(e) => setSettingsData({ ...settingsData, alert_phone_number: e.target.value })}
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
+                                            placeholder="+27821234567"
+                                        />
+                                    </div>
+                                )}
 
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-2">
-                                                <label className="text-sm font-medium text-gray-300 ml-1">Min Temp (°C)</label>
-                                                <input
-                                                    type="number"
-                                                    step="0.1"
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300 ml-1">Min Temp (°C)</label>
+                                        <input
+                                            type="number"
+                                            step="0.1"
                                                     value={settingsData.min_temperature}
                                                     onChange={(e) => setSettingsData({ ...settingsData, min_temperature: e.target.value })}
                                                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
@@ -557,10 +562,8 @@ const Devices = () => {
                                                 className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
                                                 placeholder="e.g. 60"
                                             />
-                                            <p className="text-xs text-gray-500 ml-1 mt-1">Alert if door stays open longer than this duration.</p>
-                                        </div>
-                                    </>
-                                )}
+                                    <p className="text-xs text-gray-500 ml-1 mt-1">Alert if door stays open longer than this duration.</p>
+                                </div>
 
                                 <div className="flex space-x-4 pt-4">
                                     <button

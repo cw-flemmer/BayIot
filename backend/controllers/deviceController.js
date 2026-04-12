@@ -125,8 +125,15 @@ export const updateDevice = async (req, res) => {
         if (min_temperature !== undefined) device.min_temperature = min_temperature;
         if (max_temperature !== undefined) device.max_temperature = max_temperature;
         if (alert_phone_number !== undefined) device.alert_phone_number = alert_phone_number;
-        if (sms_alerts_enabled !== undefined) device.sms_alerts_enabled = sms_alerts_enabled;
         if (door_open_time_limit !== undefined) device.door_open_time_limit = door_open_time_limit;
+
+        if (sms_alerts_enabled !== undefined) {
+            if (req.user && req.user.role === 'customer') {
+                console.log(`Customer ${req.user.id} attempted to change sms_alerts_enabled. Ignored.`);
+            } else {
+                device.sms_alerts_enabled = sms_alerts_enabled;
+            }
+        }
 
         await device.save();
 

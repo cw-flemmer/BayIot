@@ -15,7 +15,7 @@ router.use(authMiddleware);
 router.get('/', getDevices);
 router.post('/', adminMiddleware, createDevice);
 router.post('/:id/allocate', adminMiddleware, allocateDashboard);
-router.put('/:id', adminMiddleware, updateDevice);
+router.put('/:id', updateDevice);
 router.delete('/:id', adminMiddleware, deleteDevice);
 
 export default router;
