@@ -98,7 +98,7 @@ const WidgetCard = ({ widget, onDelete, onUpdate, isDraggable, showDelete, canMa
             case 'door':
                 const closedLabel = localSettings?.closedLabel || 'CLOSED';
                 const openLabel = localSettings?.openLabel || 'OPEN';
-                return data.door_status ? openLabel : closedLabel;
+                return data.door_status ? closedLabel : openLabel;
             default: return '--';
         }
     };
@@ -174,7 +174,7 @@ const WidgetCard = ({ widget, onDelete, onUpdate, isDraggable, showDelete, canMa
                 {widget.type === 'temperature' ? (
                     getValue()
                 ) : (
-                    <span className={`text-4xl font-bold font-['Outfit'] ${widget.type === 'door' ? (data?.door_status ? 'text-red-400' : 'text-green-400') : 'text-white'}`}>
+                    <span className={`text-4xl font-bold font-['Outfit'] ${widget.type === 'door' ? (data?.door_status ? 'text-green-400' : 'text-red-400') : 'text-white'}`}>
                         {getValue()}
                     </span>
                 )}
