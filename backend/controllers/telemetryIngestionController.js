@@ -45,17 +45,19 @@ export const ingestTelemetry = async (req, res) => {
             }
 
             // -- Door Check --
+            // door_status: 0 = OPEN, 1 = CLOSED
             if (doorStatus !== undefined && doorStatus !== null) {
-                // Assuming true = open, false = closed
-                if (doorStatus === true) {
+                const isDoorOpen = doorStatus === false || doorStatus === 0;
+
+                if (isDoorOpen) {
                     if (!device.door_opened_at) {
-                        // Door just opened. Log the time but don't alert yet.
+                        // Door just opened — record the time, don't alert yet
                         device.door_opened_at = now;
                         deviceUpdated = true;
                     } else {
-                        // Door was already open. Check duration.
+                        // Door already open — check how long
                         const timeOpenMs = now.getTime() - new Date(device.door_opened_at).getTime();
-                        const limitMs = (device.door_open_time_limit || 60) * 1000; // default 60s
+                        const limitMs = (device.door_open_time_limit || 60) * 1000;
                         if (timeOpenMs > limitMs) {
                             if (!shouldSendSms) {
                                 shouldSendSms = true;
@@ -66,7 +68,7 @@ export const ingestTelemetry = async (req, res) => {
                         }
                     }
                 } else {
-                    // Door is closed. Reset the timer if it was set.
+                    // Door is now closed — reset the timer
                     if (device.door_opened_at) {
                         device.door_opened_at = null;
                         deviceUpdated = true;
