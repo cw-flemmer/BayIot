@@ -2,7 +2,7 @@ import Telemetry from '../models/Telemetry.js';
 import Device from '../models/Device.js';
 import { sendSms } from '../utils/smsService.js';
 
-const SMS_COOLDOWN_MS = 15 * 60 * 1000; // 15 minutes
+const SMS_COOLDOWN_MS = (parseInt(process.env.SMS_COOLDOWN_MINUTES, 10) || 15) * 60 * 1000;
 
 export const ingestTelemetry = async (req, res) => {
     try {
