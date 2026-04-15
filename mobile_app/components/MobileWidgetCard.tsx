@@ -65,7 +65,7 @@ const MobileWidgetCard: React.FC<WidgetProps> = ({ widget }) => {
             case 'battery':
                 return `${data.battery_level || '0'}%`;
             case 'door':
-                return data.door_status ? 'OPEN' : 'CLOSED';
+                return data.door_status ? 'CLOSED' : 'OPEN';
             default:
                 // Use custom column if specified
                 if (widget.telemetry_column && data[widget.telemetry_column] !== undefined) {
