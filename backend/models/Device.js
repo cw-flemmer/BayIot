@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.js';
 import Tenant from './Tenant.js';
+import TenantCustomer from './TenantCustomer.js';
 
 const Device = sequelize.define('Device', {
     id: {
@@ -56,6 +57,11 @@ const Device = sequelize.define('Device', {
         type: DataTypes.DATE,
         allowNull: true,
     },
+    tenant_customer_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: 'Optional: links device to a customer for SMS credit tracking',
+    },
 }, {
     tableName: 'tenant_devices',
     underscored: true,
@@ -65,6 +71,9 @@ const Device = sequelize.define('Device', {
 // Associations
 Tenant.hasMany(Device, { foreignKey: 'tenant_uuid', sourceKey: 'uuid' });
 Device.belongsTo(Tenant, { foreignKey: 'tenant_uuid', targetKey: 'uuid' });
+
+TenantCustomer.hasMany(Device, { foreignKey: 'tenant_customer_id' });
+Device.belongsTo(TenantCustomer, { foreignKey: 'tenant_customer_id', as: 'customer' });
 
 export const initDeviceAssociations = (Dashboard) => {
     Dashboard.hasMany(Device, { foreignKey: 'dashboard_id' });

@@ -1,5 +1,6 @@
 import Telemetry from '../models/Telemetry.js';
 import Device from '../models/Device.js';
+import TenantCustomer from '../models/TenantCustomer.js';
 import { sendSms } from '../utils/smsService.js';
 
 const SMS_COOLDOWN_MS = (parseInt(process.env.SMS_COOLDOWN_MINUTES, 10) || 15) * 60 * 1000;
@@ -103,12 +104,32 @@ export const ingestTelemetry = async (req, res) => {
         // -- Send SMS --
         console.log(`[INGEST] shouldSendSms=${shouldSendSms}, canSendSms=${canSendSms}`);
         if (shouldSendSms && canSendSms) {
-            console.log(`[INGEST] Sending SMS to ${device.alert_phone_number}: "${smsMessage}"`);
-            const smsSent = await sendSms(smsMessage, [device.alert_phone_number]);
-            console.log(`[INGEST] SMS send result: ${smsSent}`);
-            if (smsSent) {
-                device.last_sms_sent_at = now;
-                deviceUpdated = true;
+
+            // --- SMS Credit Check ---
+            let creditBlocked = false;
+            let customer = null;
+            if (device.tenant_customer_id) {
+                customer = await TenantCustomer.findByPk(device.tenant_customer_id);
+                if (customer && customer.sms_credit_limit > 0 && customer.sms_credit_used >= customer.sms_credit_limit) {
+                    creditBlocked = true;
+                    console.warn(`[INGEST] SMS blocked — customer #${customer.id} (${customer.name}) has exhausted their SMS credit limit (${customer.sms_credit_limit}).`);
+                }
+            }
+
+            if (!creditBlocked) {
+                console.log(`[INGEST] Sending SMS to ${device.alert_phone_number}: "${smsMessage}"`);
+                const smsSent = await sendSms(smsMessage, [device.alert_phone_number]);
+                console.log(`[INGEST] SMS send result: ${smsSent}`);
+                if (smsSent) {
+                    device.last_sms_sent_at = now;
+                    deviceUpdated = true;
+                    // Deduct 1 credit from customer if assigned
+                    if (customer) {
+                        customer.sms_credit_used = customer.sms_credit_used + 1;
+                        await customer.save();
+                        console.log(`[INGEST] Customer #${customer.id} credit: ${customer.sms_credit_used}/${customer.sms_credit_limit}`);
+                    }
+                }
             }
         } else if (shouldSendSms && !canSendSms) {
             console.log(`[INGEST] SMS suppressed by cooldown.`);

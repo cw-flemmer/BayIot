@@ -29,6 +29,18 @@ const TenantCustomer = sequelize.define('TenantCustomer', {
         allowNull: false,
         defaultValue: 'customer',
     },
+    sms_credit_limit: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 100,
+        comment: 'Maximum SMS credits allocated (0 = unlimited)',
+    },
+    sms_credit_used: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        comment: 'Running count of SMS alerts consumed',
+    },
     tenant_id: {
         type: DataTypes.INTEGER,
         allowNull: false,

@@ -21,6 +21,7 @@ const Devices = () => {
     const isCustomer = user?.role === 'customer';
     const [devices, setDevices] = useState([]);
     const [dashboards, setDashboards] = useState([]);
+    const [customers, setCustomers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAllocateModalOpen, setIsAllocateModalOpen] = useState(false);
     const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -45,7 +46,8 @@ const Devices = () => {
         max_temperature: '',
         door_open_time_limit: '',
         alert_phone_number: '',
-        sms_alerts_enabled: false
+        sms_alerts_enabled: false,
+        tenant_customer_id: ''
     });
 
     const fetchDevices = async () => {
@@ -70,9 +72,21 @@ const Devices = () => {
         }
     };
 
+    const fetchCustomers = async () => {
+        try {
+            const response = await api.get('/customers');
+            setCustomers(response.data);
+        } catch (err) {
+            console.error('Fetch customers error:', err);
+        }
+    };
+
     useEffect(() => {
         fetchDevices();
-        if (!isCustomer) fetchDashboards();
+        if (!isCustomer) {
+            fetchDashboards();
+            fetchCustomers();
+        }
     }, []);
 
     const handleCreate = async (e) => {
@@ -160,7 +174,8 @@ const Devices = () => {
             max_temperature: device.max_temperature ?? '',
             door_open_time_limit: device.door_open_time_limit ?? '',
             alert_phone_number: device.alert_phone_number || '',
-            sms_alerts_enabled: device.sms_alerts_enabled || false
+            sms_alerts_enabled: device.sms_alerts_enabled || false,
+            tenant_customer_id: device.tenant_customer_id || ''
         });
         setIsSettingsModalOpen(true);
         setError('');
@@ -222,7 +237,7 @@ const Devices = () => {
                             <tr className="border-b border-white/10 bg-white/[0.02]">
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Device ID</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Tenant UUID</th>
-                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Allocated Dashboard</th>
+                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Dashboard / Customer</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Created At</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Last Seen</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>
@@ -258,14 +273,24 @@ const Devices = () => {
                                             <span className="text-xs text-gray-400 font-mono">{device.tenant_uuid}</span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            {device.allocatedDashboard ? (
-                                                <div className="flex items-center space-x-2 text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full w-fit">
-                                                    <Layout size={14} />
-                                                    <span className="text-xs font-bold">{device.allocatedDashboard.name}</span>
-                                                </div>
-                                            ) : (
-                                                <span className="text-xs text-gray-500">Unallocated</span>
-                                            )}
+                                            <div className="flex flex-col gap-2">
+                                                {device.allocatedDashboard ? (
+                                                    <div className="flex items-center space-x-2 text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full w-fit">
+                                                        <Layout size={14} />
+                                                        <span className="text-xs font-bold">{device.allocatedDashboard.name}</span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-xs text-gray-500">Unallocated Dash</span>
+                                                )}
+                                                {device.customer ? (
+                                                    <div className="flex items-center space-x-2 text-green-400 bg-green-400/10 px-3 py-1 rounded-full w-fit">
+                                                        <Cpu size={14} />
+                                                        <span className="text-xs font-bold">{device.customer.name}</span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-xs text-gray-500">No Customer</span>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-2 text-sm text-gray-400">
@@ -560,6 +585,25 @@ const Devices = () => {
                                             />
                                     <p className="text-xs text-gray-500 ml-1 mt-1">Alert if door stays open longer than this duration.</p>
                                 </div>
+
+                                {!isCustomer && (
+                                    <div className="space-y-2 border-t border-white/10 pt-4 mt-4">
+                                        <label className="text-sm font-medium text-gray-300 ml-1">Assigned Customer (SMS Billing)</label>
+                                        <select
+                                            value={settingsData.tenant_customer_id}
+                                            onChange={(e) => setSettingsData({ ...settingsData, tenant_customer_id: e.target.value })}
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-['Outfit'] text-white"
+                                        >
+                                            <option value="" className="bg-[#0f172a]">Unassigned (No billing)</option>
+                                            {customers.map((c) => (
+                                                <option key={c.id} value={c.id} className="bg-[#0f172a]">
+                                                    {c.name} ({c.email})
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <p className="text-xs text-gray-500 ml-1 m-1">Link device to a customer to use their shared SMS credit pool.</p>
+                                    </div>
+                                )}
 
                                 <div className="flex space-x-4 pt-4">
                                     <button

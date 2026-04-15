@@ -1,5 +1,6 @@
 import Device from '../models/Device.js';
 import Dashboard from '../models/Dashboard.js';
+import TenantCustomer from '../models/TenantCustomer.js';
 
 export const getDevices = async (req, res) => {
     try {
@@ -16,6 +17,10 @@ export const getDevices = async (req, res) => {
             include: [{
                 model: Dashboard,
                 as: 'allocatedDashboard',
+                attributes: ['id', 'name']
+            }, {
+                model: TenantCustomer,
+                as: 'customer',
                 attributes: ['id', 'name']
             }],
             order: [['created_at', 'DESC']]
@@ -134,7 +139,7 @@ export const findDeviceByStringId = async (req, res) => {
 export const updateDevice = async (req, res) => {
     try {
         const { id } = req.params;
-        const { min_temperature, max_temperature, alert_phone_number, sms_alerts_enabled, door_open_time_limit } = req.body;
+        const { min_temperature, max_temperature, alert_phone_number, sms_alerts_enabled, door_open_time_limit, tenant_customer_id } = req.body;
 
         const device = await Device.findOne({
             where: {
@@ -151,6 +156,7 @@ export const updateDevice = async (req, res) => {
         if (max_temperature !== undefined) device.max_temperature = max_temperature;
         if (alert_phone_number !== undefined) device.alert_phone_number = alert_phone_number;
         if (door_open_time_limit !== undefined) device.door_open_time_limit = door_open_time_limit;
+        if (tenant_customer_id !== undefined) device.tenant_customer_id = tenant_customer_id === '' ? null : tenant_customer_id;
 
         if (sms_alerts_enabled !== undefined) {
             if (req.user && req.user.role === 'customer') {

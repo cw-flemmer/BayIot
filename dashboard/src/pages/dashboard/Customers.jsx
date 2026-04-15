@@ -12,7 +12,10 @@ import {
     Search,
     Calendar,
     Mail,
-    Shield
+    Shield,
+    MessageSquare,
+    Edit2,
+    RefreshCw
 } from 'lucide-react';
 
 const Customers = () => {
@@ -25,12 +28,18 @@ const Customers = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
+    // SMS Credits State
+    const [isCreditsModalOpen, setIsCreditsModalOpen] = useState(false);
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [creditLimitInput, setCreditLimitInput] = useState('');
+
     // Form State
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
-        role: 'customer'
+        role: 'customer',
+        sms_credit_limit: 100
     });
 
     const fetchCustomers = async () => {
@@ -58,7 +67,7 @@ const Customers = () => {
             await api.post('/customers', formData);
             setSuccessMessage('Customer created successfully!');
             setIsModalOpen(false);
-            setFormData({ name: '', email: '', password: '', role: 'customer' });
+            setFormData({ name: '', email: '', password: '', role: 'customer', sms_credit_limit: 100 });
             fetchCustomers();
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (err) {
@@ -77,6 +86,37 @@ const Customers = () => {
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to delete customer.');
+        }
+    };
+
+    const handleUpdateSmsLimit = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        setError('');
+        try {
+            await api.put(`/customers/${selectedCustomer.id}/sms-credits`, {
+                sms_credit_limit: parseInt(creditLimitInput, 10)
+            });
+            setSuccessMessage('SMS credit limit updated.');
+            setIsCreditsModalOpen(false);
+            fetchCustomers();
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to update SMS credits.');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleResetSmsUsage = async (id) => {
+        if (!window.confirm("Reset this customer's SMS usage count to 0?")) return;
+        try {
+            await api.post(`/customers/${id}/sms-credits/reset`);
+            setSuccessMessage('SMS usage reset to 0.');
+            fetchCustomers();
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to reset SMS usage.');
         }
     };
 
@@ -135,6 +175,7 @@ const Customers = () => {
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Customer Info</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Email</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Role</th>
+                                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">SMS Credits</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400">Joined At</th>
                                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Actions</th>
                             </tr>
@@ -142,7 +183,7 @@ const Customers = () => {
                         <tbody className="divide-y divide-white/5">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                                         <div className="flex flex-col items-center justify-center space-y-3">
                                             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
                                             <p className="text-sm">Loading customers...</p>
@@ -151,7 +192,7 @@ const Customers = () => {
                                 </tr>
                             ) : filteredCustomers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                                         <Users size={40} className="mx-auto mb-3 opacity-20" />
                                         <p>No customers found.</p>
                                     </td>
@@ -183,20 +224,63 @@ const Customers = () => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
+                                            <div className="flex flex-col space-y-1">
+                                                <div className="flex items-center justify-between text-xs">
+                                                    <span className="text-gray-400 flex items-center gap-1">
+                                                        <MessageSquare size={12} />
+                                                        {customer.sms_credit_used || 0} / {customer.sms_credit_limit === 0 ? '∞' : customer.sms_credit_limit}
+                                                    </span>
+                                                    {customer.sms_credit_limit > 0 && (
+                                                        <span className={`font-bold ${(customer.sms_credit_used / customer.sms_credit_limit) >= 0.9 ? 'text-red-400' : (customer.sms_credit_used / customer.sms_credit_limit) >= 0.7 ? 'text-amber-400' : 'text-green-400'}`}>
+                                                            {Math.round(((customer.sms_credit_used || 0) / customer.sms_credit_limit) * 100)}%
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                {customer.sms_credit_limit > 0 && (
+                                                    <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                                                        <div 
+                                                            className={`h-full rounded-full ${(customer.sms_credit_used / customer.sms_credit_limit) >= 0.9 ? 'bg-red-400' : (customer.sms_credit_used / customer.sms_credit_limit) >= 0.7 ? 'bg-amber-400' : 'bg-green-400'}`}
+                                                            style={{ width: `${Math.min(((customer.sms_credit_used || 0) / customer.sms_credit_limit) * 100, 100)}%` }}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
                                             <div className="flex items-center space-x-2 text-sm text-gray-400">
                                                 <Calendar size={14} />
-                                                <span>{new Date(customer.createdAt || new Date()).toLocaleDateString()}</span>
+                                                <span>{new Date(customer.createdAt || customer.created_at || new Date()).toLocaleDateString()}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button
-                                                onClick={() => handleDelete(customer.id)}
-                                                className="p-2 text-gray-500 hover:text-red-400 transition-colors"
-                                                title="Delete Customer"
-                                                disabled={customer.id === user?.id}
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
+                                            <div className="flex items-center justify-end space-x-2">
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedCustomer(customer);
+                                                        setCreditLimitInput(customer.sms_credit_limit?.toString() || '100');
+                                                        setIsCreditsModalOpen(true);
+                                                    }}
+                                                    className="p-2 text-gray-500 hover:text-blue-400 transition-colors"
+                                                    title="Edit SMS Limit"
+                                                >
+                                                    <Edit2 size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleResetSmsUsage(customer.id)}
+                                                    className="p-2 text-gray-500 hover:text-green-400 transition-colors"
+                                                    title="Reset SMS Usage"
+                                                >
+                                                    <RefreshCw size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(customer.id)}
+                                                    className="p-2 text-gray-500 hover:text-red-400 transition-colors"
+                                                    title="Delete Customer"
+                                                    disabled={customer.id === user?.id}
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -273,19 +357,34 @@ const Customers = () => {
                                     />
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300 ml-1">Role</label>
-                                    <select
-                                        value={formData.role}
-                                        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none text-white"
-                                    >
-                                        <option value="customer" className="bg-[#0f172a]">Customer</option>
-                                        <option value="admin" className="bg-[#0f172a]">Admin</option>
-                                    </select>
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300 ml-1">Role</label>
+                                        <select
+                                            value={formData.role}
+                                            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none text-white"
+                                        >
+                                            <option value="customer" className="bg-[#0f172a]">Customer</option>
+                                            <option value="admin" className="bg-[#0f172a]">Admin</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300 ml-1">SMS Credit Limit (0 = Unlimited)</label>
+                                        <input
+                                            required
+                                            type="number"
+                                            min="0"
+                                            value={formData.sms_credit_limit}
+                                            onChange={(e) => setFormData({ ...formData, sms_credit_limit: parseInt(e.target.value, 10) || 0 })}
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-white"
+                                            placeholder="100"
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="flex space-x-4 pt-4">
+
                                     <button
                                         type="button"
                                         onClick={() => setIsModalOpen(false)}
@@ -299,6 +398,70 @@ const Customers = () => {
                                         className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-3 rounded-2xl font-bold text-white shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
                                     >
                                         {isSaving ? <Loader2 size={18} className="animate-spin" /> : <span>Create Account</span>}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Edit SMS Credits Modal */}
+            <AnimatePresence>
+                {isCreditsModalOpen && selectedCustomer && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsCreditsModalOpen(false)}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-[#0f172a] border border-white/10 w-full max-w-md rounded-3xl p-8 relative z-10 shadow-2xl text-white"
+                        >
+                            <div className="flex items-center justify-between mb-8">
+                                <h3 className="text-2xl font-bold">Edit SMS Credits</h3>
+                                <button onClick={() => setIsCreditsModalOpen(false)} className="text-gray-500 hover:text-white">
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            <p className="text-gray-400 text-sm mb-6">
+                                Update the SMS credit limit for <strong>{selectedCustomer.name}</strong>. Set to 0 for unlimited.
+                            </p>
+
+                            <form onSubmit={handleUpdateSmsLimit} className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300 ml-1">Credit Limit</label>
+                                    <input
+                                        required
+                                        type="number"
+                                        min="0"
+                                        value={creditLimitInput}
+                                        onChange={(e) => setCreditLimitInput(e.target.value)}
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-white text-lg font-bold"
+                                        placeholder="0"
+                                    />
+                                </div>
+
+                                <div className="flex space-x-4 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCreditsModalOpen(false)}
+                                        className="flex-1 bg-white/5 hover:bg-white/10 py-3 rounded-2xl font-bold transition-all text-white"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isSaving}
+                                        className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-3 rounded-2xl font-bold text-white shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+                                    >
+                                        {isSaving ? <Loader2 size={18} className="animate-spin" /> : <span>Save Limit</span>}
                                     </button>
                                 </div>
                             </form>

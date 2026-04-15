@@ -6,7 +6,7 @@ export const getCustomers = async (req, res) => {
         const tenant_id = req.tenant.id;
         const customers = await TenantCustomer.findAll({
             where: { tenant_id },
-            attributes: ['id', 'name', 'email', 'role']
+            attributes: ['id', 'name', 'email', 'role', 'sms_credit_limit', 'sms_credit_used', 'created_at']
         });
         res.json(customers);
     } catch (error) {
@@ -17,7 +17,7 @@ export const getCustomers = async (req, res) => {
 
 export const createCustomer = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, sms_credit_limit } = req.body;
         const tenant_id = req.tenant.id;
 
         if (!name || !email || !password) {
@@ -36,16 +36,96 @@ export const createCustomer = async (req, res) => {
             email,
             password: hashedPassword,
             tenant_id,
-            role: role || 'customer'
+            role: role || 'customer',
+            sms_credit_limit: sms_credit_limit !== undefined ? parseInt(sms_credit_limit, 10) : 100,
+            sms_credit_used: 0,
         });
 
         res.status(201).json({
             message: 'Customer created successfully',
-            user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role }
+            user: {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email,
+                role: newUser.role,
+                sms_credit_limit: newUser.sms_credit_limit,
+                sms_credit_used: newUser.sms_credit_used,
+            }
         });
     } catch (error) {
         console.error('Create customer error:', error);
         res.status(500).json({ message: 'Server error during customer creation.' });
+    }
+};
+
+export const deleteCustomer = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tenant_id = req.tenant.id;
+
+        const customer = await TenantCustomer.findOne({ where: { id, tenant_id } });
+        if (!customer) {
+            return res.status(404).json({ message: 'Customer not found.' });
+        }
+
+        await customer.destroy();
+        res.json({ message: 'Customer deleted successfully.' });
+    } catch (error) {
+        console.error('Delete customer error:', error);
+        res.status(500).json({ message: 'Server error during customer deletion.' });
+    }
+};
+
+export const updateSmsCredits = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tenant_id = req.tenant.id;
+        const { sms_credit_limit } = req.body;
+
+        if (sms_credit_limit === undefined || isNaN(parseInt(sms_credit_limit, 10))) {
+            return res.status(400).json({ message: 'sms_credit_limit (integer) is required.' });
+        }
+
+        const customer = await TenantCustomer.findOne({ where: { id, tenant_id } });
+        if (!customer) {
+            return res.status(404).json({ message: 'Customer not found.' });
+        }
+
+        customer.sms_credit_limit = parseInt(sms_credit_limit, 10);
+        await customer.save();
+
+        res.json({
+            message: 'SMS credit limit updated.',
+            sms_credit_limit: customer.sms_credit_limit,
+            sms_credit_used: customer.sms_credit_used,
+        });
+    } catch (error) {
+        console.error('Update SMS credits error:', error);
+        res.status(500).json({ message: 'Server error updating SMS credits.' });
+    }
+};
+
+export const resetSmsCredits = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tenant_id = req.tenant.id;
+
+        const customer = await TenantCustomer.findOne({ where: { id, tenant_id } });
+        if (!customer) {
+            return res.status(404).json({ message: 'Customer not found.' });
+        }
+
+        customer.sms_credit_used = 0;
+        await customer.save();
+
+        res.json({
+            message: 'SMS credit usage reset to 0.',
+            sms_credit_limit: customer.sms_credit_limit,
+            sms_credit_used: 0,
+        });
+    } catch (error) {
+        console.error('Reset SMS credits error:', error);
+        res.status(500).json({ message: 'Server error resetting SMS credits.' });
     }
 };
 
