@@ -27,7 +27,7 @@ export const useAuthStore = create<AuthState>((set) => ({
             set({
                 token: storedToken || null,
                 user: storedUser ? JSON.parse(storedUser) : null,
-                tenantDomain: storedDomain || null,
+                tenantDomain: (storedDomain && storedDomain !== 'undefined') ? storedDomain : null,
                 isLoading: false,
             });
 
@@ -55,15 +55,22 @@ export const useAuthStore = create<AuthState>((set) => ({
             // providing the user didn't request valid JWTs yet.
             const accessToken = "MOBILE-SESSION-TOKEN";
 
+            // Use domain if provided, otherwise grab domain returned from server
+            const actualDomain = domain || userData.tenant_domain;
+
             // Ensure values are strings
             await SecureStore.setItemAsync('auth_token', String(accessToken));
             await SecureStore.setItemAsync('auth_user', JSON.stringify(userData));
-            await SecureStore.setItemAsync('tenant_domain', String(domain));
+            if (actualDomain) {
+                await SecureStore.setItemAsync('tenant_domain', String(actualDomain));
+            } else {
+                await SecureStore.deleteItemAsync('tenant_domain').catch(() => {});
+            }
 
             set({
                 token: accessToken,
                 user: userData,
-                tenantDomain: domain,
+                tenantDomain: actualDomain,
             });
 
             console.log('[AuthStore] Signin successful');
